@@ -167,11 +167,16 @@
     color: var(--text-primary);
     font-size: 1rem;
     line-height: 1.65;
+    /* Archivo là font variable nên đặt được mức giữa 400 và 500.
+       Mức 400 trông mảnh với chữ có dấu tiếng Việt trên nền sáng, còn 500 thì
+       nặng cả trang. 440 là mức đọc chắc mà không thành in đậm. */
+    font-weight: 440;
   }
 
   h1,
   h2,
   h3 {
+    font-weight: 650;
     font-variation-settings: 'wdth' 108;
     letter-spacing: -0.022em;
     line-height: 1.1;
@@ -230,20 +235,38 @@
     animation-delay: calc(var(--d, 0) * 90ms);
   }
 
-  /* Hiện dần khi cuộn tới. Dùng scroll-driven animation của CSS nên không
-     cần JavaScript, không có listener cuộn nào. */
-  @supports (animation-timeline: view()) {
-    @keyframes reveal {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
+  /* Hiện dần khi cuộn tới.
+     Chrome dùng scroll-driven animation của CSS, không cần JavaScript.
+     Safari và Firefox chưa hỗ trợ nên có lớp dự phòng bằng IntersectionObserver
+     ở BaseLayout, gắn class .in-view. Cả hai đường đều mặc định HIỆN SẴN rồi
+     mới animate, nên tắt JavaScript vẫn đọc được bình thường. */
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(22px);
     }
+  }
 
+  @supports (animation-timeline: view()) {
     .reveal {
       animation: reveal linear both;
       animation-timeline: view();
-      animation-range: entry 8% cover 26%;
+      animation-range: entry 5% cover 30%;
+    }
+  }
+
+  /* Đường dự phòng: chỉ bật khi trình duyệt KHÔNG hỗ trợ scroll-driven. */
+  @supports not (animation-timeline: view()) {
+    .js .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition:
+        opacity 0.7s var(--ease-out),
+        transform 0.7s var(--ease-out);
+    }
+    .js .reveal.in-view {
+      opacity: 1;
+      transform: none;
     }
   }
 }

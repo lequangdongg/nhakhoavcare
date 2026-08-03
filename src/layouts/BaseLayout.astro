@@ -59,6 +59,16 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
     <StructuredData locale={locale} service={service} doctors={doctors} />
     <ThemeScript />
+
+    {
+      /*
+      Đánh dấu có JavaScript, để CSS biết được phép giấu nội dung chờ hiện dần.
+      Không có dòng này thì trình duyệt tắt JS sẽ thấy trang trắng trơn.
+    */
+    }
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
   </head>
   <body class="pb-[4.75rem] lg:pb-0">
     <a href="#main" class="sr-only focus:not-sr-only">{t('nav.skipToContent')}</a>
@@ -68,5 +78,32 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     </main>
     <Footer locale={locale} />
     <StickyActions locale={locale} />
+
+    {
+      /*
+      Dự phòng hiệu ứng cuộn cho Safari và Firefox, nơi animation-timeline: view()
+      chưa được hỗ trợ. Chrome bỏ qua nhánh này vì CSS đã lo.
+    */
+    }
+    <script is:inline>
+      (() => {
+        if (CSS.supports('animation-timeline: view()')) return;
+        if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          for (const el of document.querySelectorAll('.reveal')) el.classList.add('in-view');
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              e.target.classList.add('in-view');
+              io.unobserve(e.target);
+            }
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 },
+        );
+        for (const el of document.querySelectorAll('.reveal')) io.observe(el);
+      })();
+    </script>
   </body>
 </html>

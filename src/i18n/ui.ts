@@ -60,7 +60,7 @@ export const UI = {
     'footer.follow': 'Theo dõi',
     'footer.licence': 'Giấy phép hoạt động',
     'footer.demoWarning':
-      'Dữ liệu liên hệ trên trang này là bản dựng tạm, chưa phải thông tin thật của phòng khám.',
+      'Giờ làm việc, số giấy phép và năm thành lập còn là bản dựng tạm. Số điện thoại, email và địa chỉ đã là thông tin thật.',
     'footer.rights': 'Bảo lưu mọi quyền.',
     'navd.clinic': 'Phòng khám',
     'navd.allServices': 'Xem tất cả dịch vụ',
@@ -91,6 +91,10 @@ export const UI = {
     'slide.promiseTitle': 'Bạn biết đủ trước khi đồng ý',
     'slide.promiseBody':
       'Chi phí phụ thuộc tình trạng từng người nên con số cuối chỉ có sau khi khám. Điều không đổi là cách chúng tôi báo giá.',
+    'status.open': 'Đang mở cửa',
+    'status.closed': 'Đã đóng cửa',
+    'status.opensAt': 'Mở lúc',
+    'status.closesAt': 'đến',
     'nav.home': 'Trang chủ',
     'nav.primary': 'Điều hướng chính',
     'nav.about': 'Giới thiệu',
@@ -173,7 +177,7 @@ export const UI = {
     'footer.follow': 'Follow',
     'footer.licence': 'Licence number',
     'footer.demoWarning':
-      'The contact details on this site are placeholder data, not the real details of the clinic.',
+      'Opening hours, licence number and founding year are still placeholder data. The phone number, email and address are real.',
     'footer.rights': 'All rights reserved.',
     'navd.clinic': 'Clinic',
     'navd.allServices': 'See all treatments',
@@ -204,6 +208,10 @@ export const UI = {
     'slide.promiseTitle': 'You know it all before you agree',
     'slide.promiseBody':
       'Cost depends on each case, so the final figure only exists after an examination. What never changes is how we quote it.',
+    'status.open': 'Open now',
+    'status.closed': 'Closed',
+    'status.opensAt': 'Opens',
+    'status.closesAt': 'until',
     'nav.home': 'Home',
     'nav.primary': 'Main navigation',
     'nav.about': 'About',

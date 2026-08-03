@@ -1,0 +1,209 @@
+---
+/**
+ * Thanh tiện ích trên cùng header.
+ *
+ * Bản trước là một mảng nền đen đặc chiếm hết chiều ngang, nặng nề và chỉ lặp
+ * lại thông tin đã có ở footer. Bản này nhẹ hơn và mang một thứ footer không
+ * làm được: TRẠNG THÁI ĐANG MỞ HAY ĐÃ ĐÓNG, tính theo đồng hồ của chính khách.
+ *
+ * Đây là câu hỏi đầu tiên của người tra cứu nha khoa lúc 21h tối. Trả lời được
+ * nó ngay dòng đầu tiên đáng giá hơn mọi thứ trang trí.
+ *
+ * Chấm trạng thái là ngoại lệ hợp lệ của luật cấm chấm màu trang trí trong
+ * Taste mục 9.F: nó mang trạng thái thật, không phải hoạ tiết.
+ */
+import { Icon } from 'astro-icon/components';
+import { clinic, zaloHref } from '../data/clinic';
+import type { Locale } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
+import Container from './Container.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+// Bảng giờ đưa xuống trình duyệt để tính trạng thái theo đồng hồ của khách.
+// Máy chủ dựng site không biết bây giờ là mấy giờ ở chỗ người xem.
+const HOUR_KEYS = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+] as const;
+const hoursByDay = HOUR_KEYS.map((k) => {
+  const v = clinic.hours[k];
+  return v === 'closed' ? null : [v.open, v.close];
+});
+---
+
+<div class="util">
+  <Container wide class="flex h-9 items-center gap-4 text-[0.8125rem] lg:h-10 lg:gap-5">
+    {
+      /* Trạng thái mở cửa. Hiện sau khi trình duyệt tính xong, tránh nhấp nháy sai.
+        Đây là thứ giá trị nhất trên mobile: người tra cứu lúc 21h cần biết ngay
+        gọi bây giờ có ai nghe máy không. */
+    }
+    <span class="status" data-status hidden>
+      <span class="status-dot" data-status-dot></span>
+      <span data-status-text></span>
+    </span>
+
+    <span class="util-item hidden lg:flex">
+      <Icon name="ph:clock" class="size-4 shrink-0 text-ink-3" aria-hidden="true" />
+      <span>{t('header.todayHours')}: <span data-today-hours></span></span>
+    </span>
+
+    <a
+      href={clinic.mapsUrl}
+      target="_blank"
+      rel="noopener"
+      class="util-item util-link hidden lg:flex"
+    >
+      <Icon name="ph:map-pin" class="size-4 shrink-0 text-ink-3" aria-hidden="true" />
+      <span>{clinic.address.street}, {clinic.address.city}</span>
+    </a>
+
+    <div class="ms-auto flex items-center gap-1.5">
+      <a
+        href={zaloHref(clinic.zalo)}
+        class="util-icon"
+        aria-label={t('cta.zalo')}
+        title={t('cta.zalo')}
+      >
+        <Icon name="simple-icons:zalo" class="size-4" aria-hidden="true" />
+      </a>
+      <a
+        href={clinic.sameAs.facebook}
+        target="_blank"
+        rel="noopener"
+        class="util-icon"
+        aria-label="Facebook"
+      >
+        <Icon name="simple-icons:facebook" class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+  </Container>
+</div>
+
+<script
+  is:inline
+  define:vars={{
+    hoursByDay,
+    labels: {
+      open: t('status.open'),
+      closed: t('status.closed'),
+      closesAt: t('status.closesAt'),
+      closedToday: t('footer.closed'),
+    },
+  }}
+>
+  (() => {
+    const now = new Date();
+    const today = hoursByDay[now.getDay()];
+    const hoursEl = document.querySelector('[data-today-hours]');
+    const wrap = document.querySelector('[data-status]');
+    const dot = document.querySelector('[data-status-dot]');
+    const text = document.querySelector('[data-status-text]');
+    if (!wrap) return;
+
+    if (!today) {
+      if (hoursEl) hoursEl.textContent = labels.closedToday;
+      text.textContent = labels.closed;
+      wrap.dataset.open = 'false';
+      wrap.hidden = false;
+      return;
+    }
+
+    const [open, close] = today;
+    if (hoursEl) hoursEl.textContent = open + ' - ' + close;
+
+    const toMin = (s) => Number(s.slice(0, 2)) * 60 + Number(s.slice(3, 5));
+    const cur = now.getHours() * 60 + now.getMinutes();
+    const isOpen = cur >= toMin(open) && cur < toMin(close);
+
+    wrap.dataset.open = String(isOpen);
+    text.textContent = isOpen ? labels.open + ' ' + labels.closesAt + ' ' + close : labels.closed;
+    wrap.hidden = false;
+  })();
+</script>
+
+<style>
+  .util {
+    border-bottom: 1px solid var(--steel-line);
+    background: var(--surface-sunken);
+    color: var(--text-secondary);
+  }
+
+  .util-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .util-link {
+    transition: color 0.25s var(--ease-out);
+  }
+  .util-link:hover {
+    color: var(--accent);
+  }
+
+  /* Trạng thái mở cửa: viên thuốc có chấm. Chấm mang trạng thái thật nên nó
+     không rơi vào luật cấm chấm màu trang trí. */
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.15rem 0.6rem 0.15rem 0.5rem;
+    border-radius: var(--r-pill);
+    font-weight: 500;
+  }
+  .status[data-open='true'] {
+    background: color-mix(in srgb, var(--success) 14%, transparent);
+    color: color-mix(in srgb, var(--success) 78%, var(--text-primary));
+  }
+  .status[data-open='false'] {
+    background: var(--steel-line);
+    color: var(--text-tertiary);
+  }
+
+  .status-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: var(--r-pill);
+    background: currentColor;
+  }
+  /* Nhịp đập nhẹ khi đang mở, báo đây là trạng thái sống chứ không phải nhãn tĩnh. */
+  @media (prefers-reduced-motion: no-preference) {
+    .status[data-open='true'] .status-dot {
+      animation: status-pulse 2.4s ease-in-out infinite;
+    }
+    @keyframes status-pulse {
+      50% {
+        opacity: 0.35;
+      }
+    }
+  }
+
+  .util-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: var(--r-pill);
+    color: var(--text-tertiary);
+    transition:
+      background-color 0.25s var(--ease-out),
+      color 0.25s var(--ease-out);
+  }
+  .util-icon:hover {
+    background: var(--accent-quiet);
+    color: var(--accent);
+  }
+</style>

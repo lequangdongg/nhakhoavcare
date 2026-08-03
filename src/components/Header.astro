@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
-import { clinic, telHref, zaloHref } from '../data/clinic';
+import { clinic, telHref } from '../data/clinic';
 import type { Locale } from '../i18n/locales';
 import { type ServiceKey, pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
@@ -10,6 +10,7 @@ import Container from './Container.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import NavDropdown, { type DropdownItem } from './NavDropdown.astro';
 import SearchModal from './SearchModal.astro';
+import UtilityBar from './UtilityBar.astro';
 
 interface Props {
   locale: Locale;
@@ -66,61 +67,24 @@ const mobileNav = [
   { key: 'blog', label: t('nav.blog') },
   { key: 'contact', label: t('nav.contact') },
 ] as const;
-
-// Giờ mở cửa hôm nay. Khách vào site buổi tối cần biết ngay mai mấy giờ mở.
-const DAYS = [
-  'sunday',
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-] as const;
-const today = clinic.hours[DAYS[new Date().getDay()]!];
-const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${today.close}`;
 ---
 
 <header class="sticky top-0 z-40">
-  <div class="hidden bg-ink text-surface lg:block">
-    <Container wide class="flex h-10 items-center gap-6 text-[0.8125rem]">
-      <span class="flex items-center gap-1.5 opacity-85">
-        <Icon name="ph:map-pin" class="size-4 shrink-0" aria-hidden="true" />
-        <span>{clinic.address.street}, {clinic.address.city}</span>
-      </span>
-      <span class="flex items-center gap-1.5 opacity-85">
-        <Icon name="ph:clock" class="size-4 shrink-0" aria-hidden="true" />
-        <span>{t('header.todayHours')}: {todayLabel}</span>
-      </span>
-      <a
-        href={zaloHref(clinic.zalo)}
-        class="ms-auto flex items-center gap-1.5 opacity-85 transition-opacity duration-300 hover:opacity-100"
-      >
-        <Icon name="simple-icons:zalo" class="size-4 shrink-0" aria-hidden="true" />
-        <span>{t('cta.zalo')}</span>
-      </a>
-      <a href={clinic.sameAs.facebook} target="_blank" rel="noopener" aria-label="Facebook">
-        <Icon
-          name="simple-icons:facebook"
-          class="size-4 opacity-85 transition-opacity duration-300 hover:opacity-100"
-        />
-      </a>
-    </Container>
-  </div>
+  <UtilityBar locale={locale} />
 
   <div class="border-b border-steel bg-surface/90 backdrop-blur-md">
-    <Container wide class="flex h-16 items-center gap-4 lg:h-[4.5rem]">
+    <Container wide class="flex h-15 items-center gap-4 lg:h-16">
       <a href={pathFor('home', locale)} class="flex shrink-0 items-center gap-2.5">
         {/* Nhận diện: một tab sứ trên khung thép, vật thật của bộ so màu. */}
-        <BrandMark class="size-9" />
-        <span class="leading-none">
-          <span
-            class="block text-[1.0625rem] font-semibold"
-            style="font-variation-settings: 'wdth' 108"
-          >
-            {clinic.name}
-          </span>
-          <span class="measure mt-0.5 block text-[0.6875rem] text-ink-3">{clinic.tagline}</span>
+        <BrandMark class="size-8" />
+        {
+          /*
+          Bỏ dòng tagline ở đây: hero đã nói điều đó to hơn nhiều, và nó làm
+          header cao thêm một tầng không cần thiết. Tagline vẫn ở footer.
+        */
+        }
+        <span class="text-[1.0625rem] font-semibold" style="font-variation-settings: 'wdth' 108">
+          {clinic.name}
         </span>
       </a>
 

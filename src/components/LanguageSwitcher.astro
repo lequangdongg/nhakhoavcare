@@ -21,7 +21,7 @@ const other = alternateLinks(Astro.url.pathname).find((a) => a.locale !== locale
   rel="alternate"
   aria-label={t('lang.switchTo')}
   title={UI[other.locale]['lang.current']}
-  class="group relative flex size-10 items-center justify-center rounded-full border border-steel-edge transition-colors duration-300 hover:border-accent hover:bg-accent-quiet"
+  class="group relative flex size-9 items-center justify-center rounded-full border border-steel-edge transition-colors duration-300 hover:border-accent hover:bg-accent-quiet"
 >
   <Icon
     name="ph:translate"

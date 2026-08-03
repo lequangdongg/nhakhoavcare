@@ -58,9 +58,12 @@ export const clinic: Clinic = {
   tagline: 'Chuyên sâu cấy ghép Implant',
   foundedYear: 2014,
 
-  phone: '0236 3 897 686',
-  zalo: '0905 417 268',
-  email: 'lienhe@nhakhoavcare.com',
+  // Số hotline và email THẬT do phòng khám cung cấp.
+  // Zalo dùng chung số hotline vì đây là số di động; nếu phòng khám có số Zalo
+  // riêng thì tách ra ở đây.
+  phone: '090.123.2442',
+  zalo: '090.123.2442',
+  email: 'nhakhoavcare@gmail.com',
 
   // Địa chỉ và toạ độ THẬT, lấy từ trang Google Maps của phòng khám.
   address: {
