@@ -171,7 +171,11 @@ const a = images[after];
     border-inline-start: 5px solid var(--accent-contrast);
   }
 
-  /* Thanh trượt thật, trong suốt, phủ kín ảnh. Đây là thứ nhận mọi thao tác. */
+  /* Thanh trượt thật, trong suốt, phủ kín ảnh. Đây là thứ nhận mọi thao tác.
+     touch-action: pan-y là BẮT BUỘC: không có nó, ngón tay vuốt lên xuống để
+     cuộn trang bị thanh trượt bắt mất, và người dùng mobile không cuộn qua
+     được vùng ảnh. Với pan-y, trình duyệt giữ quyền cuộn dọc còn thao tác
+     ngang mới đưa cho thanh trượt. */
   .ba-range {
     position: absolute;
     inset: 0;
@@ -181,6 +185,7 @@ const a = images[after];
     appearance: none;
     background: transparent;
     cursor: ew-resize;
+    touch-action: pan-y;
   }
   .ba-range::-webkit-slider-thumb {
     appearance: none;

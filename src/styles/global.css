@@ -160,6 +160,9 @@
   html {
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    /* Lá chắn cuối: một phần tử tính sai chiều rộng cũng không kéo cả trang
+       trượt ngang trên mobile. Không thay thế việc sửa gốc, chỉ chặn hậu quả. */
+    overflow-x: hidden;
   }
 
   body {
