@@ -4,6 +4,9 @@ lang: en
 title: "Removable Dentures"
 description: "A removable appliance for patients missing several teeth. Covers the adjustment period, daily cleaning, and why a denture loosens over the years."
 order: 5
+keywords:
+  - "false teeth"
+  - "partial denture"
 faq: []
 ---
 

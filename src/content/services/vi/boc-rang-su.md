@@ -4,6 +4,11 @@ lang: vi
 title: "Bọc răng sứ"
 description: "Mão sứ chụp toàn bộ thân răng, dùng cho răng vỡ lớn hoặc đã chữa tủy. Trang này so sánh các loại sứ và giải thích vì sao răng chữa tủy cần bọc."
 order: 3
+keywords:
+  - "mão răng"
+  - "chụp răng"
+  - "răng sứ"
+  - "răng vỡ"
 faq: []
 ---
 

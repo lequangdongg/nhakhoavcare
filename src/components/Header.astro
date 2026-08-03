@@ -4,6 +4,7 @@ import { clinic, telHref } from '../data/clinic';
 import { pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
 import LanguageSwitcher from './LanguageSwitcher.astro';
+import SearchModal from './SearchModal.astro';
 import Container from './Container.astro';
 import type { Locale } from '../i18n/locales';
 
@@ -62,6 +63,7 @@ const current = Astro.url.pathname;
     </nav>
 
     <div class="ms-auto flex items-center gap-3 lg:ms-0">
+      <SearchModal locale={locale} />
       <LanguageSwitcher locale={locale} />
 
       <a

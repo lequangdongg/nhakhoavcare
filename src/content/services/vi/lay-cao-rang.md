@@ -4,6 +4,11 @@ lang: vi
 title: "Lấy cao răng"
 description: "Làm sạch mảng bám vôi hóa quanh cổ răng và dưới nướu. Trang này nói về tần suất nên làm và vì sao chảy máu khi lấy cao răng là dấu hiệu có sẵn viêm."
 order: 8
+keywords:
+  - "vôi răng"
+  - "cạo vôi"
+  - "làm sạch răng"
+  - "chảy máu chân răng"
 faq: []
 ---
 

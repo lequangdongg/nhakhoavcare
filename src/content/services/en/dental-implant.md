@@ -4,6 +4,10 @@ lang: en
 title: "Dental Implants"
 description: "A titanium post placed in the jawbone to replace a missing tooth root. This page covers the procedure, healing time and when it cannot be done."
 order: 1
+keywords:
+  - "missing tooth"
+  - "tooth replacement"
+  - "tooth root"
 faq: []
 ---
 

@@ -4,6 +4,10 @@ lang: vi
 title: "Tẩy trắng răng"
 description: "Làm sáng màu răng bằng thuốc tẩy chuyên dụng. Trang này nói rõ loại nhiễm màu nào tẩy được, loại nào không, và vì sao răng sứ không đổi màu theo."
 order: 10
+keywords:
+  - "làm trắng răng"
+  - "răng vàng"
+  - "răng ố"
 faq: []
 ---
 

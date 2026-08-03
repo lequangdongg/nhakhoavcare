@@ -20,6 +20,12 @@ const services = defineCollection({
      */
     priceFrom: z.number().int().positive().optional(),
     order: z.number().int(),
+    /**
+     * Từ khoá phụ cho tìm kiếm. Dùng cho những cách gọi khác mà tiêu đề không
+     * chứa: "trồng răng" cho Implant, "trẻ em" cho Vecni Flour, "răng giả" cho
+     * hàm tháo lắp. Không hiển thị ra trang, chỉ vào chỉ mục tìm kiếm.
+     */
+    keywords: z.array(z.string().min(1)).default([]),
     faq: z
       .array(z.object({ question: z.string().min(1), answer: z.string().min(1) }))
       .default([]),

@@ -4,6 +4,11 @@ lang: vi
 title: "Chữa tủy răng"
 description: "Lấy bỏ phần tủy viêm hoặc hoại tử rồi trám kín ống tủy. Trang này giải thích vì sao răng hết đau vẫn phải điều trị và vì sao cần bọc lại sau đó."
 order: 7
+keywords:
+  - "lấy tủy"
+  - "đau răng"
+  - "viêm tủy"
+  - "nhức răng"
 faq: []
 ---
 
