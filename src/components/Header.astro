@@ -187,7 +187,9 @@ const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${
           </span>
         </a>
 
-        <details class="lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden">
+        <details
+          class="disclosure lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden"
+        >
           <summary
             class="flex size-10 cursor-pointer list-none items-center justify-center rounded-full border border-steel-edge transition-colors duration-300 hover:bg-surface-sunken"
             aria-label={t('nav.openMenu')}
