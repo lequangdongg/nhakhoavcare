@@ -2,12 +2,10 @@
 /**
  * Xem trước bảng giá trên trang chủ.
  *
- * Bản trước chỉ là một câu "Giá công khai, không phát sinh" rồi một nút. Nói về
- * giá mà không cho thấy giá thì không ai bấm: người ta đã nghe câu đó ở mọi
- * phòng khám.
- *
- * Bản này đưa con số ra ngay. Khách thấy mức khởi điểm, biết mình có nằm trong
- * tầm không, rồi mới bấm xem đầy đủ. Đó là lý do bấm thật.
+ * Dùng ĐÚNG kiểu hàng của trang bảng giá, để hai nơi đọc ra là một hệ chứ không
+ * phải hai thiết kế rời. Bản trước dùng đường kẻ chấm kiểu thực đơn, vừa lệch
+ * với trang giá vừa có lỗi: kẻ chấm kéo dài bằng -100vw nên tràn ra khỏi khung
+ * chứa, chạy hết chiều ngang màn hình.
  */
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
@@ -31,18 +29,23 @@ const services = (await getCollection('services', (e) => e.data.lang === locale)
 const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
 ---
 
-<ul class="price-grid">
+<ul class="prows">
   {
     services.map((s) => (
       <li>
-        <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="price-row">
-          <span class="price-name">{s.data.title}</span>
-          <span class="price-value">
-            <span class="price-label">{t('home.priceFrom')}</span>
-            <span class="measure price-num">{fmt.format(s.data.priceFrom!)}</span>
-            <span class="price-unit">đ</span>
+        <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="prow">
+          <span class="min-w-0">
+            <span class="prow-name">{s.data.title}</span>
+            <span class="prow-sub">{`${s.data.description.split('.')[0]}.`}</span>
           </span>
-          <Icon name="ph:arrow-right" class="price-arrow size-4 shrink-0" aria-hidden="true" />
+
+          <span class="prow-price">
+            <span class="prow-label">{t('home.priceFrom')}</span>
+            <span class="measure prow-num">{fmt.format(s.data.priceFrom!)}</span>
+            <span class="prow-cur">đ</span>
+          </span>
+
+          <Icon name="ph:caret-right" class="prow-arrow size-4 shrink-0" aria-hidden="true" />
         </a>
       </li>
     ))
@@ -50,83 +53,86 @@ const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
 </ul>
 
 <style>
-  .price-grid {
+  .prows {
     display: grid;
     gap: 0.5rem;
   }
   @media (min-width: 768px) {
-    .price-grid {
+    .prows {
       grid-template-columns: 1fr 1fr;
-      gap: 0.5rem 1.5rem;
     }
   }
 
-  .price-row {
+  .prow {
     display: flex;
-    align-items: baseline;
-    gap: 0.75rem;
-    padding: 0.875rem 1rem;
+    align-items: center;
+    gap: 0.85rem;
+    height: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--steel-line);
     border-radius: var(--r-md);
-    transition: background-color 0.25s var(--ease-out);
+    background: var(--surface-raised);
+    transition:
+      border-color 0.25s var(--ease-out),
+      background-color 0.25s var(--ease-out),
+      translate 0.25s var(--ease-out);
   }
-  .price-row:hover,
-  .price-row:focus-visible {
+  .prow:hover,
+  .prow:focus-visible {
+    border-color: var(--accent);
     background: var(--accent-quiet);
+    translate: 0 -2px;
   }
 
-  .price-name {
+  .prow-name {
+    display: block;
     font-weight: 500;
     transition: color 0.25s var(--ease-out);
   }
-  .price-row:hover .price-name {
+  .prow:hover .prow-name {
     color: var(--accent);
   }
 
-  /* Đường kẻ chấm nối tên với giá, kiểu thực đơn. Nó dẫn mắt đi ngang mà không
-     cần kẻ viền cho từng hàng, thứ Taste liệt vào bố cục lười nhất. */
-  .price-value {
+  .prow-sub {
+    display: block;
+    overflow: hidden;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-tertiary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .prow-price {
     display: flex;
     align-items: baseline;
-    gap: 0.3rem;
+    gap: 0.25rem;
     margin-inline-start: auto;
-    padding-inline-start: 0.75rem;
-    position: relative;
+    white-space: nowrap;
   }
-  .price-value::before {
-    content: '';
-    position: absolute;
-    inset-inline: -100vw 100%;
-    bottom: 0.28em;
-    border-bottom: 1px dotted var(--steel-edge);
-    mask-image: linear-gradient(to right, transparent, black 96%);
-  }
-
-  .price-label {
-    font-size: 0.8125rem;
+  .prow-label {
+    font-size: 0.75rem;
     color: var(--text-tertiary);
   }
-  .price-num {
+  .prow-num {
     font-size: 1.0625rem;
     font-weight: 600;
+    color: var(--accent);
   }
-  .price-unit {
+  .prow-cur {
     font-size: 0.8125rem;
-    color: var(--text-secondary);
+    font-weight: 500;
+    color: var(--accent);
   }
 
-  .price-arrow {
-    align-self: center;
+  .prow-arrow {
     color: var(--text-tertiary);
-    opacity: 0;
-    translate: -4px 0;
     transition:
-      opacity 0.25s var(--ease-out),
+      color 0.25s var(--ease-out),
       translate 0.25s var(--ease-out);
   }
-  .price-row:hover .price-arrow,
-  .price-row:focus-visible .price-arrow {
+  .prow:hover .prow-arrow {
     color: var(--accent);
-    opacity: 1;
-    translate: 0 0;
+    translate: 2px 0;
   }
 </style>
