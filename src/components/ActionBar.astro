@@ -1,0 +1,49 @@
+---
+/**
+ * Ba kênh liên hệ thật của khách Việt: gọi, Zalo, chỉ đường.
+ * Bản launch đầu không có form, nên đây là toàn bộ đường chuyển đổi của site.
+ * Mọi giá trị đọc từ clinic.ts.
+ */
+import { Icon } from 'astro-icon/components';
+import { clinic, telHref, zaloHref } from '../data/clinic';
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  class?: string;
+}
+
+const { locale, class: className = '' } = Astro.props;
+const t = useTranslations(locale);
+
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.lat},${clinic.geo.lng}`;
+---
+
+<div class:list={['flex flex-wrap items-center gap-3', className]}>
+  <a
+    href={telHref(clinic.phone)}
+    class="inline-flex min-h-11 items-center gap-2 bg-accent px-5 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px"
+  >
+    <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
+    <span class="font-medium">{t('cta.call')}</span>
+  </a>
+
+  <a
+    href={zaloHref(clinic.zalo)}
+    class="inline-flex min-h-11 items-center gap-2 border border-steel-edge px-5 transition-colors duration-300 hover:bg-surface-raised active:translate-y-px"
+  >
+    <Icon name="ph:chat-circle-text" class="size-5 shrink-0" aria-hidden="true" />
+    <span class="font-medium">{t('cta.zalo')}</span>
+  </a>
+
+  <a
+    href={mapsHref}
+    target="_blank"
+    rel="noopener"
+    class="inline-flex min-h-11 items-center gap-2 px-2 text-ink-2 underline-offset-4 transition-colors duration-300 hover:text-ink hover:underline"
+  >
+    <Icon name="ph:map-pin-area" class="size-5 shrink-0" aria-hidden="true" />
+    <span>{t('cta.directions')}</span>
+  </a>
+</div>

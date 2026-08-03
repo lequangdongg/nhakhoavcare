@@ -34,6 +34,8 @@ const SEGMENTS = {
 const STATIC_PAGES = {
   home: { vi: '', en: '' },
   about: { vi: 'gioi-thieu', en: 'about' },
+  /** Trang danh sách dịch vụ. Trang chi tiết nằm dưới cùng segment. */
+  services: { vi: 'dich-vu', en: 'services' },
   pricing: { vi: 'bang-gia', en: 'pricing' },
   contact: { vi: 'lien-he', en: 'contact' },
   blog: { vi: 'kien-thuc-nha-khoa', en: 'dental-knowledge' },

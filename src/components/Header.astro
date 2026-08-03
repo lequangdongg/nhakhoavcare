@@ -1,8 +1,10 @@
 ---
+import { Icon } from 'astro-icon/components';
 import { clinic, telHref } from '../data/clinic';
 import { pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
 import LanguageSwitcher from './LanguageSwitcher.astro';
+import Container from './Container.astro';
 import type { Locale } from '../i18n/locales';
 
 interface Props {
@@ -14,31 +16,89 @@ const t = useTranslations(locale);
 
 const nav = [
   { key: 'about', label: t('nav.about') },
+  { key: 'services', label: t('nav.services') },
   { key: 'pricing', label: t('nav.pricing') },
   { key: 'blog', label: t('nav.blog') },
   { key: 'contact', label: t('nav.contact') },
 ] as const;
+
+const current = Astro.url.pathname;
 ---
 
-<header class="border-b border-border">
-  <nav aria-label={t('nav.home')} class="flex items-center gap-4 p-4">
-    <a href={pathFor('home', locale)} class="font-semibold">{clinic.name}</a>
+{/* Chiều cao 64px mobile, 72px desktop. Taste mục 4.7: nav một hàng, tối đa 80px. */}
+<header class="sticky top-0 z-40 border-b border-steel bg-surface/92 backdrop-blur-sm">
+  <Container as="div" wide class="flex h-16 items-center gap-4 lg:h-[4.5rem]">
+    <a
+      href={pathFor('home', locale)}
+      class="shrink-0 text-[1.05rem] font-semibold tracking-tight"
+      style="font-variation-settings: 'wdth' 112"
+    >
+      {clinic.name}
+    </a>
 
-    <ul class="flex gap-4">
-      {
-        nav.map(({ key, label }) => (
-          <li>
-            <a href={pathFor(key, locale)}>{label}</a>
-          </li>
-        ))
-      }
-    </ul>
+    <nav aria-label={t('nav.primary')} class="ms-auto hidden lg:block">
+      <ul class="flex items-center gap-7">
+        {
+          nav.map(({ key, label }) => {
+            const href = pathFor(key, locale);
+            const active = current === href;
+            return (
+              <li>
+                <a
+                  href={href}
+                  aria-current={active ? 'page' : undefined}
+                  class:list={[
+                    'text-[0.95rem] transition-colors duration-300 hover:text-ink',
+                    active ? 'text-ink' : 'text-ink-2',
+                  ]}
+                >
+                  {label}
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </nav>
 
-    <div class="ms-auto flex items-center gap-3">
+    <div class="ms-auto flex items-center gap-3 lg:ms-0">
       <LanguageSwitcher locale={locale} />
-      <a href={telHref(clinic.phone)} class="rounded bg-accent px-3 py-2 text-accent-contrast">
-        {t('cta.call')}
+
+      <a
+        href={telHref(clinic.phone)}
+        class="hidden min-h-10 items-center gap-2 bg-accent px-4 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px sm:inline-flex"
+      >
+        <Icon name="ph:phone-call" class="size-4 shrink-0" aria-hidden="true" />
+        <span class="text-[0.95rem] font-medium">{t('cta.call')}</span>
       </a>
+
+      {/* Menu mobile bằng details/summary: không cần JavaScript, bàn phím dùng được sẵn. */}
+      <details class="lg:hidden [&[open]_.menu-open]:hidden [&[open]_.menu-close]:block">
+        <summary
+          class="flex size-10 cursor-pointer list-none items-center justify-center border border-steel-edge"
+          aria-label={t('nav.openMenu')}
+        >
+          <Icon name="ph:list" class="menu-open size-5" aria-hidden="true" />
+          <Icon name="ph:x" class="menu-close hidden size-5" aria-hidden="true" />
+        </summary>
+
+        <div class="absolute inset-x-0 top-16 border-y border-steel bg-surface">
+          <ul class="divide-y divide-steel">
+            {
+              nav.map(({ key, label }) => (
+                <li>
+                  <a
+                    href={pathFor(key, locale)}
+                    class="block px-5 py-4 text-[1.05rem] transition-colors duration-300 hover:bg-surface-raised"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </details>
     </div>
-  </nav>
+  </Container>
 </header>

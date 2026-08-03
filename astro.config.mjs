@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { assertNoPlaceholders } from './src/data/clinic.ts';
 
 import sitemap from '@astrojs/sitemap';
+import icon from 'astro-icon';
 
 /** Chặn deploy khi clinic.ts còn giá trị giữ chỗ. Chỉ áp dụng lúc build, không cản dev. */
 function guardClinicData() {
@@ -34,6 +35,9 @@ export default defineConfig({
 
   integrations: [
     guardClinicData(),
+    // Phosphor qua Iconify. Inline SVG lúc build nên không tải font icon.
+    // Taste mục 3.C: cấm tự vẽ path SVG.
+    icon({ iconDir: 'src/icons' }),
     sitemap({
       // Sitemap khai đầy đủ quan hệ hai ngôn ngữ để Google hiểu đây là bản dịch
       // của nhau, không phải nội dung trùng lặp.

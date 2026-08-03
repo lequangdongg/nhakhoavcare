@@ -3,6 +3,7 @@ import type { Locale } from './locales';
 export const UI = {
   vi: {
     'nav.home': 'Trang chủ',
+    'nav.primary': 'Điều hướng chính',
     'nav.about': 'Giới thiệu',
     'nav.services': 'Dịch vụ',
     'nav.pricing': 'Bảng giá',
@@ -27,6 +28,7 @@ export const UI = {
   },
   en: {
     'nav.home': 'Home',
+    'nav.primary': 'Main navigation',
     'nav.about': 'About',
     'nav.services': 'Services',
     'nav.pricing': 'Pricing',

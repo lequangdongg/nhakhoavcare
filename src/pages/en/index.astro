@@ -1,13 +1,160 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Container from '../../components/Container.astro';
+import ShadeScale from '../../components/ShadeScale.astro';
+import ActionBar from '../../components/ActionBar.astro';
+import ImageSlot from '../../components/ImageSlot.astro';
+import { Icon } from 'astro-icon/components';
 import { clinic } from '../../data/clinic';
+import { pathFor } from '../../i18n/routes';
+
+const locale = 'en' as const;
+
+const shadeTabs = [
+  { key: 'whitening', code: 'B1', label: 'Teeth whitening', shade: 'var(--shade-b1)' },
+  { key: 'veneer', code: 'A1', label: 'Porcelain veneers', shade: 'var(--shade-a1)' },
+  { key: 'crown', code: 'A2', label: 'Dental crowns', shade: 'var(--shade-a2)' },
+  { key: 'implant', code: 'B3', label: 'Dental implants', shade: 'var(--shade-b3)' },
+  { key: 'braces', code: 'A3', label: 'Orthodontics', shade: 'var(--shade-a3)' },
+  { key: 'scaling', code: 'C3', label: 'Teeth scaling', shade: 'var(--shade-c3)' },
+] as const;
+
+const implantSteps = [
+  {
+    title: 'Examination and imaging',
+    body: 'A CT scan measures the exact height and density of the jawbone where the tooth is missing.',
+  },
+  {
+    title: 'Placing the post',
+    body: 'A titanium post is placed into the jawbone under local anaesthetic, in a single appointment.',
+  },
+  {
+    title: 'Bone integration',
+    body: 'Bone grows onto the surface of the post. This is the longest stage and it cannot be rushed.',
+  },
+  {
+    title: 'Fitting the crown',
+    body: 'We match the shade of your own teeth, make the crown to that shade, and fit it to the post.',
+  },
+];
 ---
 
 <BaseLayout
-  locale="en"
+  locale={locale}
   title={`${clinic.name}. Dental Clinic in Da Nang`}
-  description="A dental clinic in Da Nang, Vietnam. Dental implants, crowns, orthodontics and general dentistry. Full content arrives in Plan 2."
+  description="A dental clinic in Da Nang, Vietnam, focused on dental implants. Published prices, a clear treatment plan, and a written warranty."
 >
-  <h1>{clinic.name}</h1>
-  <p>The foundation is in place. Real content will be written in Plan 2.</p>
+  <section class="border-b border-steel">
+    <Container class="grid items-center gap-10 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:py-20">
+      <div class="max-w-[36ch]">
+        <h1 class="text-4xl leading-[1.08] font-semibold md:text-5xl lg:text-[3.4rem]">
+          A new tooth should match the teeth you already have
+        </h1>
+        <p class="mt-5 max-w-[46ch] text-lg text-ink-2">
+          A dental clinic in Da Nang focused on implants. Prices published, nothing added later.
+        </p>
+        <ActionBar locale={locale} class="mt-8" />
+      </div>
+
+      <ImageSlot
+        slot="hero"
+        ratio="3/2"
+        brief="Clinic interior in natural light, with a dentist at work inside the frame"
+      />
+    </Container>
+  </section>
+
+  <section aria-labelledby="services" class="border-b border-steel">
+    <Container class="py-14 lg:py-20">
+      <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+        <h2 id="services" class="text-2xl font-semibold md:text-3xl">Treatments</h2>
+        <a
+          href={pathFor('services', locale)}
+          class="inline-flex items-center gap-1.5 text-ink-2 underline-offset-4 transition-colors duration-300 hover:text-ink hover:underline"
+        >
+          See all
+          <Icon name="ph:arrow-right" class="size-4" aria-hidden="true" />
+        </a>
+      </div>
+
+      <ShadeScale locale={locale} tabs={shadeTabs} />
+    </Container>
+  </section>
+
+  <section aria-labelledby="implants" class="border-b border-steel bg-surface-sunken">
+    <Container class="py-14 lg:py-20">
+      <div class="max-w-[52ch]">
+        <h2 id="implants" class="text-2xl font-semibold md:text-3xl">
+          Dental implants are what we do most
+        </h2>
+        <p class="mt-4 text-ink-2">
+          A titanium post replaces the root of a missing tooth. You chew normally, the neighbouring
+          teeth are not filed down, and nothing comes out at night.
+        </p>
+      </div>
+
+      <ol class="mt-10 grid gap-px bg-steel sm:grid-cols-2 lg:grid-cols-4">
+        {
+          implantSteps.map((step) => (
+            <li class="bg-surface-sunken p-5 lg:p-6">
+              <h3 class="text-base font-semibold">{step.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-2">{step.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <a
+        href={pathFor('service:implant', locale)}
+        class="mt-8 inline-flex min-h-11 items-center gap-2 border border-steel-edge px-5 transition-colors duration-300 hover:bg-surface active:translate-y-px"
+      >
+        <span class="font-medium">More on implants</span>
+        <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+      </a>
+    </Container>
+  </section>
+
+  <section aria-labelledby="results" class="border-b border-steel">
+    <Container class="py-14 lg:py-20">
+      <h2 id="results" class="text-2xl font-semibold md:text-3xl">Treatment results</h2>
+      <p class="mt-3 max-w-[58ch] text-ink-2">
+        Before and after photographs are taken at the same angle, in the same light, from the same
+        distance. These frames keep a light background even in dark mode so tooth colour reads true.
+      </p>
+
+      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:max-w-3xl">
+        <ImageSlot
+          slot="case-before"
+          ratio="1/1"
+          brief="Before treatment. Record the camera settings so the after shot matches exactly."
+          clinical
+        />
+        <ImageSlot
+          slot="case-after"
+          ratio="1/1"
+          brief="After treatment. Same angle, same light, same distance."
+          clinical
+        />
+      </div>
+    </Container>
+  </section>
+
+  <section aria-labelledby="prices" class="border-b border-steel">
+    <Container class="flex flex-col items-start gap-6 py-14 lg:flex-row lg:items-center lg:justify-between lg:py-20">
+      <div class="max-w-[46ch]">
+        <h2 id="prices" class="text-2xl font-semibold md:text-3xl">Published prices</h2>
+        <p class="mt-3 text-ink-2">
+          The full cost is written down before treatment starts. The warranty is a document, not a
+          promise.
+        </p>
+      </div>
+      <a
+        href={pathFor('pricing', locale)}
+        class="inline-flex min-h-11 shrink-0 items-center gap-2 bg-accent px-5 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px"
+      >
+        <span class="font-medium">See prices</span>
+        <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+      </a>
+    </Container>
+  </section>
 </BaseLayout>
