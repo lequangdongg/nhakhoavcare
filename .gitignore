@@ -1,11 +1,18 @@
-# build
+# build output
 dist/
+# generated types
 .astro/
 
-# deps
+# dependencies
 node_modules/
 
-# env & secrets — không bao giờ commit khóa service account
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables & secrets — không bao giờ commit khoá service account
 .env
 .env.*
 .dev.vars
@@ -14,5 +21,8 @@ node_modules/
 # cloudflare
 .wrangler/
 
-# os
+# macOS-specific files
 .DS_Store
+
+# jetbrains setting folder
+.idea/
