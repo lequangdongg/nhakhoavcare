@@ -3,6 +3,7 @@ key: braces
 lang: en
 title: 'Orthodontics'
 description: 'Moving teeth into position with braces or clear aligners. Covers treatment time and why a retainer after the braces come off is not optional.'
+priceFrom: 25000000
 order: 11
 keywords:
   - 'braces'

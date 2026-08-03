@@ -75,14 +75,15 @@ export const clinic: Clinic = {
 
   geo: { lat: 16.0748384, lng: 108.1693839 },
 
+  // Giờ làm việc THẬT: 8:00 tới 20:00, tất cả các ngày trong tuần.
   hours: {
-    monday: { open: '07:30', close: '20:00' },
-    tuesday: { open: '07:30', close: '20:00' },
-    wednesday: { open: '07:30', close: '20:00' },
-    thursday: { open: '07:30', close: '20:00' },
-    friday: { open: '07:30', close: '20:00' },
-    saturday: { open: '07:30', close: '17:30' },
-    sunday: { open: '08:00', close: '12:00' },
+    monday: { open: '08:00', close: '20:00' },
+    tuesday: { open: '08:00', close: '20:00' },
+    wednesday: { open: '08:00', close: '20:00' },
+    thursday: { open: '08:00', close: '20:00' },
+    friday: { open: '08:00', close: '20:00' },
+    saturday: { open: '08:00', close: '20:00' },
+    sunday: { open: '08:00', close: '20:00' },
   },
 
   /** Link chỉ đường. Dùng URL trang phòng khám để mở đúng hồ sơ có tên, ảnh và

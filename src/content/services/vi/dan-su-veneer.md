@@ -3,6 +3,7 @@ key: veneer
 lang: vi
 title: 'Dán sứ Veneer'
 description: 'Lớp sứ mỏng dán lên mặt trước răng để chỉnh màu và hình dáng. Trang này nói về mức mài răng, tuổi thọ và khi nào nên chọn bọc sứ thay thế.'
+priceFrom: 4500000
 order: 2
 keywords:
   - 'mặt dán sứ'

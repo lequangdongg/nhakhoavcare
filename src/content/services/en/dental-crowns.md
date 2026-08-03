@@ -3,6 +3,7 @@ key: crown
 lang: en
 title: 'Dental Crowns'
 description: 'A crown covers the whole visible tooth, used for badly broken or root-treated teeth. Compares crown materials and explains why treated teeth need one.'
+priceFrom: 1500000
 order: 3
 keywords:
   - 'cap'

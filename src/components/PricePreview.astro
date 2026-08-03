@@ -1,0 +1,132 @@
+---
+/**
+ * Xem trước bảng giá trên trang chủ.
+ *
+ * Bản trước chỉ là một câu "Giá công khai, không phát sinh" rồi một nút. Nói về
+ * giá mà không cho thấy giá thì không ai bấm: người ta đã nghe câu đó ở mọi
+ * phòng khám.
+ *
+ * Bản này đưa con số ra ngay. Khách thấy mức khởi điểm, biết mình có nằm trong
+ * tầm không, rồi mới bấm xem đầy đủ. Đó là lý do bấm thật.
+ */
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import type { Locale } from '../i18n/locales';
+import { type ServiceKey, pathFor } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  limit?: number;
+}
+
+const { locale, limit = 6 } = Astro.props;
+const t = useTranslations(locale);
+
+const services = (await getCollection('services', (e) => e.data.lang === locale))
+  .filter((s) => s.data.priceFrom !== undefined)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, limit);
+
+const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
+---
+
+<ul class="price-grid">
+  {
+    services.map((s) => (
+      <li>
+        <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="price-row">
+          <span class="price-name">{s.data.title}</span>
+          <span class="price-value">
+            <span class="price-label">{t('home.priceFrom')}</span>
+            <span class="measure price-num">{fmt.format(s.data.priceFrom!)}</span>
+            <span class="price-unit">đ</span>
+          </span>
+          <Icon name="ph:arrow-right" class="price-arrow size-4 shrink-0" aria-hidden="true" />
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .price-grid {
+    display: grid;
+    gap: 0.5rem;
+  }
+  @media (min-width: 768px) {
+    .price-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 1.5rem;
+    }
+  }
+
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--r-md);
+    transition: background-color 0.25s var(--ease-out);
+  }
+  .price-row:hover,
+  .price-row:focus-visible {
+    background: var(--accent-quiet);
+  }
+
+  .price-name {
+    font-weight: 500;
+    transition: color 0.25s var(--ease-out);
+  }
+  .price-row:hover .price-name {
+    color: var(--accent);
+  }
+
+  /* Đường kẻ chấm nối tên với giá, kiểu thực đơn. Nó dẫn mắt đi ngang mà không
+     cần kẻ viền cho từng hàng, thứ Taste liệt vào bố cục lười nhất. */
+  .price-value {
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    margin-inline-start: auto;
+    padding-inline-start: 0.75rem;
+    position: relative;
+  }
+  .price-value::before {
+    content: '';
+    position: absolute;
+    inset-inline: -100vw 100%;
+    bottom: 0.28em;
+    border-bottom: 1px dotted var(--steel-edge);
+    mask-image: linear-gradient(to right, transparent, black 96%);
+  }
+
+  .price-label {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+  .price-num {
+    font-size: 1.0625rem;
+    font-weight: 600;
+  }
+  .price-unit {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  .price-arrow {
+    align-self: center;
+    color: var(--text-tertiary);
+    opacity: 0;
+    translate: -4px 0;
+    transition:
+      opacity 0.25s var(--ease-out),
+      translate 0.25s var(--ease-out);
+  }
+  .price-row:hover .price-arrow,
+  .price-row:focus-visible .price-arrow {
+    color: var(--accent);
+    opacity: 1;
+    translate: 0 0;
+  }
+</style>

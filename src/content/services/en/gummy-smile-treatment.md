@@ -3,6 +3,7 @@ key: gummySmile
 lang: en
 title: 'Gummy Smile Treatment'
 description: 'Gum contouring surgery to expose more of the tooth when smiling. Separates the three causes of a gummy smile, because each one needs a different fix.'
+priceFrom: 5000000
 order: 6
 keywords:
   - 'gum surgery'

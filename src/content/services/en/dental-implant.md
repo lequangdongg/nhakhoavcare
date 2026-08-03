@@ -3,6 +3,7 @@ key: implant
 lang: en
 title: 'Dental Implants'
 description: 'A titanium post placed in the jawbone to replace a missing tooth root. This page covers the procedure, healing time and when it cannot be done.'
+priceFrom: 15000000
 order: 1
 keywords:
   - 'missing tooth'

@@ -3,6 +3,7 @@ key: denture
 lang: en
 title: 'Removable Dentures'
 description: 'A removable appliance for patients missing several teeth. Covers the adjustment period, daily cleaning, and why a denture loosens over the years.'
+priceFrom: 3000000
 order: 5
 keywords:
   - 'false teeth'

@@ -3,6 +3,7 @@ key: rootCanal
 lang: vi
 title: 'Chữa tủy răng'
 description: 'Lấy bỏ phần tủy viêm hoặc hoại tử rồi trám kín ống tủy. Trang này giải thích vì sao răng hết đau vẫn phải điều trị và vì sao cần bọc lại sau đó.'
+priceFrom: 800000
 order: 7
 keywords:
   - 'lấy tủy'

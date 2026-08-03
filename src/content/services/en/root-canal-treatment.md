@@ -3,6 +3,7 @@ key: rootCanal
 lang: en
 title: 'Root Canal Treatment'
 description: 'Removing inflamed or dead pulp and sealing the canal. Explains why a tooth that stopped hurting still needs treatment, and why it needs a crown after.'
+priceFrom: 800000
 order: 7
 keywords:
   - 'endodontic'

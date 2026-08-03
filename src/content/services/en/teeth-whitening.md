@@ -3,6 +3,7 @@ key: whitening
 lang: en
 title: 'Teeth Whitening'
 description: 'Lightening tooth colour with professional bleaching gel. Explains which stains respond, which do not, and why crowns will not change colour with them.'
+priceFrom: 1800000
 order: 10
 keywords:
   - 'bleaching'

@@ -3,6 +3,7 @@ key: scaling
 lang: en
 title: 'Teeth Scaling'
 description: 'Removing hardened plaque from around the neck of the tooth and below the gum. Covers how often to do it and why bleeding means gums were already inflamed.'
+priceFrom: 250000
 order: 8
 keywords:
   - 'tartar'

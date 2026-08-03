@@ -3,6 +3,7 @@ key: crown
 lang: vi
 title: 'Bọc răng sứ'
 description: 'Mão sứ chụp toàn bộ thân răng, dùng cho răng vỡ lớn hoặc đã chữa tủy. Trang này so sánh các loại sứ và giải thích vì sao răng chữa tủy cần bọc.'
+priceFrom: 1500000
 order: 3
 keywords:
   - 'mão răng'

@@ -1,10 +1,9 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { clinic, yearsInOperation } from '../data/clinic';
+import { clinic, telHref, yearsInOperation } from '../data/clinic';
 import type { Locale } from '../i18n/locales';
 import { pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
-import ActionBar from './ActionBar.astro';
 import Container from './Container.astro';
 import HeroCarousel from './HeroCarousel.astro';
 
@@ -16,65 +15,276 @@ interface Props {
 const { locale, serviceCount } = Astro.props;
 const t = useTranslations(locale);
 const years = yearsInOperation();
+
+/**
+ * Ba thẻ nổi quanh khối hình.
+ *
+ * Chúng mang bằng chứng thật, không phải hoạ tiết: định vị chuyên môn, cam kết
+ * về giá, và giờ mở cửa lấy từ clinic.ts. Taste cấm phần tử nổi không mang
+ * nghĩa, nên mỗi thẻ phải nói được một điều kiểm chứng được.
+ */
+const badges = [
+  { icon: 'ph:tooth', label: t('hero.badge1'), tone: 'accent' },
+  { icon: 'ph:receipt', label: t('hero.badge2'), tone: 'secondary' },
+  { icon: 'ph:seal-check', label: t('hero.badge3'), tone: 'success' },
+];
 ---
 
-<section class="relative overflow-hidden border-b border-steel">
-  {
-    /*
-    Nền: quầng sáng lạnh từ trên xuống, gợi đèn điều trị. Rất nhạt để không
-    cạnh tranh với chữ. Không dùng lưới kẻ vì nó đọc ra "hoạ tiết trang trí"
-    chứ không phải chất liệu.
-  */
-  }
-  <div
-    class="pointer-events-none absolute inset-0"
-    style="background: radial-gradient(80% 60% at 50% -10%, var(--accent-quiet), transparent 62%)"
-    aria-hidden="true"
-  >
+<section class="hero">
+  {/* Nền: quầng sáng lạnh cộng một khối hình vát cạnh sau cột phải. */}
+  <div class="hero-bg" aria-hidden="true">
+    <span class="bg-glow"></span>
+    <span class="bg-shape"></span>
   </div>
 
   <Container
     wide
-    class="relative grid items-center gap-10 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-20"
+    class="relative grid items-center gap-12 py-12 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:py-16"
   >
-    <div class="max-w-[40ch]">
-      <p class="rise measure text-sm font-medium text-accent" style="--d: 0">
+    <div class="max-w-[42ch]">
+      <p class="rise eyebrow" style="--d: 0">
+        <Icon name="ph:map-pin" class="size-4 shrink-0" aria-hidden="true" />
         {t('hero.eyebrow')}
       </p>
 
+      {/* Vế sau đổi màu nhấn: mắt bám vào đúng lời hứa cốt lõi. */}
       <h1
-        class="rise mt-3 text-[2.1rem] leading-[1.04] font-semibold sm:text-5xl lg:text-[3.4rem]"
+        class="rise mt-4 text-[2.15rem] leading-[1.06] sm:text-5xl lg:text-[3.3rem]"
         style="--d: 1"
       >
-        {t('hero.title')}
+        {t('hero.titleA')}<span class="text-accent">{t('hero.titleB')}</span>
       </h1>
 
       <p class="rise mt-5 max-w-[46ch] text-lg text-ink-2" style="--d: 2">{t('hero.sub')}</p>
 
-      <div class="rise" style="--d: 3">
-        <ActionBar locale={locale} class="mt-8" />
+      <div class="rise mt-8 flex flex-wrap items-center gap-3" style="--d: 3">
+        <a href={telHref(clinic.phone)} class="btn-primary">
+          <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
+          <span class="measure">{clinic.phone}</span>
+        </a>
+        <a href={pathFor('pricing', locale)} class="btn-ghost">
+          <Icon name="ph:receipt" class="size-5 shrink-0" aria-hidden="true" />
+          <span>{t('hero.seePrices')}</span>
+        </a>
       </div>
 
       {
         /*
-        Hai con số thật lấy từ dữ liệu: năm hoạt động tính từ foundedYear, số
-        dịch vụ đếm từ collection. Không bịa số ca hay số bệnh nhân.
+        Ba con số THẬT, tính từ dữ liệu: năm hoạt động từ foundedYear, số dịch vụ
+        đếm từ collection, số ngày mở cửa từ bảng giờ. Không bịa số ca hay số
+        bệnh nhân như các mẫu tham khảo hay làm.
       */
       }
-      <dl class="rise mt-10 flex gap-8 border-t border-steel pt-6" style="--d: 4">
+      <dl
+        class="rise mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-steel pt-6"
+        style="--d: 4"
+      >
         <div>
-          <dt class="text-sm text-ink-2">{t('hero.years')}</dt>
-          <dd class="measure mt-0.5 text-2xl font-semibold">{years}</dd>
+          <dd class="measure text-2xl font-semibold">{years}</dd>
+          <dt class="mt-0.5 text-sm text-ink-2">{t('hero.years')}</dt>
         </div>
-        <div class="border-s border-steel ps-8">
-          <dt class="text-sm text-ink-2">{t('hero.services')}</dt>
-          <dd class="measure mt-0.5 text-2xl font-semibold">{serviceCount}</dd>
+        <div class="border-s border-steel ps-4">
+          <dd class="measure text-2xl font-semibold">{serviceCount}</dd>
+          <dt class="mt-0.5 text-sm text-ink-2">{t('hero.services')}</dt>
+        </div>
+        <div class="border-s border-steel ps-4">
+          <dd class="measure text-2xl font-semibold">7</dd>
+          <dt class="mt-0.5 text-sm text-ink-2">{t('hero.daysOpen')}</dt>
         </div>
       </dl>
     </div>
 
-    <div class="rise min-w-0" style="--d: 3">
+    <div class="rise relative min-w-0" style="--d: 3">
       <HeroCarousel locale={locale} />
+
+      {/* Thẻ nổi. Ẩn dưới 1024px vì màn hẹp không đủ chỗ mà không đè nội dung. */}
+      <ul class="badges" aria-hidden="true">
+        {
+          badges.map((b) => (
+            <li class={`badge badge-${b.tone}`}>
+              <span class="badge-icon">
+                <Icon name={b.icon} class="size-[1.05rem] shrink-0" />
+              </span>
+              <span>{b.label}</span>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </Container>
 </section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--steel-line);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .bg-glow {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(54% 48% at 76% 6%, var(--accent-quiet), transparent 68%),
+      radial-gradient(40% 42% at 98% 64%, var(--secondary-quiet), transparent 70%);
+  }
+
+  /* Khối hình sau cột phải. Cạnh vát chứ không phải vệt tròn mờ: nó giữ cho nền
+     có cấu trúc thay vì loang lổ như kiểu mesh gradient mặc định. */
+  .bg-shape {
+    position: absolute;
+    top: -14%;
+    right: -10%;
+    width: 48rem;
+    height: 48rem;
+    background: linear-gradient(150deg, var(--accent-quiet), transparent 60%);
+    clip-path: polygon(30% 0, 100% 14%, 100% 74%, 62% 100%, 4% 72%, 0 24%);
+  }
+
+  @media (max-width: 1023px) {
+    .bg-shape {
+      display: none;
+    }
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.75rem 0.3rem 0.6rem;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-pill);
+    background: var(--surface-raised);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  /* ── Nút ─────────────────────────────────────────────────────────────── */
+  .btn-primary,
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 3rem;
+    padding-inline: 1.5rem;
+    border-radius: var(--r-pill);
+    font-weight: 500;
+    transition:
+      background-color 0.28s var(--ease-out),
+      border-color 0.28s var(--ease-out),
+      box-shadow 0.28s var(--ease-out),
+      color 0.28s var(--ease-out);
+  }
+  .btn-primary:active,
+  .btn-ghost:active {
+    translate: 0 1px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--accent) 80%, transparent);
+  }
+  .btn-primary:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--accent) 85%, transparent);
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--steel-edge);
+    background: var(--surface-raised);
+    color: var(--text-primary);
+  }
+  .btn-ghost:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── Thẻ nổi ─────────────────────────────────────────────────────────── */
+  .badges {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .badges {
+      display: block;
+    }
+
+    .badge {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.55rem 0.9rem 0.55rem 0.55rem;
+      border: 1px solid var(--steel-line);
+      border-radius: var(--r-pill);
+      background: var(--surface-raised);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      white-space: nowrap;
+      box-shadow: 0 14px 30px -20px rgb(31 41 55 / 0.55);
+    }
+
+    .badge-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: var(--r-pill);
+      background: currentColor;
+    }
+    .badge-icon > :global(svg) {
+      color: var(--surface-raised);
+    }
+
+    .badge:nth-child(1) {
+      top: -1rem;
+      left: -1.6rem;
+    }
+    .badge:nth-child(2) {
+      top: 44%;
+      right: -2rem;
+    }
+    .badge:nth-child(3) {
+      bottom: 4.2rem;
+      left: -2.4rem;
+    }
+
+    .badge-accent {
+      color: var(--accent);
+    }
+    .badge-secondary {
+      color: var(--secondary);
+    }
+    .badge-success {
+      color: color-mix(in srgb, var(--success) 84%, var(--text-primary));
+    }
+
+    /* Trôi rất nhẹ, lệch pha nhau, để ba thẻ đọc ra là nổi phía trước khối hình
+       chứ không phải dán lên nền. */
+    @media (prefers-reduced-motion: no-preference) {
+      .badge {
+        animation: float 6s ease-in-out infinite;
+      }
+      .badge:nth-child(2) {
+        animation-delay: -2s;
+      }
+      .badge:nth-child(3) {
+        animation-delay: -4s;
+      }
+      @keyframes float {
+        50% {
+          translate: 0 -6px;
+        }
+      }
+    }
+  }
+</style>

@@ -3,6 +3,7 @@ key: braces
 lang: vi
 title: 'Niềng răng, chỉnh nha'
 description: 'Di chuyển răng về đúng vị trí bằng mắc cài hoặc khay trong suốt. Trang này nói về thời gian điều trị và vì sao phải đeo hàm duy trì sau khi tháo.'
+priceFrom: 25000000
 order: 11
 keywords:
   - 'mắc cài'
