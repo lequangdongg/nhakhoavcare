@@ -12,7 +12,9 @@
     "astro": "astro",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify": "astro check && vitest run && astro build"
+    "verify": "astro check && vitest run && ALLOW_PLACEHOLDER_CLINIC=1 astro build",
+    "deploy": "astro check && vitest run && astro build && wrangler pages deploy dist",
+    "deploy:preview": "npm run verify && wrangler pages deploy dist --branch preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
@@ -21,7 +23,9 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.1.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wrangler": "^4.118.0"
   }
 }

@@ -1,43 +1,43 @@
-# Astro Starter Kit: Minimal
+# Nha Khoa Vcare — website
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Astro 7 · Tailwind 4 · TypeScript · Cloudflare Pages
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Lệnh
 
-## 🚀 Project Structure
+| Lệnh | Việc |
+|---|---|
+| `npm run dev` | Chạy dev server tại `localhost:4321` |
+| `npm test` | Chạy unit test |
+| `npm run verify` | Kiểm type + test + build (chạy trước mọi commit lớn) |
+| `npm run deploy:preview` | Deploy bản xem trước |
+| `npm run deploy` | Deploy production — **fail nếu `clinic.ts` còn dữ liệu giả** |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Sửa nội dung
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+| Muốn đổi | Sửa file |
+|---|---|
+| SĐT, địa chỉ, giờ làm việc | `src/data/clinic.ts` — **nguồn duy nhất**, đổi ở đây là đổi cả site |
+| Chữ trên giao diện (menu, nút) | `src/i18n/ui.ts` |
+| Đường dẫn URL | `src/i18n/routes.ts` — **nguồn duy nhất**, đừng viết URL tay ở nơi khác |
+| Nội dung trang dịch vụ | `src/content/services/{vi,en}/*.md` |
+| Màu sắc | `src/styles/global.css` |
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Trước khi launch
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+`npm run deploy` **fail** nếu `src/data/clinic.ts` còn giá trị `CHUA_CO`.
+Đây là chủ ý — xem spec §18-B để biết cần điền những gì.
 
-Any static assets, like images, can be placed in the `public/` directory.
+`npm run verify` và `npm run deploy:preview` có cờ `ALLOW_PLACEHOLDER_CLINIC=1` để
+vẫn làm việc được khi chưa có dữ liệu. Khi đã điền dữ liệu thật, **xoá cờ khỏi cả hai**.
 
-## 🧞 Commands
+## Kiến trúc
 
-All commands are run from the root of the project, from a terminal:
+- Xuất HTML tĩnh, **0 KB JavaScript** trừ đoạn script chống lóe sáng khi đổi theme
+- Logic thuần nằm trong `.ts` có unit test; file `.astro` chỉ lắp ráp
+- Slug URL dịch riêng theo ngôn ngữ (`/dich-vu/...` ↔ `/en/services/...`), quản lý tập trung ở `routes.ts`
+- Vùng ảnh lâm sàng giữ nền sáng ở cả chế độ tối — xem ghi chú trong `global.css`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Tài liệu
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Thiết kế: `docs/superpowers/specs/2026-08-03-nhakhoavcare-rebuild-design.md`
+- Kế hoạch: `docs/superpowers/plans/`
