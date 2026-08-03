@@ -15,7 +15,11 @@ const locale = 'vi' as const;
 const t = useTranslations(locale);
 ---
 
-<BaseLayout locale={locale} title={`${t('notFound.title')}. ${t('brand.short')}`} description={t('notFound.body')}>
+<BaseLayout
+  locale={locale}
+  title={`${t('notFound.title')}. ${t('brand.short')}`}
+  description={t('notFound.body')}
+>
   <Container class="flex min-h-[50vh] flex-col justify-center py-16">
     <p class="measure text-sm text-ink-3">404</p>
     <h1 class="mt-2 text-3xl font-semibold md:text-4xl">{t('notFound.title')}</h1>

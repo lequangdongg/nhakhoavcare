@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest';
 import { experimental_AstroContainer as AstroContainer } from 'astro/container';
-import Footer from './Footer.astro';
+import { describe, expect, it } from 'vitest';
 import { clinic } from '../data/clinic';
+import Footer from './Footer.astro';
 
 describe('Footer', () => {
   it('hiện số điện thoại lấy từ clinic.ts, không viết cứng', async () => {

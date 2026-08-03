@@ -6,10 +6,7 @@ import { z } from 'astro/zod';
  */
 export const PLACEHOLDER = 'CHUA_CO';
 
-const daySchema = z.union([
-  z.object({ open: z.string(), close: z.string() }),
-  z.literal('closed'),
-]);
+const daySchema = z.union([z.object({ open: z.string(), close: z.string() }), z.literal('closed')]);
 
 export const clinicSchema = z.object({
   name: z.string().min(1),

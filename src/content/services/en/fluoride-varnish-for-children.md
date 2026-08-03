@@ -1,14 +1,14 @@
 ---
 key: fluoride
 lang: en
-title: "Fluoride Varnish for Children"
-description: "Fluoride varnish painted onto a child enamel to prevent decay. Covers the starting age, how often it is applied, and what it does not replace."
+title: 'Fluoride Varnish for Children'
+description: 'Fluoride varnish painted onto a child enamel to prevent decay. Covers the starting age, how often it is applied, and what it does not replace.'
 order: 9
 keywords:
-  - "children"
-  - "kids"
-  - "child"
-  - "cavity prevention"
+  - 'children'
+  - 'kids'
+  - 'child'
+  - 'cavity prevention'
 faq: []
 ---
 

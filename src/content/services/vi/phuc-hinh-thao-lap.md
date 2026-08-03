@@ -1,14 +1,14 @@
 ---
 key: denture
 lang: vi
-title: "Phục hình tháo lắp"
-description: "Hàm giả tháo ra lắp vào, dùng khi mất nhiều răng. Trang này nói về thời gian làm quen, cách giữ vệ sinh và vì sao hàm sẽ lỏng dần theo năm."
+title: 'Phục hình tháo lắp'
+description: 'Hàm giả tháo ra lắp vào, dùng khi mất nhiều răng. Trang này nói về thời gian làm quen, cách giữ vệ sinh và vì sao hàm sẽ lỏng dần theo năm.'
 order: 5
 keywords:
-  - "hàm giả"
-  - "răng giả"
-  - "hàm tháo lắp"
-  - "mất nhiều răng"
+  - 'hàm giả'
+  - 'răng giả'
+  - 'hàm tháo lắp'
+  - 'mất nhiều răng'
 faq: []
 ---
 

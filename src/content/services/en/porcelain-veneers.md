@@ -1,12 +1,12 @@
 ---
 key: veneer
 lang: en
-title: "Porcelain Veneers"
-description: "A thin porcelain layer bonded to the front of a tooth to change its colour and shape. Covers how much enamel is removed and when a crown is the better choice."
+title: 'Porcelain Veneers'
+description: 'A thin porcelain layer bonded to the front of a tooth to change its colour and shape. Covers how much enamel is removed and when a crown is the better choice.'
 order: 2
 keywords:
-  - "veneer"
-  - "cosmetic teeth"
+  - 'veneer'
+  - 'cosmetic teeth'
 faq: []
 ---
 

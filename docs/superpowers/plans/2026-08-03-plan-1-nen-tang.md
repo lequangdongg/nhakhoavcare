@@ -24,23 +24,23 @@
 
 ## Cấu trúc file
 
-| File | Trách nhiệm |
-|---|---|
-| `astro.config.mjs` | Cấu hình Astro: i18n, Tailwind, site URL |
-| `vitest.config.ts` | Cấu hình test dùng `getViteConfig` của Astro |
-| `wrangler.toml` | Cấu hình Cloudflare Pages |
-| `src/i18n/locales.ts` | Kiểu `Locale`, hằng số ngôn ngữ. Không phụ thuộc gì |
-| `src/i18n/ui.ts` | Chuỗi giao diện vi/en + hàm `t()` |
-| `src/i18n/routes.ts` | **Nguồn sự thật cho mọi đường dẫn.** key+locale → path, path → key, cặp hreflang |
-| `src/data/clinic.ts` | **Nguồn sự thật cho dữ liệu phòng khám.** Có Zod tự kiểm, chặn giá trị giả khi build production |
-| `src/content.config.ts` | Zod schema cho collection `services` |
-| `src/styles/global.css` | Import Tailwind + design token theo vai trò, hai chế độ màu |
-| `src/components/ThemeScript.astro` | Script chặn trong `<head>`, chống lóe sáng |
-| `src/components/Header.astro` | Điều hướng + nút gọi, đọc từ `clinic.ts` |
-| `src/components/Footer.astro` | Liên hệ + giờ làm việc, đọc từ `clinic.ts` |
-| `src/components/LanguageSwitcher.astro` | Chuyển ngôn ngữ giữ đúng trang, dùng `routes.ts` |
-| `src/layouts/BaseLayout.astro` | HTML ngữ nghĩa, meta, hreflang, skip link |
-| `src/pages/index.astro` · `src/pages/en/index.astro` | Trang chủ hai ngôn ngữ |
+| File                                                 | Trách nhiệm                                                                                     |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `astro.config.mjs`                                   | Cấu hình Astro: i18n, Tailwind, site URL                                                        |
+| `vitest.config.ts`                                   | Cấu hình test dùng `getViteConfig` của Astro                                                    |
+| `wrangler.toml`                                      | Cấu hình Cloudflare Pages                                                                       |
+| `src/i18n/locales.ts`                                | Kiểu `Locale`, hằng số ngôn ngữ. Không phụ thuộc gì                                             |
+| `src/i18n/ui.ts`                                     | Chuỗi giao diện vi/en + hàm `t()`                                                               |
+| `src/i18n/routes.ts`                                 | **Nguồn sự thật cho mọi đường dẫn.** key+locale → path, path → key, cặp hreflang                |
+| `src/data/clinic.ts`                                 | **Nguồn sự thật cho dữ liệu phòng khám.** Có Zod tự kiểm, chặn giá trị giả khi build production |
+| `src/content.config.ts`                              | Zod schema cho collection `services`                                                            |
+| `src/styles/global.css`                              | Import Tailwind + design token theo vai trò, hai chế độ màu                                     |
+| `src/components/ThemeScript.astro`                   | Script chặn trong `<head>`, chống lóe sáng                                                      |
+| `src/components/Header.astro`                        | Điều hướng + nút gọi, đọc từ `clinic.ts`                                                        |
+| `src/components/Footer.astro`                        | Liên hệ + giờ làm việc, đọc từ `clinic.ts`                                                      |
+| `src/components/LanguageSwitcher.astro`              | Chuyển ngôn ngữ giữ đúng trang, dùng `routes.ts`                                                |
+| `src/layouts/BaseLayout.astro`                       | HTML ngữ nghĩa, meta, hreflang, skip link                                                       |
+| `src/pages/index.astro` · `src/pages/en/index.astro` | Trang chủ hai ngôn ngữ                                                                          |
 
 Nguyên tắc: mọi thứ có logic đều nằm trong `.ts` để test thẳng. File `.astro` chỉ lắp ráp.
 
@@ -49,6 +49,7 @@ Nguyên tắc: mọi thứ có logic đều nằm trong `.ts` để test thẳng
 ## Task 1: Scaffold dự án
 
 **Files:**
+
 - Create: `package.json`, `astro.config.mjs`, `tsconfig.json`, `src/styles/global.css`
 
 - [ ] **Step 1: Tạo dự án Astro tối giản**
@@ -93,6 +94,7 @@ git commit -m "chore: scaffold Astro 5 + Tailwind 4 + TypeScript strict"
 ## Task 2: Cấu hình i18n và Vitest
 
 **Files:**
+
 - Modify: `astro.config.mjs`
 - Create: `vitest.config.ts`
 - Modify: `package.json` (scripts)
@@ -166,6 +168,7 @@ git commit -m "chore: cấu hình i18n vi/en và Vitest"
 ## Task 3: Kiểu Locale
 
 **Files:**
+
 - Create: `src/i18n/locales.ts`
 - Test: `src/i18n/locales.test.ts`
 
@@ -245,6 +248,7 @@ git commit -m "feat(i18n): thêm kiểu Locale và hằng số ngôn ngữ"
 Đây là task quan trọng nhất của Plan 1. `getRelativeLocaleUrl()` của Astro chỉ thêm tiền tố `/en/`, **không đổi được slug**. Vì spec chốt slug dịch riêng cho từng ngôn ngữ, cần lớp này làm nguồn sự thật.
 
 **Files:**
+
 - Create: `src/i18n/routes.ts`
 - Test: `src/i18n/routes.test.ts`
 
@@ -342,8 +346,14 @@ describe('mọi key đều có đường dẫn ở cả hai ngôn ngữ', () => 
   it('đường dẫn sinh ra luôn quay ngược lại đúng key', () => {
     for (const key of SERVICE_KEYS) {
       const routeKey = `service:${key}` as const;
-      expect(keyFromPath(pathFor(routeKey, 'vi'))).toEqual({ key: routeKey, locale: 'vi' });
-      expect(keyFromPath(pathFor(routeKey, 'en'))).toEqual({ key: routeKey, locale: 'en' });
+      expect(keyFromPath(pathFor(routeKey, 'vi'))).toEqual({
+        key: routeKey,
+        locale: 'vi',
+      });
+      expect(keyFromPath(pathFor(routeKey, 'en'))).toEqual({
+        key: routeKey,
+        locale: 'en',
+      });
     }
   });
 });
@@ -475,6 +485,7 @@ git commit -m "feat(i18n): lớp định tuyến có slug dịch riêng cho từ
 ## Task 5: Chuỗi giao diện
 
 **Files:**
+
 - Create: `src/i18n/ui.ts`
 - Test: `src/i18n/ui.test.ts`
 
@@ -619,6 +630,7 @@ Spec §6: site cũ hiện giờ làm việc ở hai nơi với số liệu khác
 Dữ liệu thật chưa có (spec §18-B). Giải pháp: giá trị giữ chỗ mang sentinel `CHUA_CO`, và Zod **từ chối sentinel khi build production** — làm được `npm run dev` ngay bây giờ, nhưng không thể lỡ tay deploy site với số điện thoại giả.
 
 **Files:**
+
 - Create: `src/data/clinic.ts`
 - Test: `src/data/clinic.test.ts`
 
@@ -647,10 +659,9 @@ describe('bảo vệ giá trị giữ chỗ', () => {
   });
 
   it('từ chối sentinel khi build production — không thể deploy với số điện thoại giả', () => {
-    const strict = clinicSchema.refine(
-      (c) => !JSON.stringify(c).includes(PLACEHOLDER),
-      { message: `Còn giá trị giữ chỗ ${PLACEHOLDER} trong clinic.ts` },
-    );
+    const strict = clinicSchema.refine((c) => !JSON.stringify(c).includes(PLACEHOLDER), {
+      message: `Còn giá trị giữ chỗ ${PLACEHOLDER} trong clinic.ts`,
+    });
     const result = strict.safeParse({ ...clinic, phone: PLACEHOLDER });
     expect(result.success).toBe(false);
   });
@@ -811,6 +822,7 @@ git commit -m "feat(data): nguồn dữ liệu phòng khám duy nhất, chặn b
 ## Task 7: Content Collections + Zod schema
 
 **Files:**
+
 - Create: `src/content.config.ts`
 - Create: `src/content/services/vi/cay-ghep-implant.md`
 - Create: `src/content/services/en/dental-implant.md`
@@ -918,6 +930,7 @@ git commit -m "feat(content): Zod schema cho collection services + nội dung m�
 ## Task 8: Design token sáng/tối
 
 **Files:**
+
 - Modify: `src/styles/global.css`
 
 - [ ] **Step 1: Viết token theo vai trò**
@@ -925,7 +938,7 @@ git commit -m "feat(content): Zod schema cho collection services + nội dung m�
 Thay toàn bộ `src/styles/global.css`:
 
 ```css
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /*
   Màu khai theo VAI TRÒ, không theo tên màu. Đổi theme là đổi một tầng biến.
@@ -1019,6 +1032,7 @@ git commit -m "feat(style): design token theo vai trò, hai chế độ màu, n�
 ## Task 9: Script theme chống lóe sáng
 
 **Files:**
+
 - Create: `src/lib/theme.ts`
 - Test: `src/lib/theme.test.ts`
 - Create: `src/components/ThemeScript.astro`
@@ -1093,7 +1107,9 @@ export type ThemePreference = (typeof THEME_PREFERENCES)[number];
 export type ResolvedTheme = 'light' | 'dark';
 
 export function isThemePreference(value: unknown): value is ThemePreference {
-  return typeof value === 'string' && (THEME_PREFERENCES as readonly string[]).includes(value);
+  return (
+    typeof value === 'string' && (THEME_PREFERENCES as readonly string[]).includes(value)
+  );
 }
 
 /** Giá trị lưu trữ + cài đặt hệ điều hành → theme thật sự áp dụng. */
@@ -1120,12 +1136,14 @@ Kỳ vọng: PASS, 6 test.
 import { THEME_STORAGE_KEY } from '../lib/theme';
 ---
 
-{/*
+{
+  /*
   Chạy CHẶN trong <head>, trước khi trình duyệt vẽ. Không có nó, trang lóe trắng
   một nhịp rồi mới chuyển sang tối — lỗi này nhìn rất rẻ tiền.
   Đây là ngoại lệ JavaScript duy nhất trên đường tải chính (spec §8).
   is:inline bắt buộc: Astro không được bundle/hoãn đoạn này.
-*/}
+*/
+}
 <script is:inline define:vars={{ storageKey: THEME_STORAGE_KEY }}>
   try {
     const stored = localStorage.getItem(storageKey);
@@ -1151,6 +1169,7 @@ git commit -m "feat(theme): logic theme có test + script chặn chống lóe s�
 ## Task 10: Layout nền
 
 **Files:**
+
 - Create: `src/layouts/BaseLayout.astro`
 
 - [ ] **Step 1: Viết layout**
@@ -1232,6 +1251,7 @@ Ghi chú: build sẽ chưa chạy được cho tới khi có `Header` và `Foote
 ## Task 11: Header và Footer
 
 **Files:**
+
 - Create: `src/components/Header.astro`
 - Create: `src/components/LanguageSwitcher.astro`
 - Create: `src/components/Footer.astro`
@@ -1300,7 +1320,12 @@ const t = useTranslations(locale);
 const other = alternateLinks(Astro.url.pathname).find((a) => a.locale !== locale)!;
 ---
 
-<a href={other.path} hreflang={other.locale} rel="alternate" aria-label={t('lang.switchTo')}>
+<a
+  href={other.path}
+  hreflang={other.locale}
+  rel="alternate"
+  aria-label={t('lang.switchTo')}
+>
   {UI[other.locale]['lang.current']}
 </a>
 ```
@@ -1332,7 +1357,7 @@ const nav = [
 ] as const;
 ---
 
-<header class="border-b border-border">
+<header class="border-border border-b">
   <nav aria-label={t('nav.home')} class="flex items-center gap-4 p-4">
     <a href={pathFor('home', locale)} class="font-semibold">{clinic.name}</a>
 
@@ -1348,7 +1373,10 @@ const nav = [
 
     <div class="ms-auto flex items-center gap-3">
       <LanguageSwitcher locale={locale} />
-      <a href={telHref(clinic.phone)} class="rounded bg-accent px-3 py-2 text-accent-contrast">
+      <a
+        href={telHref(clinic.phone)}
+        class="rounded bg-accent px-3 py-2 text-accent-contrast"
+      >
         {t('cta.call')}
       </a>
     </div>
@@ -1399,7 +1427,7 @@ const days = Object.entries(clinic.hours) as Array<
 >;
 ---
 
-<footer class="border-t border-border p-4">
+<footer class="border-border border-t p-4">
   {/* Mọi giá trị đọc từ clinic.ts — spec §6. Không viết cứng lại ở đây. */}
   <section aria-labelledby="footer-contact">
     <h2 id="footer-contact">{t('footer.contact')}</h2>
@@ -1418,7 +1446,9 @@ const days = Object.entries(clinic.hours) as Array<
         days.map(([day, value]) => (
           <div>
             <dt>{DAY_LABELS[locale][day]}</dt>
-            <dd>{value === 'closed' ? t('footer.closed') : `${value.open} – ${value.close}`}</dd>
+            <dd>
+              {value === 'closed' ? t('footer.closed') : `${value.open} – ${value.close}`}
+            </dd>
           </div>
         ))
       }
@@ -1449,6 +1479,7 @@ git commit -m "feat(ui): header, footer và nút chuyển ngôn ngữ đọc t�
 ## Task 12: Trang chủ hai ngôn ngữ
 
 **Files:**
+
 - Modify: `src/pages/index.astro`
 - Create: `src/pages/en/index.astro`
 
@@ -1499,6 +1530,7 @@ npm run dev
 ```
 
 Mở `http://localhost:4321/` và `http://localhost:4321/en/`. Kiểm:
+
 - Bấm nút chuyển ngôn ngữ ở trang chủ vi → tới `/en/`, và ngược lại
 - Đổi cài đặt sáng/tối của hệ điều hành rồi tải lại → **không lóe trắng**
 - Footer hiện đủ 7 ngày
@@ -1525,6 +1557,7 @@ git commit -m "feat(pages): trang chủ hai ngôn ngữ dùng layout nền"
 ## Task 13: Wrangler và deploy
 
 **Files:**
+
 - Create: `wrangler.toml`
 - Modify: `package.json`
 
@@ -1579,6 +1612,7 @@ git commit -m "chore(deploy): cấu hình Wrangler cho Cloudflare Pages"
 ## Task 14: Chặn build production khi còn dữ liệu giả
 
 **Files:**
+
 - Modify: `astro.config.mjs`
 - Modify: `package.json`
 
@@ -1677,6 +1711,7 @@ git commit -m "feat(build): chặn build production khi clinic.ts còn giá tr�
 ## Task 15: README bàn giao
 
 **Files:**
+
 - Create: `README.md`
 
 - [ ] **Step 1: Viết README**
@@ -1688,23 +1723,23 @@ Astro 5 · Tailwind 4 · TypeScript · Cloudflare Pages
 
 ## Lệnh
 
-| Lệnh | Việc |
-|---|---|
-| `npm run dev` | Chạy dev server tại `localhost:4321` |
-| `npm test` | Chạy unit test |
-| `npm run verify` | Kiểm type + test + build (chạy trước mọi commit lớn) |
-| `npm run deploy:preview` | Deploy bản xem trước |
-| `npm run deploy` | Deploy production |
+| Lệnh                     | Việc                                                 |
+| ------------------------ | ---------------------------------------------------- |
+| `npm run dev`            | Chạy dev server tại `localhost:4321`                 |
+| `npm test`               | Chạy unit test                                       |
+| `npm run verify`         | Kiểm type + test + build (chạy trước mọi commit lớn) |
+| `npm run deploy:preview` | Deploy bản xem trước                                 |
+| `npm run deploy`         | Deploy production                                    |
 
 ## Sửa nội dung
 
-| Muốn đổi | Sửa file |
-|---|---|
-| SĐT, địa chỉ, giờ làm việc | `src/data/clinic.ts` — **nguồn duy nhất**, đổi ở đây là đổi cả site |
-| Chữ trên giao diện (menu, nút) | `src/i18n/ui.ts` |
-| Đường dẫn URL | `src/i18n/routes.ts` — **nguồn duy nhất**, đừng viết URL tay ở nơi khác |
-| Nội dung trang dịch vụ | `src/content/services/{vi,en}/*.md` |
-| Màu sắc | `src/styles/global.css` |
+| Muốn đổi                       | Sửa file                                                                |
+| ------------------------------ | ----------------------------------------------------------------------- |
+| SĐT, địa chỉ, giờ làm việc     | `src/data/clinic.ts` — **nguồn duy nhất**, đổi ở đây là đổi cả site     |
+| Chữ trên giao diện (menu, nút) | `src/i18n/ui.ts`                                                        |
+| Đường dẫn URL                  | `src/i18n/routes.ts` — **nguồn duy nhất**, đừng viết URL tay ở nơi khác |
+| Nội dung trang dịch vụ         | `src/content/services/{vi,en}/*.md`                                     |
+| Màu sắc                        | `src/styles/global.css`                                                 |
 
 ## Trước khi launch
 
@@ -1752,9 +1787,11 @@ git commit -m "docs: README hướng dẫn lệnh và nơi sửa nội dung"
 4. **Thiếu `@types/node`.** `process.env` trong `astro.config.mjs` không có kiểu.
 
 5. **Lỗi thật trong plan — chốt chặn dữ liệu giả bị vô hiệu.** Task 13 viết `"deploy": "npm run verify && wrangler pages deploy dist"`, mà Task 14 lại thêm cờ `ALLOW_PLACEHOLDER_CLINIC=1` vào `verify`. Kết quả: deploy production build với cờ bỏ qua rồi đẩy thẳng lên — đúng chỗ cần chặn nhất thì không chặn. Đã sửa `deploy` thành chuỗi lệnh riêng, build **không cờ**:
+
    ```
    "deploy": "astro check && vitest run && astro build && wrangler pages deploy dist"
    ```
+
    Đã xác minh: `astro build` không cờ trả exit code 1.
 
 6. **Scaffolder ghi đè `.gitignore`,** xoá mất phần chặn secrets (`.dev.vars`, `*-service-account*.json`, `.wrangler/`). Đã khôi phục và gộp với bản của Astro.

@@ -1,14 +1,14 @@
 ---
 key: gummySmile
 lang: vi
-title: "Điều trị cười hở lợi"
-description: "Phẫu thuật cắt nướu làm lộ thêm thân răng khi cười. Trang này phân biệt ba nguyên nhân gây hở lợi vì mỗi nguyên nhân cần cách xử lý khác nhau."
+title: 'Điều trị cười hở lợi'
+description: 'Phẫu thuật cắt nướu làm lộ thêm thân răng khi cười. Trang này phân biệt ba nguyên nhân gây hở lợi vì mỗi nguyên nhân cần cách xử lý khác nhau.'
 order: 6
 keywords:
-  - "hở lợi"
-  - "cắt nướu"
-  - "cười hở nướu"
-  - "nướu"
+  - 'hở lợi'
+  - 'cắt nướu'
+  - 'cười hở nướu'
+  - 'nướu'
 faq: []
 ---
 

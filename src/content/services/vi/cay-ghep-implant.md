@@ -1,14 +1,14 @@
 ---
 key: implant
 lang: vi
-title: "Cấy ghép Implant"
-description: "Trụ titanium đặt vào xương hàm thay chân răng đã mất. Trang này giải thích quy trình, thời gian tích hợp xương và những trường hợp không làm được."
+title: 'Cấy ghép Implant'
+description: 'Trụ titanium đặt vào xương hàm thay chân răng đã mất. Trang này giải thích quy trình, thời gian tích hợp xương và những trường hợp không làm được.'
 order: 1
 keywords:
-  - "trồng răng"
-  - "mất răng"
-  - "cắm răng"
-  - "trụ titanium"
+  - 'trồng răng'
+  - 'mất răng'
+  - 'cắm răng'
+  - 'trụ titanium'
 faq: []
 ---
 

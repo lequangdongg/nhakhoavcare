@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { fold, matches, score } from './search';
 
 describe('fold: bỏ dấu tiếng Việt', () => {

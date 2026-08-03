@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
-import { UI, useTranslations } from './ui';
+import { describe, expect, it } from 'vitest';
 import { LOCALES } from './locales';
+import { UI, useTranslations } from './ui';
 
 describe('UI', () => {
   it('mọi ngôn ngữ có đúng cùng bộ key', () => {

@@ -1,6 +1,6 @@
 import { z } from 'astro/zod';
-import { SERVICE_KEYS } from '../i18n/routes';
 import { LOCALES } from '../i18n/locales';
+import { SERVICE_KEYS } from '../i18n/routes';
 
 /**
  * Năm hiện tại tính lúc build. Dùng để chặn năm cấp chứng chỉ ở tương lai —

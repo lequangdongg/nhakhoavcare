@@ -12,9 +12,13 @@
     "astro": "astro",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify": "astro check && vitest run && ALLOW_PLACEHOLDER_CLINIC=1 astro build",
-    "deploy": "astro check && vitest run && astro build && wrangler pages deploy dist",
-    "deploy:preview": "npm run verify && wrangler pages deploy dist --branch preview"
+    "verify": "prettier --check . && ./node_modules/.bin/biome check src && astro check && vitest run && ALLOW_PLACEHOLDER_CLINIC=1 astro build",
+    "deploy": "pnpm run verify && astro build && wrangler pages deploy dist",
+    "deploy:preview": "pnpm run verify && wrangler pages deploy dist --branch preview",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "./node_modules/.bin/biome check src",
+    "lint:fix": "./node_modules/.bin/biome check --write src"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -27,9 +31,14 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@biomejs/biome": "^2.5.6",
     "@types/node": "^26.1.2",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10",
     "wrangler": "^4.118.0"
-  }
+  },
+  "packageManager": "pnpm@10.6.3"
 }

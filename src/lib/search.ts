@@ -14,15 +14,17 @@ export interface SearchDoc {
 
 /** Bỏ dấu, hạ chữ thường, gộp khoảng trắng. */
 export function fold(input: string): string {
-  return input
-    .normalize('NFD')
-    // Bỏ toàn bộ dấu thanh và dấu phụ
-    .replace(/[̀-ͯ]/g, '')
-    // đ và Đ không tách được bằng NFD, phải xử lý riêng
-    .replace(/[đĐ]/g, 'd')
-    .toLowerCase()
-    .replace(/\s+/g, ' ')
-    .trim();
+  return (
+    input
+      .normalize('NFD')
+      // Bỏ toàn bộ dấu thanh và dấu phụ
+      .replace(/[̀-ͯ]/g, '')
+      // đ và Đ không tách được bằng NFD, phải xử lý riêng
+      .replace(/[đĐ]/g, 'd')
+      .toLowerCase()
+      .replace(/\s+/g, ' ')
+      .trim()
+  );
 }
 
 function terms(query: string): string[] {

@@ -75,7 +75,7 @@ const current = Astro.url.pathname;
       </a>
 
       {/* Menu mobile bằng details/summary: không cần JavaScript, bàn phím dùng được sẵn. */}
-      <details class="lg:hidden [&[open]_.menu-open]:hidden [&[open]_.menu-close]:block">
+      <details class="lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden">
         <summary
           class="flex size-10 cursor-pointer list-none items-center justify-center border border-steel-edge"
           aria-label={t('nav.openMenu')}

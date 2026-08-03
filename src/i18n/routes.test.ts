@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { pathFor, keyFromPath, alternateLinks, SERVICE_KEYS } from './routes';
+import { describe, expect, it } from 'vitest';
+import { alternateLinks, keyFromPath, pathFor, SERVICE_KEYS } from './routes';
 
 describe('pathFor', () => {
   it('trang chủ tiếng Việt ở gốc, không tiền tố', () => {

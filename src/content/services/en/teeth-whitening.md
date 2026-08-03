@@ -1,13 +1,13 @@
 ---
 key: whitening
 lang: en
-title: "Teeth Whitening"
-description: "Lightening tooth colour with professional bleaching gel. Explains which stains respond, which do not, and why crowns will not change colour with them."
+title: 'Teeth Whitening'
+description: 'Lightening tooth colour with professional bleaching gel. Explains which stains respond, which do not, and why crowns will not change colour with them.'
 order: 10
 keywords:
-  - "bleaching"
-  - "yellow teeth"
-  - "stains"
+  - 'bleaching'
+  - 'yellow teeth'
+  - 'stains'
 faq: []
 ---
 

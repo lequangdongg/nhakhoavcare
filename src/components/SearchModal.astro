@@ -48,10 +48,12 @@ const themeOptions = [
   <Icon name="ph:magnifying-glass" class="size-5" aria-hidden="true" />
 </button>
 
-{/*
+{
+  /*
   Dùng <dialog> gốc của trình duyệt: nhốt focus, phím Esc, và lớp phủ đều có sẵn,
   không phải tự viết. Trên mobile là tấm phủ toàn màn hình.
-*/}
+*/
+}
 <dialog
   data-search-dialog
   aria-label={t('search.open')}
@@ -282,9 +284,9 @@ const themeOptions = [
       list[(i + step + list.length) % list.length].focus();
     }
 
-    document.querySelectorAll('[data-search-open]').forEach((btn) =>
-      btn.addEventListener('click', () => open(btn)),
-    );
+    document
+      .querySelectorAll('[data-search-open]')
+      .forEach((btn) => btn.addEventListener('click', () => open(btn)));
     dialog.querySelector('[data-search-close]')?.addEventListener('click', close);
     dialog.addEventListener('close', () => {
       if (trigger instanceof HTMLElement) trigger.focus();

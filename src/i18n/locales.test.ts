@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { LOCALES, DEFAULT_LOCALE, isLocale } from './locales';
+import { describe, expect, it } from 'vitest';
+import { DEFAULT_LOCALE, isLocale, LOCALES } from './locales';
 
 describe('locales', () => {
   it('hỗ trợ đúng hai ngôn ngữ', () => {

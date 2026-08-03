@@ -33,12 +33,10 @@ const DAY_LABELS: Record<Locale, Record<DayKey, string>> = {
   },
 };
 
-const days = Object.entries(clinic.hours) as Array<
-  [DayKey, (typeof clinic.hours)[DayKey]]
->;
+const days = Object.entries(clinic.hours) as Array<[DayKey, (typeof clinic.hours)[DayKey]]>;
 ---
 
-<footer class="border-t border-border p-4">
+<footer class="border-border border-t p-4">
   {/* Mọi giá trị đọc từ clinic.ts — spec §6. Không viết cứng lại ở đây. */}
   <section aria-labelledby="footer-contact">
     <h2 id="footer-contact">{t('footer.contact')}</h2>

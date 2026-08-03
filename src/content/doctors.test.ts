@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { doctorSchema } from './doctors-schema';
 
 const valid = {
@@ -11,9 +11,7 @@ const valid = {
   portrait: './bs-nguyen-van-a.jpg',
   summary:
     'Bác sĩ chuyên sâu cấy ghép Implant với hơn mười năm kinh nghiệm, đã thực hiện trên một nghìn ca tại Đà Nẵng và khu vực miền Trung.',
-  education: [
-    { degree: 'Bác sĩ Răng Hàm Mặt', institution: 'Đại học Y Dược Huế', year: 2012 },
-  ],
+  education: [{ degree: 'Bác sĩ Răng Hàm Mặt', institution: 'Đại học Y Dược Huế', year: 2012 }],
   certificates: [
     {
       name: 'Chứng chỉ Cấy ghép Implant nha khoa',

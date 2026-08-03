@@ -1,7 +1,7 @@
 import { getCollection } from 'astro:content';
+import type { Locale } from '../i18n/locales';
 import { pathFor, type ServiceKey } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
-import type { Locale } from '../i18n/locales';
 
 export interface IndexEntry {
   title: string;

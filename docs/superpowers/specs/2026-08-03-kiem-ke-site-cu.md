@@ -11,30 +11,30 @@
 
 ## Bảng bài đăng
 
-| # | Tiêu đề | URL cũ | Nhãn | Số ký tự | Phân loại mới |
-|---|---|---|---|---|---|
-| 1 | Giới thiệu nha khoa | `/2020/11/blog-post.html` | — | **26** | Trang Giới thiệu — **rỗng, phải viết mới** |
-| 2 | Quy trình vô trùng dụng cụ | `/2020/04/quy-trinh-vo-trung-dung-cu.html` | — | 2775 | Trang Giới thiệu (mục con) |
-| 3 | Sâu răng và phòng ngừa | `/2020/04/sau-rang-va-phong-ngua-sau-rang.html` | Kiến thức nha khoa | 3419 | Blog |
-| 4 | Lấy cao răng | `/2020/04/lay-cao-rang_16.html` | — | 1180 | Dịch vụ · `scaling` |
-| 5 | Phẫu thuật cắt nướu – cười hở lợi | `/2020/04/1cuoi-ho-loi-la-gi-cuoi-ho-loi-la-tinh.html` | DV thẩm mỹ | 2284 | Dịch vụ · `gummySmile` |
-| 6 | Chữa tủy răng | `/2020/04/chua-tuy-rang.html` | — | 4675 | Dịch vụ · `rootCanal` |
-| 7 | Các thiết bị nha khoa | `/2020/04/cac-thiet-bi-nha-khoa.html` | — | 898 | Trang Giới thiệu (mục con) |
-| 8 | Vai trò X-quang răng | `/2020/04/vai-tro-x-quang-rang.html` | Kiến thức nha khoa | 1515 | Blog |
-| 9 | Cấy ghép Implant | `/2020/03/cay-ghep-implant.html` | Implant | 1325 | Dịch vụ · `implant` |
-| 10 | Cầu răng | `/2020/03/cau-rang.html` | Phục hình cố định | 1523 | Dịch vụ · `bridge` |
-| 11 | Mão răng | `/2020/03/phuc-hinh-co-inh.html` | DV thẩm mỹ, Phục hình cố định | 4954 | Dịch vụ · `crown` |
-| 12 | Dán sứ Veneer | `/2020/03/dan-su-veneer.html` | DV thẩm mỹ, Phục hình cố định | 3646 | Dịch vụ · `veneer` |
-| 13 | Bảng giá | `/2020/03/bang-gia.html` | — | 3734 | Trang Bảng giá |
-| 14 | Hàm giả tháo lắp | `/2020/03/loai-truong-hop-su-dung-rang-gia-thao.html` | Phục hình tháo lắp | 3068 | Dịch vụ · `denture` |
-| 15 | Vecni Flour phòng sâu răng cho trẻ | `/2020/03/vecni-flour.html` | DV trẻ em | 1503 | Dịch vụ · `fluoride` |
+| #   | Tiêu đề                            | URL cũ                                                 | Nhãn                          | Số ký tự | Phân loại mới                              |
+| --- | ---------------------------------- | ------------------------------------------------------ | ----------------------------- | -------- | ------------------------------------------ |
+| 1   | Giới thiệu nha khoa                | `/2020/11/blog-post.html`                              | —                             | **26**   | Trang Giới thiệu — **rỗng, phải viết mới** |
+| 2   | Quy trình vô trùng dụng cụ         | `/2020/04/quy-trinh-vo-trung-dung-cu.html`             | —                             | 2775     | Trang Giới thiệu (mục con)                 |
+| 3   | Sâu răng và phòng ngừa             | `/2020/04/sau-rang-va-phong-ngua-sau-rang.html`        | Kiến thức nha khoa            | 3419     | Blog                                       |
+| 4   | Lấy cao răng                       | `/2020/04/lay-cao-rang_16.html`                        | —                             | 1180     | Dịch vụ · `scaling`                        |
+| 5   | Phẫu thuật cắt nướu – cười hở lợi  | `/2020/04/1cuoi-ho-loi-la-gi-cuoi-ho-loi-la-tinh.html` | DV thẩm mỹ                    | 2284     | Dịch vụ · `gummySmile`                     |
+| 6   | Chữa tủy răng                      | `/2020/04/chua-tuy-rang.html`                          | —                             | 4675     | Dịch vụ · `rootCanal`                      |
+| 7   | Các thiết bị nha khoa              | `/2020/04/cac-thiet-bi-nha-khoa.html`                  | —                             | 898      | Trang Giới thiệu (mục con)                 |
+| 8   | Vai trò X-quang răng               | `/2020/04/vai-tro-x-quang-rang.html`                   | Kiến thức nha khoa            | 1515     | Blog                                       |
+| 9   | Cấy ghép Implant                   | `/2020/03/cay-ghep-implant.html`                       | Implant                       | 1325     | Dịch vụ · `implant`                        |
+| 10  | Cầu răng                           | `/2020/03/cau-rang.html`                               | Phục hình cố định             | 1523     | Dịch vụ · `bridge`                         |
+| 11  | Mão răng                           | `/2020/03/phuc-hinh-co-inh.html`                       | DV thẩm mỹ, Phục hình cố định | 4954     | Dịch vụ · `crown`                          |
+| 12  | Dán sứ Veneer                      | `/2020/03/dan-su-veneer.html`                          | DV thẩm mỹ, Phục hình cố định | 3646     | Dịch vụ · `veneer`                         |
+| 13  | Bảng giá                           | `/2020/03/bang-gia.html`                               | —                             | 3734     | Trang Bảng giá                             |
+| 14  | Hàm giả tháo lắp                   | `/2020/03/loai-truong-hop-su-dung-rang-gia-thao.html`  | Phục hình tháo lắp            | 3068     | Dịch vụ · `denture`                        |
+| 15  | Vecni Flour phòng sâu răng cho trẻ | `/2020/03/vecni-flour.html`                            | DV trẻ em                     | 1503     | Dịch vụ · `fluoride`                       |
 
 ## Trang tĩnh
 
-| Tiêu đề | URL | Ghi chú |
-|---|---|---|
-| Kiến thức nha khoa | `/p/kien-thuc-nha-khoa.html` | Trang danh mục blog |
-| *(không tiêu đề)* | `/p/blog-page.html` | **Trang hỏng — loại bỏ** |
+| Tiêu đề            | URL                          | Ghi chú                  |
+| ------------------ | ---------------------------- | ------------------------ |
+| Kiến thức nha khoa | `/p/kien-thuc-nha-khoa.html` | Trang danh mục blog      |
+| _(không tiêu đề)_  | `/p/blog-page.html`          | **Trang hỏng — loại bỏ** |
 
 ## Phát hiện đáng chú ý
 

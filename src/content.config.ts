@@ -1,9 +1,9 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
-import { SERVICE_KEYS } from './i18n/routes';
-import { LOCALES } from './i18n/locales';
 import { doctorSchema } from './content/doctors-schema';
+import { LOCALES } from './i18n/locales';
+import { SERVICE_KEYS } from './i18n/routes';
 
 const services = defineCollection({
   loader: glob({ base: './src/content/services', pattern: '**/*.md' }),
@@ -26,9 +26,7 @@ const services = defineCollection({
      * hàm tháo lắp. Không hiển thị ra trang, chỉ vào chỉ mục tìm kiếm.
      */
     keywords: z.array(z.string().min(1)).default([]),
-    faq: z
-      .array(z.object({ question: z.string().min(1), answer: z.string().min(1) }))
-      .default([]),
+    faq: z.array(z.object({ question: z.string().min(1), answer: z.string().min(1) })).default([]),
   }),
 });
 

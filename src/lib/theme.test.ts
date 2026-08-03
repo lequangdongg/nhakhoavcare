@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { resolveTheme, THEME_STORAGE_KEY, isThemePreference } from './theme';
+import { describe, expect, it } from 'vitest';
+import { isThemePreference, resolveTheme, THEME_STORAGE_KEY } from './theme';
 
 describe('resolveTheme', () => {
   it('lựa chọn rõ ràng thắng cài đặt hệ thống', () => {

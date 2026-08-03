@@ -1,7 +1,7 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@import "@fontsource-variable/archivo/wght.css";
-@import "@fontsource-variable/archivo/wght-italic.css";
+@import '@fontsource-variable/archivo/wght.css';
+@import '@fontsource-variable/archivo/wght-italic.css';
 
 /* ===========================================================================
    HỆ MÀU: BẢNG SO MÀU RĂNG VITA
@@ -112,7 +112,7 @@
   --color-clinical-ink: var(--clinical-text);
   --color-clinical-edge: var(--clinical-edge);
 
-  --font-sans: "Archivo Variable", system-ui, sans-serif;
+  --font-sans: 'Archivo Variable', system-ui, sans-serif;
 }
 
 /* ===========================================================================
@@ -136,8 +136,10 @@
     line-height: 1.65;
   }
 
-  h1, h2, h3 {
-    font-variation-settings: "wdth" 112;
+  h1,
+  h2,
+  h3 {
+    font-variation-settings: 'wdth' 112;
     letter-spacing: -0.02em;
     line-height: 1.12;
     text-wrap: balance;
@@ -150,7 +152,7 @@
   /* Số đo, mã hiệu, giá: chữ số đều bề rộng để cột thẳng hàng như trên bảng đo */
   .measure {
     font-variant-numeric: tabular-nums;
-    font-variation-settings: "wdth" 92;
+    font-variation-settings: 'wdth' 92;
     letter-spacing: 0.02em;
   }
 

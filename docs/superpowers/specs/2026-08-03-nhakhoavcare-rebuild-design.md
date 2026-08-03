@@ -50,7 +50,7 @@ Mọi đánh đổi trong tài liệu này đều được giải quyết theo h
 ### Ngoài phạm vi (YAGNI)
 
 - **CMS** — chủ dự án tự sửa file trong repo. Không dựng Sanity/Payload/Decap.
-- **Đặt lịch xác nhận tức thì theo khung giờ trống** — kể cả khi làm §11 về sau, cũng chỉ nhận *yêu cầu* rồi gọi lại xác nhận. Không hiển thị lịch trống thật, không có huỷ/đổi lịch tự động.
+- **Đặt lịch xác nhận tức thì theo khung giờ trống** — kể cả khi làm §11 về sau, cũng chỉ nhận _yêu cầu_ rồi gọi lại xác nhận. Không hiển thị lịch trống thật, không có huỷ/đổi lịch tự động.
 - **Tài khoản người dùng, hồ sơ bệnh nhân, thanh toán online**
 - **Bảng ánh xạ URL đầy đủ cho SEO** — chủ dự án đã quyết định bỏ. Xem §11.
 - **Refactor không liên quan** — không có codebase cũ để refactor; đây là dự án mới hoàn toàn.
@@ -61,33 +61,33 @@ Mọi đánh đổi trong tài liệu này đều được giải quyết theo h
 
 Cả 4 nhóm đều được làm, nhưng độ sâu và thứ tự khác nhau. Dàn đều là cách chắc chắn để không nhóm nào đủ mạnh.
 
-| Đợt | Nhóm | Độ sâu |
-|---|---|---|
-| 1 | **Implant / trồng răng** | Trang trụ cột đầy đủ: giá chi tiết, quy trình từng bước, FAQ dài, gallery trước/sau, chính sách bảo hành |
-| 1 | **Thẩm mỹ** (Veneer, bọc sứ, tẩy trắng) | Như trên, trọng tâm là gallery trước/sau |
-| 2 | **Chỉnh nha / niềng răng** | Cùng khuôn mẫu, làm ngay sau đợt 1. Hiện là menu chết trên site cũ nên viết mới hoàn toàn |
-| 3 | **Nha khoa tổng quát** (lấy cao răng, trám, chữa tủy, nhổ răng, phục hình) | Gộp thành nhóm trang gọn, đủ chuẩn SEO nhưng không viết dài |
+| Đợt | Nhóm                                                                       | Độ sâu                                                                                                   |
+| --- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 1   | **Implant / trồng răng**                                                   | Trang trụ cột đầy đủ: giá chi tiết, quy trình từng bước, FAQ dài, gallery trước/sau, chính sách bảo hành |
+| 1   | **Thẩm mỹ** (Veneer, bọc sứ, tẩy trắng)                                    | Như trên, trọng tâm là gallery trước/sau                                                                 |
+| 2   | **Chỉnh nha / niềng răng**                                                 | Cùng khuôn mẫu, làm ngay sau đợt 1. Hiện là menu chết trên site cũ nên viết mới hoàn toàn                |
+| 3   | **Nha khoa tổng quát** (lấy cao răng, trám, chữa tủy, nhổ răng, phục hình) | Gộp thành nhóm trang gọn, đủ chuẩn SEO nhưng không viết dài                                              |
 
 ---
 
 ## 4. Stack & hạ tầng
 
-| Hạng mục | Lựa chọn | Lý do |
-|---|---|---|
-| Framework | **Astro 7** (`output: 'static'`) | Mặc định xuất HTML tĩnh, 0 KB JavaScript. Content Collections khớp với mô hình "sửa file markdown trong repo". i18n routing gốc. Tối ưu ảnh sẵn có. |
-| Kiểu render | **SSG — dựng sẵn toàn bộ lúc build** | Xem §4.1 |
-| Sitemap | **`@astrojs/sitemap`** có khai i18n | Xem §4.2 |
-| CSS | **Tailwind 4** | Mobile-first theo mặc định (class không tiền tố = mobile). |
-| Ngôn ngữ | **TypeScript**, strict mode | |
-| Hosting | **Cloudflare Pages** | Có PoP tại Việt Nam; Vercel free tier gần nhất là Singapore. Với khách Đà Nẵng, chênh lệch này đo được. |
-| Deploy | **Wrangler CLI** | Deploy từ terminal, không phụ thuộc giao diện web. |
-| Tìm kiếm | **Pagefind** | Sinh chỉ mục lúc build, chia mảnh, tải lười. Đa ngôn ngữ sẵn. |
-| Animation | **CSS thuần + `motion` (~5 KB)** | Xem §8. |
-| Font | **`@fontsource`, tự host** | Không gọi Google Fonts (thêm một vòng kết nối ngoài = chậm). |
-| Backend đặt lịch | **Cloudflare Pages Functions** | Một endpoint duy nhất, nằm trong repo, deploy cùng một lệnh `wrangler`. Site vẫn tĩnh. |
-| Lưu lịch hẹn | **Google Sheets API** | Nhân viên xem/lọc/ghi chú bằng công cụ đã dùng hàng ngày. Không phải xây trang quản trị. |
-| Thông báo | **Google Calendar API + email** | Calendar hiện ngay trên điện thoại nhân viên, không cần cài gì. |
-| Chống bot | **Cloudflare Turnstile** | Miễn phí, chạy sẵn trên Cloudflare, không dùng CAPTCHA gây khó chịu. |
+| Hạng mục         | Lựa chọn                             | Lý do                                                                                                                                               |
+| ---------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework        | **Astro 7** (`output: 'static'`)     | Mặc định xuất HTML tĩnh, 0 KB JavaScript. Content Collections khớp với mô hình "sửa file markdown trong repo". i18n routing gốc. Tối ưu ảnh sẵn có. |
+| Kiểu render      | **SSG — dựng sẵn toàn bộ lúc build** | Xem §4.1                                                                                                                                            |
+| Sitemap          | **`@astrojs/sitemap`** có khai i18n  | Xem §4.2                                                                                                                                            |
+| CSS              | **Tailwind 4**                       | Mobile-first theo mặc định (class không tiền tố = mobile).                                                                                          |
+| Ngôn ngữ         | **TypeScript**, strict mode          |                                                                                                                                                     |
+| Hosting          | **Cloudflare Pages**                 | Có PoP tại Việt Nam; Vercel free tier gần nhất là Singapore. Với khách Đà Nẵng, chênh lệch này đo được.                                             |
+| Deploy           | **Wrangler CLI**                     | Deploy từ terminal, không phụ thuộc giao diện web.                                                                                                  |
+| Tìm kiếm         | **Pagefind**                         | Sinh chỉ mục lúc build, chia mảnh, tải lười. Đa ngôn ngữ sẵn.                                                                                       |
+| Animation        | **CSS thuần + `motion` (~5 KB)**     | Xem §8.                                                                                                                                             |
+| Font             | **`@fontsource`, tự host**           | Không gọi Google Fonts (thêm một vòng kết nối ngoài = chậm).                                                                                        |
+| Backend đặt lịch | **Cloudflare Pages Functions**       | Một endpoint duy nhất, nằm trong repo, deploy cùng một lệnh `wrangler`. Site vẫn tĩnh.                                                              |
+| Lưu lịch hẹn     | **Google Sheets API**                | Nhân viên xem/lọc/ghi chú bằng công cụ đã dùng hàng ngày. Không phải xây trang quản trị.                                                            |
+| Thông báo        | **Google Calendar API + email**      | Calendar hiện ngay trên điện thoại nhân viên, không cần cài gì.                                                                                     |
+| Chống bot        | **Cloudflare Turnstile**             | Miễn phí, chạy sẵn trên Cloudflare, không dùng CAPTCHA gây khó chịu.                                                                                |
 
 ### 4.1 SSG — dựng sẵn tĩnh
 
@@ -219,15 +219,15 @@ Mỗi file markdown có trường `key` chung giữa các ngôn ngữ (`key: "im
 
 Ví dụ cho collection `services`:
 
-| Trường | Ràng buộc |
-|---|---|
-| `title` | bắt buộc |
-| `key` | bắt buộc, dùng để nối bản dịch |
-| `lang` | `"vi"` hoặc `"en"` |
+| Trường        | Ràng buộc                            |
+| ------------- | ------------------------------------ |
+| `title`       | bắt buộc                             |
+| `key`         | bắt buộc, dùng để nối bản dịch       |
+| `lang`        | `"vi"` hoặc `"en"`                   |
 | `description` | 120–160 ký tự (tránh Google cắt cụt) |
-| `heroImage` | file ảnh phải tồn tại thật |
-| `priceFrom` | số |
-| `faq` | mảng câu hỏi/trả lời |
+| `heroImage`   | file ảnh phải tồn tại thật           |
+| `priceFrom`   | số                                   |
+| `faq`         | mảng câu hỏi/trả lời                 |
 
 Ba lỗi cụ thể mà nó chặn được:
 
@@ -276,18 +276,18 @@ Mỗi bác sĩ là một mục có cấu trúc, không phải đoạn văn tự 
 
 #### Cấu trúc mỗi hồ sơ
 
-| Trường | Bắt buộc | Ghi chú |
-|---|---|---|
-| `name`, `title` | có | "BS. Nguyễn Văn A", "Bác sĩ Răng Hàm Mặt" |
-| `yearsOfExperience` | có | 0–60, chặn con số phi lý |
-| `portrait` | có | Tỷ lệ 4:5, nền sạch |
-| `summary` | có | 100–300 ký tự |
-| `education[]` | **≥ 1 mục** | Bằng cấp + trường + năm |
-| `certificates[]` | **≥ 1 mục** | Tên + **nơi cấp** + **năm**, kèm link xác minh nếu có |
-| `achievements[]` | không | Số ca đã thực hiện, giải thưởng, báo cáo hội nghị |
-| `specialties[]` | không | Khớp key dịch vụ, tự sinh liên kết sang trang dịch vụ |
-| `memberships[]` | không | Hội Răng Hàm Mặt Việt Nam... |
-| `languages[]` | không | Quan trọng với khách nước ngoài |
+| Trường              | Bắt buộc    | Ghi chú                                               |
+| ------------------- | ----------- | ----------------------------------------------------- |
+| `name`, `title`     | có          | "BS. Nguyễn Văn A", "Bác sĩ Răng Hàm Mặt"             |
+| `yearsOfExperience` | có          | 0–60, chặn con số phi lý                              |
+| `portrait`          | có          | Tỷ lệ 4:5, nền sạch                                   |
+| `summary`           | có          | 100–300 ký tự                                         |
+| `education[]`       | **≥ 1 mục** | Bằng cấp + trường + năm                               |
+| `certificates[]`    | **≥ 1 mục** | Tên + **nơi cấp** + **năm**, kèm link xác minh nếu có |
+| `achievements[]`    | không       | Số ca đã thực hiện, giải thưởng, báo cáo hội nghị     |
+| `specialties[]`     | không       | Khớp key dịch vụ, tự sinh liên kết sang trang dịch vụ |
+| `memberships[]`     | không       | Hội Răng Hàm Mặt Việt Nam...                          |
+| `languages[]`       | không       | Quan trọng với khách nước ngoài                       |
 
 #### Ràng buộc do Zod cưỡng chế
 
@@ -308,12 +308,12 @@ Mỗi hồ sơ xuất JSON-LD `Person` với `jobTitle`, `alumniOf`, `hasCredent
 
 Chủ dự án chưa có ảnh chụp chuyên nghiệp nhưng sẽ chụp. Thiết kế phải có sẵn khung ảnh định tỷ lệ với placeholder có nhãn, để thả ảnh thật vào sau.
 
-| Slot | Tỷ lệ | Cần chụp |
-|---|---|---|
-| `hero` | 3:2 | Không gian phòng khám, ánh sáng tự nhiên, có người |
-| `doctor-portrait` | 4:5 | Chân dung từng bác sĩ, nền sạch, ánh sáng đều — **bắt buộc, xem §8.1** |
-| `facility-*` | 3:2 | Ghế nha, phòng vô trùng, khu chờ |
-| `case-before` / `case-after` | 1:1 | **Cùng góc, cùng ánh sáng, cùng khoảng cách** |
+| Slot                         | Tỷ lệ | Cần chụp                                                               |
+| ---------------------------- | ----- | ---------------------------------------------------------------------- |
+| `hero`                       | 3:2   | Không gian phòng khám, ánh sáng tự nhiên, có người                     |
+| `doctor-portrait`            | 4:5   | Chân dung từng bác sĩ, nền sạch, ánh sáng đều — **bắt buộc, xem §8.1** |
+| `facility-*`                 | 3:2   | Ghế nha, phòng vô trùng, khu chờ                                       |
+| `case-before` / `case-after` | 1:1   | **Cùng góc, cùng ánh sáng, cùng khoảng cách**                          |
 
 Ảnh gốc từ máy chụp bỏ vào `src/assets/`; Astro tự nén và xuất AVIF/WebP nhiều kích thước. Không phải resize tay.
 
@@ -325,12 +325,12 @@ Ràng buộc `case-before`/`case-after` phải chụp cùng điều kiện là b
 
 Mức đã chốt: **vừa đủ, tinh tế.** Lý do loại bỏ phương án mạnh (GSAP + ScrollTrigger, ~40 KB): trên điện thoại Android tầm trung, animation nặng gây giật khi cuộn — mà site giật phá uy tín nhanh hơn bất kỳ thiết kế xấu nào. Animation quá tay cũng nằm trong danh mục "AI slop" mà Impeccable được sinh ra để bắt.
 
-| Kỹ thuật | Dùng ở đâu | Chi phí |
-|---|---|---|
-| CSS `animation-timeline: view()` | Fade/slide khi cuộn | 0 KB |
-| Astro View Transitions | Chuyển trang mượt | 0 KB |
-| CSS transition | Hover, focus | 0 KB |
-| `motion` (~5 KB) | Menu mobile, accordion FAQ, modal tìm kiếm | 5 KB, tải lười |
+| Kỹ thuật                         | Dùng ở đâu                                 | Chi phí        |
+| -------------------------------- | ------------------------------------------ | -------------- |
+| CSS `animation-timeline: view()` | Fade/slide khi cuộn                        | 0 KB           |
+| Astro View Transitions           | Chuyển trang mượt                          | 0 KB           |
+| CSS transition                   | Hover, focus                               | 0 KB           |
+| `motion` (~5 KB)                 | Menu mobile, accordion FAQ, modal tìm kiếm | 5 KB, tải lười |
 
 - `@supports` fallback cho trình duyệt chưa hỗ trợ scroll-driven animation
 - **`prefers-reduced-motion` tôn trọng toàn cục** — bắt buộc, không phải tùy chọn
@@ -409,7 +409,7 @@ Không phải hộp nổi giữa màn hình mà là **sheet toàn màn hình**, 
 >
 > Hai thứ cần chuẩn bị **ngay từ bản đầu** để sau này thêm vào không phải sửa: thư mục `functions/` có sẵn trong cấu trúc (§5), và nút "Đặt lịch hẹn" trong modal tìm kiếm tạm trỏ tới `tel:` — đổi sang form là đổi một liên kết.
 
-### Quyết định nền tảng: nhận *yêu cầu*, không xác nhận tức thì
+### Quyết định nền tảng: nhận _yêu cầu_, không xác nhận tức thì
 
 Khách chọn **ngày và buổi mong muốn** (sáng/chiều), không phải khung giờ chính xác. Phòng khám gọi lại xác nhận.
 
@@ -436,14 +436,14 @@ Trình duyệt  →  POST /api/booking  →  Cloudflare Pages Function
 
 ### Trường dữ liệu — cố tình tối thiểu
 
-| Trường | Bắt buộc |
-|---|---|
-| Họ tên | có |
-| Số điện thoại | có |
-| Dịch vụ quan tâm | có (chọn từ danh sách) |
-| Ngày mong muốn | có |
-| Buổi | có (sáng / chiều) |
-| Ghi chú ngắn | không |
+| Trường                 | Bắt buộc                           |
+| ---------------------- | ---------------------------------- |
+| Họ tên                 | có                                 |
+| Số điện thoại          | có                                 |
+| Dịch vụ quan tâm       | có (chọn từ danh sách)             |
+| Ngày mong muốn         | có                                 |
+| Buổi                   | có (sáng / chiều)                  |
+| Ghi chú ngắn           | không                              |
 | Đồng ý xử lý thông tin | có, ô tick rõ ràng, không tick sẵn |
 
 **Không hỏi triệu chứng. Không hỏi tiền sử bệnh. Không hỏi ngày sinh, địa chỉ, email.**
@@ -485,14 +485,14 @@ Heading đúng cấp bậc, `<article>` / `<section>` / `<nav>` / `<address>` d�
 
 ### JSON-LD
 
-| Schema | Áp dụng |
-|---|---|
+| Schema                      | Áp dụng                                         |
+| --------------------------- | ----------------------------------------------- |
 | `Dentist` + `LocalBusiness` | Toàn site — địa chỉ, giờ mở cửa, tọa độ Đà Nẵng |
-| `MedicalProcedure` | Từng trang dịch vụ |
-| `FAQPage` | Khối câu hỏi trên trang dịch vụ |
-| `Offer` | Bảng giá |
-| `BreadcrumbList` | Mọi trang con |
-| `sameAs` | Trỏ tới Facebook + Google Business Profile |
+| `MedicalProcedure`          | Từng trang dịch vụ                              |
+| `FAQPage`                   | Khối câu hỏi trên trang dịch vụ                 |
+| `Offer`                     | Bảng giá                                        |
+| `BreadcrumbList`            | Mọi trang con                                   |
+| `sameAs`                    | Trỏ tới Facebook + Google Business Profile      |
 
 Tất cả sinh từ `clinic.ts` và frontmatter, không viết tay.
 
@@ -510,9 +510,9 @@ Heading là câu hỏi thật khách gõ; đoạn ngay dưới trả lời gọn
 
 ### Bộ từ khóa hai lớp
 
-| Lớp | Ví dụ vi | Ví dụ en |
-|---|---|---|
-| Truyền thống (ngắn) | `trồng răng implant Đà Nẵng` | `dentist Da Nang` |
+| Lớp                      | Ví dụ vi                                                  | Ví dụ en                                                   |
+| ------------------------ | --------------------------------------------------------- | ---------------------------------------------------------- |
+| Truyền thống (ngắn)      | `trồng răng implant Đà Nẵng`                              | `dentist Da Nang`                                          |
 | Hội thoại / hỏi AI (dài) | `trồng răng implant ở Đà Nẵng giá bao nhiêu, mất bao lâu` | `is dental implant in Vietnam safe, how much does it cost` |
 
 Lớp thứ hai quyết định việc có được AI nhắc tên hay không.
@@ -563,15 +563,15 @@ Với những URL này Google không chuyển thứ hạng (gom hết về một
 
 Build **fail** nếu không đạt:
 
-| Kiểm tra | Ngưỡng |
-|---|---|
-| `astro check` | Sạch, không lỗi type |
-| Zod schema | Mọi file markdown hợp lệ (thiếu bản dịch / thiếu ảnh = fail) |
-| Lighthouse mobile — Performance | ≥ 90 |
-| Lighthouse — Accessibility | 100 |
-| Lighthouse — SEO | 100 |
-| `axe` | Không có lỗi nghiêm trọng |
-| `npx impeccable detect --json .` | Sạch |
+| Kiểm tra                         | Ngưỡng                                                       |
+| -------------------------------- | ------------------------------------------------------------ |
+| `astro check`                    | Sạch, không lỗi type                                         |
+| Zod schema                       | Mọi file markdown hợp lệ (thiếu bản dịch / thiếu ảnh = fail) |
+| Lighthouse mobile — Performance  | ≥ 90                                                         |
+| Lighthouse — Accessibility       | 100                                                          |
+| Lighthouse — SEO                 | 100                                                          |
+| `axe`                            | Không có lỗi nghiêm trọng                                    |
+| `npx impeccable detect --json .` | Sạch                                                         |
 
 ### Test tự động
 
@@ -593,42 +593,42 @@ Khi làm §11 ở v1.2, bổ sung: dữ liệu sai bị chặn phía server; ghi
 
 ## 15. Giai đoạn thi công
 
-| GĐ | Việc | Kết quả cụ thể |
-|---|---|---|
-| **0** | ✅ **XONG 2026-08-03** — crawl qua Blogger feed API, không cần Tavily | `docs/superpowers/specs/2026-08-03-kiem-ke-site-cu.md`: 15 bài + 2 trang, bảng redirect đầy đủ |
-| 1 | Nền tảng — Astro/Tailwind/TS, i18n routing, `clinic.ts`, Zod schema, wrangler, deploy preview | Site trắng nhưng deploy được, CI chạy |
-| 2 | Ngôn ngữ thiết kế — `npx impeccable install` → `/impeccable init` → `/impeccable shape` | `PRODUCT.md` + `DESIGN.md`, bảng màu 2 chế độ, thang font tiếng Việt |
-| 3 | Nội dung — viết lại vi sạch (bỏ emoji Facebook), dịch en + hiệu đính bản ngữ, bộ từ khóa 2 lớp, FAQ | Markdown đầy đủ, qua được Zod |
-| 4 | Xây — layout → header/footer → trang chủ → template dịch vụ → 4 trụ cột → bảng giá → liên hệ → blog | Site chạy đầy đủ trên preview |
-| 5 | Tìm kiếm + theme — Pagefind, chỉ mục không dấu, modal command palette, sáng/tối | Hoàn chỉnh, có test trợ năng |
-| 6 | Lớp SEO + AI — JSON-LD, sitemap, hreflang, robots.txt, llms.txt, `_redirects`, đồng bộ NAP với Google Business Profile | Máy đọc được đúng |
-| 7 | Hoàn thiện — `impeccable harden` / `audit` / `critique` / `polish` + `detect`, Lighthouse, axe, test máy thật | Qua hết ngưỡng §14 |
-| 8 | Chuyển domain — kiểm redirect, đổi DNS, theo dõi | **Live** |
+| GĐ    | Việc                                                                                                                   | Kết quả cụ thể                                                                                 |
+| ----- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| **0** | ✅ **XONG 2026-08-03** — crawl qua Blogger feed API, không cần Tavily                                                  | `docs/superpowers/specs/2026-08-03-kiem-ke-site-cu.md`: 15 bài + 2 trang, bảng redirect đầy đủ |
+| 1     | Nền tảng — Astro/Tailwind/TS, i18n routing, `clinic.ts`, Zod schema, wrangler, deploy preview                          | Site trắng nhưng deploy được, CI chạy                                                          |
+| 2     | Ngôn ngữ thiết kế — `npx impeccable install` → `/impeccable init` → `/impeccable shape`                                | `PRODUCT.md` + `DESIGN.md`, bảng màu 2 chế độ, thang font tiếng Việt                           |
+| 3     | Nội dung — viết lại vi sạch (bỏ emoji Facebook), dịch en + hiệu đính bản ngữ, bộ từ khóa 2 lớp, FAQ                    | Markdown đầy đủ, qua được Zod                                                                  |
+| 4     | Xây — layout → header/footer → trang chủ → template dịch vụ → 4 trụ cột → bảng giá → liên hệ → blog                    | Site chạy đầy đủ trên preview                                                                  |
+| 5     | Tìm kiếm + theme — Pagefind, chỉ mục không dấu, modal command palette, sáng/tối                                        | Hoàn chỉnh, có test trợ năng                                                                   |
+| 6     | Lớp SEO + AI — JSON-LD, sitemap, hreflang, robots.txt, llms.txt, `_redirects`, đồng bộ NAP với Google Business Profile | Máy đọc được đúng                                                                              |
+| 7     | Hoàn thiện — `impeccable harden` / `audit` / `critique` / `polish` + `detect`, Lighthouse, axe, test máy thật          | Qua hết ngưỡng §14                                                                             |
+| 8     | Chuyển domain — kiểm redirect, đổi DNS, theo dõi                                                                       | **Live**                                                                                       |
 
 **Phụ thuộc:** GĐ 0 phải xong trước GĐ 3. GĐ 1 và 2 chạy song song với GĐ 0 được — không phải chờ.
 
 ### Sau khi launch
 
-| Đợt | Việc |
-|---|---|
-| v1.1 | **Khối bác sĩ** trên trang Giới thiệu — ưu tiên cao nhất vì ảnh hưởng trực tiếp mục tiêu uy tín (§17) |
+| Đợt  | Việc                                                                                                                                 |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| v1.1 | **Khối bác sĩ** trên trang Giới thiệu — ưu tiên cao nhất vì ảnh hưởng trực tiếp mục tiêu uy tín (§17)                                |
 | v1.2 | **Hệ thống đặt lịch** (§11) — Google Cloud project, service account, Sheet + Calendar, Function `/api/booking`, Turnstile, xử lý lỗi |
 
 ---
 
 ## 16. Rủi ro
 
-| Rủi ro | Mức | Xử lý |
-|---|---|---|
-| Bản tiếng Anh dịch máy làm mất uy tín | Cao | Hiệu đính bản ngữ là hạng mục ngân sách riêng, không gộp vào việc dịch |
-| Chưa có ảnh chụp thật khi tới hạn | Cao | Shot-list và tỷ lệ khung định sẵn từ GĐ 2; Zod chặn build nếu còn placeholder |
-| Tìm kiếm không xử lý được gõ không dấu → tính năng vô dụng | Cao | Chỉ mục hai lớp; có test riêng từ GĐ 5 |
-| Trang Giới thiệu không có bác sĩ làm giảm cảm giác tin cậy | Trung bình | **Hy sinh có ý thức** (§17) — đã xếp v1.1, đợt cập nhật đầu tiên sau launch |
-| Không có form ở bản đầu → mất khách ngại gọi điện | Trung bình | Nút Zalo bù được phần lớn (nhắn tin, không phải gọi). Theo dõi sau launch; nếu rõ ràng thiếu thì đẩy §11 lên sớm |
-| Mất thứ hạng của các URL hỏng bị loại | Thấp | Vốn không có thứ hạng để mất; catch-all 301 chỉ để cứu link cũ trên Facebook/Zalo |
-| Nội dung EN gấp đôi khối lượng, kéo dài dự án | Trung bình | Phân tầng dịch vụ (§3) để làm theo đợt, không dàn đều |
-| Chế độ tối làm ảnh lâm sàng sai lệch | Trung bình | Vùng ảnh lâm sàng giữ nền sáng ở cả hai chế độ (§8) |
-| Animation gây giật trên máy yếu | Thấp | Đã chọn mức nhẹ, 0 KB cho phần lớn hiệu ứng |
+| Rủi ro                                                     | Mức        | Xử lý                                                                                                            |
+| ---------------------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------- |
+| Bản tiếng Anh dịch máy làm mất uy tín                      | Cao        | Hiệu đính bản ngữ là hạng mục ngân sách riêng, không gộp vào việc dịch                                           |
+| Chưa có ảnh chụp thật khi tới hạn                          | Cao        | Shot-list và tỷ lệ khung định sẵn từ GĐ 2; Zod chặn build nếu còn placeholder                                    |
+| Tìm kiếm không xử lý được gõ không dấu → tính năng vô dụng | Cao        | Chỉ mục hai lớp; có test riêng từ GĐ 5                                                                           |
+| Trang Giới thiệu không có bác sĩ làm giảm cảm giác tin cậy | Trung bình | **Hy sinh có ý thức** (§17) — đã xếp v1.1, đợt cập nhật đầu tiên sau launch                                      |
+| Không có form ở bản đầu → mất khách ngại gọi điện          | Trung bình | Nút Zalo bù được phần lớn (nhắn tin, không phải gọi). Theo dõi sau launch; nếu rõ ràng thiếu thì đẩy §11 lên sớm |
+| Mất thứ hạng của các URL hỏng bị loại                      | Thấp       | Vốn không có thứ hạng để mất; catch-all 301 chỉ để cứu link cũ trên Facebook/Zalo                                |
+| Nội dung EN gấp đôi khối lượng, kéo dài dự án              | Trung bình | Phân tầng dịch vụ (§3) để làm theo đợt, không dàn đều                                                            |
+| Chế độ tối làm ảnh lâm sàng sai lệch                       | Trung bình | Vùng ảnh lâm sàng giữ nền sáng ở cả hai chế độ (§8)                                                              |
+| Animation gây giật trên máy yếu                            | Thấp       | Đã chọn mức nhẹ, 0 KB cho phần lớn hiệu ứng                                                                      |
 
 ---
 
@@ -653,15 +653,15 @@ GĐ 0 (đã chạy) xác nhận **site cũ không có bất kỳ thông tin bác
 
 ### A. Quyền truy cập
 
-| Cần | Dùng để | Chặn GĐ |
-|---|---|---|
-| Tài khoản **Cloudflare** | Tạo Pages project, deploy | 1 |
-| Quyền quản trị **DNS** của `nhakhoavcare.com` (ở nhà đăng ký domain) | Trỏ domain sang site mới ở bước cuối | 8 |
-| Quyền vào **Blogger** hiện tại | Lấy nội dung gốc; giữ site cũ chạy tới phút cuối | 0 |
-| **Google Business Profile** | Đồng bộ NAP, lấy link cho `sameAs` | 6 |
-| **Google Search Console** | Theo dõi thứ hạng sau khi đổi domain | 8 |
-| Link **Facebook Page** chính thức | `sameAs` trong JSON-LD, footer | 4 |
-| Tài khoản **Tavily** (gói miễn phí) | Crawl nội dung cũ | 0 |
+| Cần                                                                  | Dùng để                                          | Chặn GĐ |
+| -------------------------------------------------------------------- | ------------------------------------------------ | ------- |
+| Tài khoản **Cloudflare**                                             | Tạo Pages project, deploy                        | 1       |
+| Quyền quản trị **DNS** của `nhakhoavcare.com` (ở nhà đăng ký domain) | Trỏ domain sang site mới ở bước cuối             | 8       |
+| Quyền vào **Blogger** hiện tại                                       | Lấy nội dung gốc; giữ site cũ chạy tới phút cuối | 0       |
+| **Google Business Profile**                                          | Đồng bộ NAP, lấy link cho `sameAs`               | 6       |
+| **Google Search Console**                                            | Theo dõi thứ hạng sau khi đổi domain             | 8       |
+| Link **Facebook Page** chính thức                                    | `sameAs` trong JSON-LD, footer                   | 4       |
+| Tài khoản **Tavily** (gói miễn phí)                                  | Crawl nội dung cũ                                | 0       |
 
 Lưu ý bàn giao: mọi tài khoản nên đứng tên **phòng khám**, không phải tài khoản cá nhân của người thi công.
 
@@ -709,13 +709,13 @@ Theo shot-list §8, **bao gồm chân dung từng bác sĩ** (4:5).
 
 ### E. Công cụ dev
 
-| Công cụ | Trạng thái |
-|---|---|
-| Node.js | ✅ v24.16.0 đã có |
+| Công cụ    | Trạng thái                                                              |
+| ---------- | ----------------------------------------------------------------------- |
+| Node.js    | ✅ v24.16.0 đã có                                                       |
 | Tavily CLI | ❌ `curl -fsSL https://cli.tavily.com/install.sh \| bash && tvly login` |
-| Wrangler | ❌ cài qua `npm i -D wrangler` ở GĐ 1 |
-| Impeccable | ❌ `npx impeccable install` ở GĐ 2 |
-| Git repo | ❌ thư mục hiện chưa `git init` |
+| Wrangler   | ❌ cài qua `npm i -D wrangler` ở GĐ 1                                   |
+| Impeccable | ❌ `npx impeccable install` ở GĐ 2                                      |
+| Git repo   | ❌ thư mục hiện chưa `git init`                                         |
 
 ### F. Cần kiểm tra về mặt pháp lý
 

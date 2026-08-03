@@ -1,12 +1,12 @@
 ---
 key: bridge
 lang: vi
-title: "Cầu răng"
-description: "Phục hình cố định thay răng mất bằng cách tựa lên hai răng kế bên. Trang này nói rõ cái giá phải trả là mài hai răng còn khỏe."
+title: 'Cầu răng'
+description: 'Phục hình cố định thay răng mất bằng cách tựa lên hai răng kế bên. Trang này nói rõ cái giá phải trả là mài hai răng còn khỏe.'
 order: 4
 keywords:
-  - "cầu răng sứ"
-  - "bắc cầu răng"
+  - 'cầu răng sứ'
+  - 'bắc cầu răng'
 faq: []
 ---
 

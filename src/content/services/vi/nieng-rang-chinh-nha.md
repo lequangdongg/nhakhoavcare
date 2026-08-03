@@ -1,15 +1,15 @@
 ---
 key: braces
 lang: vi
-title: "Niềng răng, chỉnh nha"
-description: "Di chuyển răng về đúng vị trí bằng mắc cài hoặc khay trong suốt. Trang này nói về thời gian điều trị và vì sao phải đeo hàm duy trì sau khi tháo."
+title: 'Niềng răng, chỉnh nha'
+description: 'Di chuyển răng về đúng vị trí bằng mắc cài hoặc khay trong suốt. Trang này nói về thời gian điều trị và vì sao phải đeo hàm duy trì sau khi tháo.'
 order: 11
 keywords:
-  - "mắc cài"
-  - "khay trong suốt"
-  - "răng hô"
-  - "răng lệch"
-  - "răng khấp khểnh"
+  - 'mắc cài'
+  - 'khay trong suốt'
+  - 'răng hô'
+  - 'răng lệch'
+  - 'răng khấp khểnh'
 faq: []
 ---
 

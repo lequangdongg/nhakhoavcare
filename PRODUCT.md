@@ -10,7 +10,7 @@ web
 
 **Chính:** người dân Đà Nẵng và vùng lân cận đang cân nhắc một can thiệp nha khoa có giá trị lớn — chủ yếu cấy ghép Implant, kế đến là bọc răng sứ, dán sứ Veneer, chỉnh nha. Họ tra cứu trên **điện thoại, qua mạng 4G**, thường vào buổi tối. Trước khi gọi điện, họ đã đọc vài phòng khám và đang tìm lý do để loại bớt.
 
-Câu hỏi thật họ mang theo: *giá bao nhiêu, mất bao lâu, có đau không, bảo hành thế nào, ai là người làm.*
+Câu hỏi thật họ mang theo: _giá bao nhiêu, mất bao lâu, có đau không, bảo hành thế nào, ai là người làm._
 
 **Phụ:** người nước ngoài sinh sống tại Đà Nẵng và khách du lịch nha khoa. Nhóm này đọc tiếng Anh, so sánh giá với nước họ, và đánh giá độ tin cậy khắt khe hơn vì không có mạng lưới quen biết để hỏi.
 

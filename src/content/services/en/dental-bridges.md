@@ -1,12 +1,12 @@
 ---
 key: bridge
 lang: en
-title: "Dental Bridges"
-description: "A fixed restoration that replaces a missing tooth by resting on the two teeth beside it. Explains the real cost: filing down two healthy teeth."
+title: 'Dental Bridges'
+description: 'A fixed restoration that replaces a missing tooth by resting on the two teeth beside it. Explains the real cost: filing down two healthy teeth.'
 order: 4
 keywords:
-  - "bridgework"
-  - "missing tooth"
+  - 'bridgework'
+  - 'missing tooth'
 faq: []
 ---
 

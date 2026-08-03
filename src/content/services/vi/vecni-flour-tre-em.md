@@ -1,16 +1,16 @@
 ---
 key: fluoride
 lang: vi
-title: "Vecni Flour cho trẻ"
-description: "Bôi vecni fluoride lên men răng trẻ để phòng sâu răng. Trang này nói về độ tuổi bắt đầu, tần suất và việc đây không thay thế chải răng hằng ngày."
+title: 'Vecni Flour cho trẻ'
+description: 'Bôi vecni fluoride lên men răng trẻ để phòng sâu răng. Trang này nói về độ tuổi bắt đầu, tần suất và việc đây không thay thế chải răng hằng ngày.'
 order: 9
 keywords:
-  - "trẻ em"
-  - "trẻ nhỏ"
-  - "cho bé"
-  - "nha khoa trẻ em"
-  - "phòng sâu răng"
-  - "sâu răng"
+  - 'trẻ em'
+  - 'trẻ nhỏ'
+  - 'cho bé'
+  - 'nha khoa trẻ em'
+  - 'phòng sâu răng'
+  - 'sâu răng'
 faq: []
 ---
 
