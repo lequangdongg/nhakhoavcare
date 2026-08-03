@@ -41,10 +41,11 @@ Mọi đánh đổi trong tài liệu này đều được giải quyết theo h
 
 Ở bản launch đầu tiên, kênh liên hệ là **nút gọi điện, nút Zalo và nút chỉ đường** — nổi bật trên mọi trang. Không có form. Với phòng khám Việt Nam đây vẫn là kênh chuyển đổi mạnh nhất, và nó không phụ thuộc backend nào.
 
+- **Hồ sơ bác sĩ chi tiết** — chứng chỉ, bằng cấp, thành tựu (xem §8.1)
+
 ### Hoãn sang sau khi launch
 
 - **Hệ thống nhận yêu cầu đặt lịch** (§11) — thiết kế đã hoàn chỉnh và giữ nguyên trong spec, nhưng không thi công ở bản đầu. Xây khi site đã chạy ổn định.
-- **Khối chân dung & bằng cấp bác sĩ** trên trang Giới thiệu (§17)
 
 ### Ngoài phạm vi (YAGNI)
 
@@ -266,6 +267,43 @@ Hệ quả: ảnh trước/sau luôn được nhìn trên cùng một nền, ở
 
 Cả hai chế độ đều phải đạt tương phản WCAG 2.2 AA — kiểm tự động, không đánh giá bằng mắt.
 
+### 8.1 Hồ sơ bác sĩ
+
+Mỗi bác sĩ là một mục có cấu trúc, không phải đoạn văn tự do. Đây là phần **có sức nặng nhất** đối với mục tiêu uy tín, vì hai lý do cộng dồn:
+
+- **Bệnh nhân tin người, không tin phòng khám.** Ai sẽ cầm mũi khoan là câu hỏi thật.
+- **Google xếp nội dung y tế vào nhóm YMYL** và đánh giá theo E-E-A-T (Kinh nghiệm – Chuyên môn – Thẩm quyền – Đáng tin). Hồ sơ bác sĩ có chứng chỉ ghi rõ nguồn chính là tín hiệu mạnh nhất trong nhóm này. Trợ lý AI cũng trích phần này khi được hỏi "nha khoa nào uy tín ở Đà Nẵng".
+
+#### Cấu trúc mỗi hồ sơ
+
+| Trường | Bắt buộc | Ghi chú |
+|---|---|---|
+| `name`, `title` | có | "BS. Nguyễn Văn A", "Bác sĩ Răng Hàm Mặt" |
+| `yearsOfExperience` | có | 0–60, chặn con số phi lý |
+| `portrait` | có | Tỷ lệ 4:5, nền sạch |
+| `summary` | có | 100–300 ký tự |
+| `education[]` | **≥ 1 mục** | Bằng cấp + trường + năm |
+| `certificates[]` | **≥ 1 mục** | Tên + **nơi cấp** + **năm**, kèm link xác minh nếu có |
+| `achievements[]` | không | Số ca đã thực hiện, giải thưởng, báo cáo hội nghị |
+| `specialties[]` | không | Khớp key dịch vụ, tự sinh liên kết sang trang dịch vụ |
+| `memberships[]` | không | Hội Răng Hàm Mặt Việt Nam... |
+| `languages[]` | không | Quan trọng với khách nước ngoài |
+
+#### Ràng buộc do Zod cưỡng chế
+
+1. **Chứng chỉ phải truy nguyên được** — bắt buộc có nơi cấp và năm. Một dòng "Chứng chỉ Implant" trống trơn không chứng minh được gì; nó **làm giảm uy tín thay vì tăng**, vì người đọc kỹ sẽ nhận ra nó rỗng.
+2. **Không được để trống phần đào tạo** — hồ sơ y tế thiếu mục học vấn là dấu hiệu xấu.
+3. **Năm cấp không được ở tương lai** — chặn lỗi gõ nhầm kiểu `2099` trên hồ sơ y tế.
+4. **`specialties` phải khớp key dịch vụ có thật** — chặn liên kết chết sang trang dịch vụ.
+
+#### Cần lưu ý về pháp lý
+
+Chứng chỉ và thành tựu công bố trên site phải **có thật và chứng minh được**. Quảng cáo dịch vụ khám chữa bệnh tại Việt Nam chịu điều chỉnh của Luật Quảng cáo (§18-F), và thông tin chuyên môn sai lệch là rủi ro nặng hơn nhiều so với một trang thiết kế xấu. Trường `verifyUrl` có sẵn để trỏ tới bản scan hoặc trang xác minh khi có.
+
+#### Đánh dấu ngữ nghĩa
+
+Mỗi hồ sơ xuất JSON-LD `Person` với `jobTitle`, `alumniOf`, `hasCredential`, `memberOf`, và `worksFor` trỏ về `Dentist` của phòng khám (§12).
+
 ### Khung ảnh & shot-list
 
 Chủ dự án chưa có ảnh chụp chuyên nghiệp nhưng sẽ chụp. Thiết kế phải có sẵn khung ảnh định tỷ lệ với placeholder có nhãn, để thả ảnh thật vào sau.
@@ -273,7 +311,7 @@ Chủ dự án chưa có ảnh chụp chuyên nghiệp nhưng sẽ chụp. Thi�
 | Slot | Tỷ lệ | Cần chụp |
 |---|---|---|
 | `hero` | 3:2 | Không gian phòng khám, ánh sáng tự nhiên, có người |
-| `doctor-portrait` | 4:5 | Chân dung từng bác sĩ, nền sạch — **hoãn, xem §17** |
+| `doctor-portrait` | 4:5 | Chân dung từng bác sĩ, nền sạch, ánh sáng đều — **bắt buộc, xem §8.1** |
 | `facility-*` | 3:2 | Ghế nha, phòng vô trùng, khu chờ |
 | `case-before` / `case-after` | 1:1 | **Cùng góc, cùng ánh sáng, cùng khoảng cách** |
 
@@ -599,10 +637,10 @@ Khi làm §11 ở v1.2, bổ sung: dữ liệu sai bị chặn phía server; ghi
 **1. Phạm vi nội dung — giữ hết trang đang tồn tại.**
 Mọi trang cũ truy cập được đều được port sang. Chỉ bỏ những trang có URL hỏng/không hợp lệ. GĐ 0 vì vậy không còn nhiệm vụ "chốt phạm vi" mà chỉ còn hai việc: tải nội dung cũ về làm nguyên liệu viết lại, và lọc ra danh sách URL hỏng để loại.
 
-**2. Chân dung bác sĩ — tạm bỏ.**
-GĐ 0 kiểm xem trang cũ có thông tin bác sĩ không. Trang Giới thiệu ở phiên bản đầu **không có khối chân dung bác sĩ**; slot `doctor-portrait` giữ trong hệ thống thiết kế nhưng chưa dùng, để thêm sau mà không phải sửa layout.
+**2. Hồ sơ bác sĩ — ĐÃ ĐẢO QUYẾT ĐỊNH, đưa vào bản launch.**
+Quyết định ban đầu là "bỏ tạm". Sau đó đổi thành: **có, và phải chi tiết** — chứng chỉ, bằng cấp, thành tựu nêu rõ từng mục. Xem §8.1 để biết cấu trúc và ràng buộc.
 
-Cần nói thẳng: với site nha khoa, chân dung và bằng cấp bác sĩ là một trong những yếu tố tạo tin tưởng mạnh nhất. Bỏ nó là **hy sinh có ý thức** đối với mục tiêu số 1, không phải chuyện nhỏ. Đề nghị đưa vào ngay đợt cập nhật đầu tiên sau khi launch.
+GĐ 0 (đã chạy) xác nhận **site cũ không có bất kỳ thông tin bác sĩ nào**, nên toàn bộ phần này viết mới 100% và cần phòng khám cung cấp dữ liệu thật.
 
 **3. Google Business Profile — không bỏ qua.**
 Đồng bộ NAP với Google Business Profile nằm trong GĐ 6. Cần quyền truy cập GBP trước khi tới giai đoạn đó (§18-A).
@@ -648,9 +686,24 @@ Lưu ý bàn giao: mọi tài khoản nên đứng tên **phòng khám**, không
 - Quy trình vô trùng (site cũ đã có, cần viết lại sạch)
 - **Người hiệu đính tiếng Anh bản ngữ** — xác định ai làm và ngân sách, trước khi bắt đầu dịch
 
+### C-bis. Hồ sơ bác sĩ — cần trước GĐ 4
+
+Site cũ **không có gì** về bác sĩ, nên toàn bộ phần này cần phòng khám cung cấp. Với **mỗi** bác sĩ:
+
+- Họ tên đầy đủ + chức danh chính xác
+- Số năm kinh nghiệm
+- **Bằng cấp**: tên bằng, trường, năm tốt nghiệp — ít nhất một mục
+- **Chứng chỉ**: tên, **nơi cấp**, **năm cấp** — ít nhất một mục. Thiếu nơi cấp hoặc năm thì **build sẽ fail**
+- Thành tựu: số ca đã thực hiện, giải thưởng, báo cáo hội nghị
+- Chuyên môn (khớp danh sách dịch vụ)
+- Hội nghề nghiệp, ngoại ngữ
+- Chân dung 4:5
+
+⚠️ Mọi chứng chỉ và thành tựu công bố phải **có thật và chứng minh được** — xem §8.1 và §18-F.
+
 ### D. Hình ảnh — cần trước GĐ 4
 
-Theo shot-list §8. Không cần `doctor-portrait` ở bản đầu.
+Theo shot-list §8, **bao gồm chân dung từng bác sĩ** (4:5).
 
 Ảnh `case-before` / `case-after` phải chụp **cùng góc, cùng ánh sáng, cùng khoảng cách**. Ảnh trước/sau khác điều kiện chụp là hình thức phóng đại kết quả.
 

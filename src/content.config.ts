@@ -3,6 +3,7 @@ import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { SERVICE_KEYS } from './i18n/routes';
 import { LOCALES } from './i18n/locales';
+import { doctorSchema } from './content/doctors-schema';
 
 const services = defineCollection({
   loader: glob({ base: './src/content/services', pattern: '**/*.md' }),
@@ -21,4 +22,14 @@ const services = defineCollection({
   }),
 });
 
-export const collections = { services };
+/**
+ * Hồ sơ bác sĩ. Chứng chỉ và thành tựu là thứ Google soi kỹ nhất với nội dung
+ * y tế (E-E-A-T) và cũng là thứ bệnh nhân tin nhất — nên schema ép phải đầy đủ,
+ * không cho ghi qua loa. Xem src/content/doctors-schema.ts.
+ */
+const doctors = defineCollection({
+  loader: glob({ base: './src/content/doctors', pattern: '**/*.md' }),
+  schema: doctorSchema,
+});
+
+export const collections = { services, doctors };
