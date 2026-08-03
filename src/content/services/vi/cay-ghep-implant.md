@@ -2,7 +2,7 @@
 key: implant
 lang: vi
 title: Cấy ghép Implant
-description: Cấy ghép Implant tại Đà Nẵng — trụ titanium thay chân răng đã mất, ăn nhai như răng thật. Bài viết giải thích quy trình, chi phí và thời gian điều trị.
+description: Cấy ghép Implant tại Đà Nẵng, trụ titanium thay chân răng đã mất, ăn nhai như răng thật. Bài viết giải thích quy trình, chi phí và thời gian điều trị.
 priceFrom: 15000000
 order: 1
 faq:

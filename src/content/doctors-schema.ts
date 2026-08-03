@@ -39,7 +39,7 @@ export const doctorSchema = z.object({
   lang: z.enum(LOCALES as unknown as [string, ...string[]]),
 
   name: z.string().min(1),
-  /** Chức danh: "Bác sĩ Răng Hàm Mặt", "Thạc sĩ – Bác sĩ", ... */
+  /** Chức danh: "Bác sĩ Răng Hàm Mặt", "Thạc sĩ Bác sĩ", ... */
   title: z.string().min(1),
   order: z.number().int(),
 
@@ -47,7 +47,7 @@ export const doctorSchema = z.object({
 
   portrait: z.string().min(1),
 
-  /** Đoạn giới thiệu ngắn, 100–300 ký tự. */
+  /** Đoạn giới thiệu ngắn, 100-300 ký tự. */
   summary: z.string().min(100).max(300),
 
   /** Bắt buộc ít nhất một mục — hồ sơ y tế không được để trống phần đào tạo. */

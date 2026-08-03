@@ -57,7 +57,7 @@ const days = Object.entries(clinic.hours) as Array<
         days.map(([day, value]) => (
           <div>
             <dt>{DAY_LABELS[locale][day]}</dt>
-            <dd>{value === 'closed' ? t('footer.closed') : `${value.open} – ${value.close}`}</dd>
+            <dd>{value === 'closed' ? t('footer.closed') : `${value.open} - ${value.close}`}</dd>
           </div>
         ))
       }

@@ -1,65 +1,173 @@
 @import "tailwindcss";
 
-/*
-  Màu khai theo VAI TRÒ, không theo tên màu. Đổi theme là đổi một tầng biến.
-  Giá trị dưới đây là tạm — hệ màu thật do /impeccable shape quyết định ở Plan 2.
-*/
-:root {
-  --surface: #ffffff;
-  --surface-raised: #f6f7f9;
-  --text-primary: #14181d;
-  --text-secondary: #4b5563;
-  --border: #e2e5ea;
-  --accent: #0f766e;
-  --accent-contrast: #ffffff;
+@import "@fontsource-variable/archivo/wght.css";
+@import "@fontsource-variable/archivo/wght-italic.css";
 
-  /*
-    Nền cho ảnh lâm sàng. GIỮ NGUYÊN Ở CẢ HAI CHẾ ĐỘ — spec §8.
-    Mắt người đánh giá độ trắng của răng theo nền xung quanh; nền tối làm
-    kết quả trước/sau trông phóng đại. Đây là ràng buộc đạo đức, không phải thẩm mỹ.
-  */
-  --clinical-surface: #f4f5f7;
-  --clinical-text: #14181d;
+/* ===========================================================================
+   HỆ MÀU: BẢNG SO MÀU RĂNG VITA
+
+   Mọi màu dưới đây có nguồn gốc thật trong thế giới nha khoa. Không màu nào
+   được chọn vì "trông đẹp".
+
+   - Nền graphite  = tấm nền tối bác sĩ đặt sau răng khi so màu, để mắt không
+                     bị nền sáng đánh lừa.
+   - Xám thép      = khung kim loại giữ các tab sứ.
+   - Dải A1 tới D4 = sắc độ sứ thật của bộ VITA classical. Dùng làm DỮ LIỆU
+                     (bậc giá, giai đoạn điều trị), không dùng trang trí.
+   - Xanh phẫu thuật = màu khăn mổ. Ngành y chọn nó vì nó là màu bù của đỏ máu,
+                     giúp mắt bác sĩ đỡ mỏi. Đây là màu hành động của site.
+   =========================================================================== */
+
+:root {
+  /* Nền và chữ */
+  --surface: #f3f2ef;
+  --surface-raised: #fbfaf8;
+  --surface-sunken: #e7e5e0;
+  --text-primary: #1a1c1e;
+  --text-secondary: #55585c;
+  --text-tertiary: #7c8085;
+
+  /* Khung thép giữ tab */
+  --steel-line: #c9c7c1;
+  --steel-edge: #a8a6a0;
+
+  /* Màu hành động: xanh khăn phẫu thuật, đã giảm bão hoà */
+  --accent: #14655d;
+  --accent-hover: #0f4f49;
+  --accent-contrast: #f6f8f7;
+  --accent-quiet: #d8e5e3;
+
+  /* Cảnh báo: chỉ thị đổi màu trên túi hấp tiệt trùng */
+  --signal: #8a4b20;
+
+  /* Dải sắc độ sứ VITA classical, dùng làm thang dữ liệu */
+  --shade-b1: #eae4d6;
+  --shade-a1: #e5ddcc;
+  --shade-a2: #ddd2bd;
+  --shade-b3: #d4c5a4;
+  --shade-a3: #cbb99b;
+  --shade-c3: #bdae95;
+  --shade-a4: #ab9678;
+  --shade-c4: #94856d;
+
+  /* Khung ảnh lâm sàng: GIỮ NGUYÊN Ở CẢ HAI CHẾ ĐỘ.
+     Mắt người đánh giá độ trắng của răng theo nền xung quanh. Nền tối làm ảnh
+     trước/sau trông phóng đại kết quả. Đây là ràng buộc đạo đức nghề nghiệp,
+     không phải lựa chọn thẩm mỹ. */
+  --clinical-surface: #eeece7;
+  --clinical-text: #1a1c1e;
+  --clinical-edge: #cfccc5;
 }
 
 :root.dark {
-  --surface: #101418;
-  --surface-raised: #181d23;
-  --text-primary: #f2f4f7;
-  --text-secondary: #a8b0ba;
-  --border: #2a313a;
-  --accent: #2dd4bf;
-  --accent-contrast: #06201d;
+  --surface: #16181a;
+  --surface-raised: #1e2124;
+  --surface-sunken: #101214;
+  --text-primary: #f0efec;
+  --text-secondary: #a8aaad;
+  --text-tertiary: #7e8184;
 
-  /* Cố tình KHÔNG đổi. Xem ghi chú trên. */
-  --clinical-surface: #f4f5f7;
-  --clinical-text: #14181d;
+  --steel-line: #33373b;
+  --steel-edge: #4a4f54;
+
+  --accent: #4fbfae;
+  --accent-hover: #6ad3c2;
+  --accent-contrast: #0b1c1a;
+  --accent-quiet: #16302d;
+
+  --signal: #c98a55;
+
+  /* Dải sắc độ sứ giữ nguyên: nó là dữ liệu, không phải giao diện.
+     Thang màu răng không đổi theo chế độ xem. */
+  --shade-b1: #eae4d6;
+  --shade-a1: #e5ddcc;
+  --shade-a2: #ddd2bd;
+  --shade-b3: #d4c5a4;
+  --shade-a3: #cbb99b;
+  --shade-c3: #bdae95;
+  --shade-a4: #ab9678;
+  --shade-c4: #94856d;
+
+  /* Cố tình KHÔNG đổi. Xem ghi chú ở khối trên. */
+  --clinical-surface: #eeece7;
+  --clinical-text: #1a1c1e;
+  --clinical-edge: #cfccc5;
 }
 
 @theme inline {
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-border: var(--border);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-ink-3: var(--text-tertiary);
+  --color-steel: var(--steel-line);
+  --color-steel-edge: var(--steel-edge);
   --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
   --color-accent-contrast: var(--accent-contrast);
-  --color-clinical-surface: var(--clinical-surface);
-  --color-clinical-text: var(--clinical-text);
+  --color-accent-quiet: var(--accent-quiet);
+  --color-signal: var(--signal);
+  --color-clinical: var(--clinical-surface);
+  --color-clinical-ink: var(--clinical-text);
+  --color-clinical-edge: var(--clinical-edge);
+
+  --font-sans: "Archivo Variable", system-ui, sans-serif;
 }
 
-body {
-  background-color: var(--surface);
-  color: var(--text-primary);
+/* ===========================================================================
+   CHỮ
+
+   Archivo có trục độ rộng. Tiêu đề dùng bản mở rộng để đọc như nhãn dập trên
+   thân bảng đo; nội dung dùng bản thường để đọc thoải mái.
+   Tiếng Việt có dấu chồng cao nên line-height rộng hơn mặc định.
+   =========================================================================== */
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-color: var(--surface);
+    color: var(--text-primary);
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+
+  h1, h2, h3 {
+    font-variation-settings: "wdth" 112;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Số đo, mã hiệu, giá: chữ số đều bề rộng để cột thẳng hàng như trên bảng đo */
+  .measure {
+    font-variant-numeric: tabular-nums;
+    font-variation-settings: "wdth" 92;
+    letter-spacing: 0.02em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
 }
 
-/* Vùng ảnh lâm sàng: dùng class này cho mọi gallery trước/sau và ảnh cận cảnh răng. */
+/* Vùng ảnh lâm sàng. Dùng cho mọi gallery trước/sau và ảnh cận cảnh răng. */
 .clinical-frame {
   background-color: var(--clinical-surface);
   color: var(--clinical-text);
+  border: 1px solid var(--clinical-edge);
 }
 
-/* Tôn trọng toàn cục — bắt buộc, không phải tuỳ chọn. Spec §9. */
+/* Tôn trọng toàn cục, bắt buộc. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
