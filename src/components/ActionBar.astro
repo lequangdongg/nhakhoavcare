@@ -7,17 +7,25 @@
 import { Icon } from 'astro-icon/components';
 import { clinic, telHref, zaloHref } from '../data/clinic';
 import type { Locale } from '../i18n/locales';
+import { pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
 
 interface Props {
   locale: Locale;
   class?: string;
+  /**
+   * Trang hiện tại CÓ khối bản đồ hay không.
+   * Có thì nút chỉ đường cuộn xuống đó; không thì sang trang Liên hệ, nơi luôn
+   * có bản đồ. Cả hai đều giữ khách lại trong site thay vì đẩy sang Google Maps
+   * ngay lúc họ đang cân nhắc.
+   */
+  hasMap?: boolean;
 }
 
-const { locale, class: className = '' } = Astro.props;
+const { locale, class: className = '', hasMap = false } = Astro.props;
 const t = useTranslations(locale);
 
-const mapsHref = clinic.mapsUrl;
+const mapsHref = hasMap ? '#ban-do' : `${pathFor('contact', locale)}#ban-do`;
 ---
 
 <div class:list={['flex flex-wrap items-center gap-3', className]}>
@@ -37,12 +45,7 @@ const mapsHref = clinic.mapsUrl;
     <span class="font-medium">{t('cta.zalo')}</span>
   </a>
 
-  <a
-    href={mapsHref}
-    target="_blank"
-    rel="noopener"
-    class="link-slide min-h-12 rounded-full px-3 text-ink-2"
-  >
+  <a href={mapsHref} class="link-slide min-h-12 rounded-full px-3 text-ink-2">
     <Icon name="ph:map-pin-area" class="size-5 shrink-0" aria-hidden="true" />
     <span>{t('cta.directions')}</span>
   </a>

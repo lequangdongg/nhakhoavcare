@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
+import MapSection from '../components/MapSection.astro';
 import PricePreview from '../components/PricePreview.astro';
 import Container from '../components/Container.astro';
 import ServiceCards from '../components/ServiceCards.astro';
@@ -160,4 +161,5 @@ const implantSteps = [
       <PricePreview locale={locale} />
     </Container>
   </section>
+  <MapSection locale={locale} />
 </BaseLayout>

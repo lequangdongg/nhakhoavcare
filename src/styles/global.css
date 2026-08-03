@@ -78,9 +78,16 @@
 
   /* Đường cong chuyển động dùng chung, dạng thoát nhanh rồi chậm dần */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Báo cho trình duyệt biết đang ở chế độ nào, để thanh cuộn, ô nhập và các
+     control gốc đổi theo. Không có nó, ô tìm kiếm và thanh cuộn vẫn sáng trong
+     chế độ tối. */
+  color-scheme: light;
 }
 
 :root.dark {
+  color-scheme: dark;
+
   --surface: #0f172a;
   --surface-raised: #1e293b;
   --surface-sunken: #0b1220;
@@ -121,6 +128,84 @@
   --clinical-edge: #d1d5db;
 }
 
+/* ===========================================================================
+   ĐĂNG KÝ BẢNG MÀU VÀO TAILWIND
+
+   Khối này biến bảng màu đã chốt thành lớp tiện ích thật: bg-primary,
+   text-primary-600, border-secondary, ring-primary-200, và mọi biến thể khác
+   Tailwind sinh ra.
+
+   Quan trọng: nó GHI ĐÈ luôn các thang mặc định blue, teal, green, amber, red.
+   Lý do là để không ai lỡ tay dùng bg-blue-600 của Tailwind rồi ra một màu xanh
+   khác màu thương hiệu. Giờ mọi đường đều dẫn về cùng một bảng.
+
+   Mốc chốt của bạn nằm ở bậc 600 (primary) và 500 (các màu còn lại).
+   =========================================================================== */
+
+/* static: buộc Tailwind xuất mọi token dù chưa lớp nào dùng tới. Không có nó,
+   Tailwind cắt bớt token chưa dùng và bg-primary-300 sẽ không tồn tại lúc cần. */
+@theme static {
+  /* Primary: xanh dương thương hiệu, mốc chốt #2563EB ở bậc 600 */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+  --color-primary-950: #172554;
+  --color-primary: #2563eb;
+
+  /* Secondary: mint, mốc chốt #14B8A6 ở bậc 500 */
+  --color-secondary-50: #f0fdfa;
+  --color-secondary-100: #ccfbf1;
+  --color-secondary-200: #99f6e4;
+  --color-secondary-300: #5eead4;
+  --color-secondary-400: #2dd4bf;
+  --color-secondary-500: #14b8a6;
+  --color-secondary-600: #0d9488;
+  --color-secondary-700: #0f766e;
+  --color-secondary-800: #115e59;
+  --color-secondary-900: #134e4a;
+  --color-secondary-950: #042f2e;
+
+  /* Trạng thái, mốc chốt ở bậc 500 */
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+
+  /* Ghi đè thang mặc định của Tailwind để không có màu lạc ngoài bảng.
+     Ai gõ bg-blue-600 vẫn ra đúng xanh thương hiệu. */
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-green-500: #22c55e;
+  --color-amber-500: #f59e0b;
+  --color-red-500: #ef4444;
+}
+
+/* Token theo VAI TRÒ, đổi giá trị khi chuyển sáng tối. Đây là thứ giao diện
+   dùng hằng ngày; thang số ở trên dành cho lúc cần một bậc cụ thể. */
 @theme inline {
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
@@ -134,12 +219,6 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-contrast: var(--accent-contrast);
   --color-accent-quiet: var(--accent-quiet);
-  --color-secondary: var(--secondary);
-  --color-secondary-hover: var(--secondary-hover);
-  --color-secondary-quiet: var(--secondary-quiet);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
-  --color-error: var(--error);
   --color-signal: var(--signal);
   --color-clinical: var(--clinical-surface);
   --color-clinical-ink: var(--clinical-text);
@@ -158,6 +237,9 @@
 
 @layer base {
   html {
+    /* Cuộn mượt khi bấm liên kết neo, ví dụ nút chỉ đường xuống khối bản đồ.
+       Người bật giảm chuyển động được loại trừ ở khối cuối file. */
+    scroll-behavior: smooth;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     /* Lá chắn cuối: một phần tử tính sai chiều rộng cũng không kéo cả trang
@@ -202,6 +284,13 @@
     outline-offset: 3px;
     border-radius: var(--r-sm);
   }
+}
+
+/* Bảng kiểu mặc định của trình duyệt đặt color: CanvasText cho <dialog>. Đó là
+   khai báo tường minh nên nó THẮNG thừa kế từ body, khiến chữ trong hộp thoại
+   giữ màu đen theo giao diện hệ điều hành dù site đang ở chế độ tối. Phải ép lại. */
+dialog {
+  color: var(--text-primary);
 }
 
 /* Vùng ảnh lâm sàng. Dùng cho mọi gallery trước/sau và ảnh cận cảnh răng. */

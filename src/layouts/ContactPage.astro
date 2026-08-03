@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Container from '../components/Container.astro';
+import MapSection from '../components/MapSection.astro';
 import ActionBar from '../components/ActionBar.astro';
 import { Icon } from 'astro-icon/components';
 import { clinic } from '../data/clinic';
@@ -49,7 +50,7 @@ const mapsHref = clinic.mapsUrl;
   <Container class="py-12 lg:py-16">
     <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('contact.title')}</h1>
 
-    <ActionBar locale={locale} class="mt-8" />
+    <ActionBar hasMap locale={locale} class="mt-8" />
 
     <div class="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-16">
       <section aria-labelledby="dia-chi">
@@ -84,4 +85,5 @@ const mapsHref = clinic.mapsUrl;
       </section>
     </div>
   </Container>
+  <MapSection locale={locale} />
 </BaseLayout>

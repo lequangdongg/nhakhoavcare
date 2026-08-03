@@ -10,7 +10,7 @@
  */
 import { Icon } from 'astro-icon/components';
 import { clinic, telHref, zaloHref } from '../data/clinic';
-import { alternateLinks } from '../i18n/routes';
+import { alternateLinks, pathFor } from '../i18n/routes';
 import { useTranslations, UI } from '../i18n/ui';
 import { THEME_STORAGE_KEY } from '../lib/theme';
 import type { Locale } from '../i18n/locales';
@@ -23,7 +23,9 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 
 const indexUrl = locale === 'vi' ? '/search-index.json' : '/en/search-index.json';
-const mapsHref = clinic.mapsUrl;
+// Cuộn tới khối bản đồ trong site thay vì đẩy khách sang Google Maps.
+// Trang Liên hệ luôn có khối này nên đường dẫn luôn hợp lệ.
+const mapsHref = `${pathFor('contact', locale)}#ban-do`;
 const other = alternateLinks(Astro.url.pathname).find((a) => a.locale !== locale)!;
 
 const quickActions = [
@@ -83,7 +85,7 @@ const themeOptions = [
 <dialog
   data-search-dialog
   aria-label={t('search.open')}
-  class="m-0 h-full max-h-none w-full max-w-none bg-surface p-0 backdrop:bg-ink/40 sm:mx-auto sm:mt-[8vh] sm:h-auto sm:max-h-[80vh] sm:w-[min(42rem,92vw)] sm:rounded-lg sm:border sm:border-steel-edge sm:shadow-2xl sm:shadow-ink/20"
+  class="m-0 h-full max-h-none w-full max-w-none bg-surface p-0 text-ink backdrop:bg-ink/40 sm:mx-auto sm:mt-[8vh] sm:h-auto sm:max-h-[80vh] sm:w-[min(42rem,92vw)] sm:rounded-lg sm:border sm:border-steel-edge sm:shadow-2xl sm:shadow-ink/20"
 >
   <div class="flex h-full flex-col sm:max-h-[80vh]">
     <div class="flex items-center gap-3 border-b border-steel px-4 py-3">

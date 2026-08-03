@@ -93,7 +93,7 @@ const todayYear = new Date().getFullYear();
           >
             <Icon
               name="ph:map-pin"
-              class="mt-0.5 size-4 shrink-0 text-secondary"
+              class="text-secondary mt-0.5 size-4 shrink-0"
               aria-hidden="true"
             />
             <span>{clinic.address.street}<br />{clinic.address.ward}, {clinic.address.city}</span>
@@ -102,7 +102,7 @@ const todayYear = new Date().getFullYear();
             href={telHref(clinic.phone)}
             class="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink"
           >
-            <Icon name="ph:phone-call" class="size-4 shrink-0 text-secondary" aria-hidden="true" />
+            <Icon name="ph:phone-call" class="text-secondary size-4 shrink-0" aria-hidden="true" />
             <span class="measure">{clinic.phone}</span>
           </a>
           <a
@@ -111,7 +111,7 @@ const todayYear = new Date().getFullYear();
           >
             <Icon
               name="simple-icons:zalo"
-              class="size-4 shrink-0 text-secondary"
+              class="text-secondary size-4 shrink-0"
               aria-hidden="true"
             />
             <span class="measure">{clinic.zalo}</span>
@@ -122,7 +122,7 @@ const todayYear = new Date().getFullYear();
           >
             <Icon
               name="ph:envelope-simple"
-              class="size-4 shrink-0 text-secondary"
+              class="text-secondary size-4 shrink-0"
               aria-hidden="true"
             />
             <span>{clinic.email}</span>
@@ -202,7 +202,7 @@ const todayYear = new Date().getFullYear();
 
     {
       clinic.isDemoData && (
-        <p class="mt-10 flex gap-2.5 rounded-md border border-warning/40 bg-warning/5 p-3 text-sm text-signal">
+        <p class="border-warning/40 bg-warning/5 mt-10 flex gap-2.5 rounded-md border p-3 text-sm text-signal">
           <Icon name="ph:warning" class="mt-0.5 size-4 shrink-0" aria-hidden="true" />
           {t('footer.demoWarning')}
         </p>

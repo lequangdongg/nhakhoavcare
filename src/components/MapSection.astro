@@ -1,0 +1,173 @@
+---
+/**
+ * Khối bản đồ và đường đi.
+ *
+ * Trước đây nút "Chỉ đường" đẩy thẳng khách sang Google Maps, tức là đẩy họ ra
+ * khỏi site ngay lúc họ đang cân nhắc. Giờ nút cuộn tới khối này: khách xem
+ * được vị trí, địa chỉ và giờ mở cửa mà vẫn ở lại trang. Ai thật sự cần dẫn
+ * đường thì bấm nút mở Google Maps ngay trong khối.
+ *
+ * Bản đồ nhúng tải lười: nó là iframe của bên thứ ba, không nên cản đường tải
+ * phần nội dung chính.
+ */
+import { Icon } from 'astro-icon/components';
+import { clinic, telHref, zaloHref } from '../data/clinic';
+import type { Locale } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
+import Container from './Container.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const embed = `https://www.google.com/maps?q=${clinic.geo.lat},${clinic.geo.lng}&hl=${locale}&z=17&output=embed`;
+
+type DayKey = keyof typeof clinic.hours;
+const first = clinic.hours.monday;
+const sameEveryDay = Object.values(clinic.hours).every(
+  (v) => v !== 'closed' && first !== 'closed' && v.open === first.open && v.close === first.close,
+);
+---
+
+<section id="ban-do" aria-labelledby="ban-do-h" class="mapsec reveal border-t border-steel">
+  <Container wide class="py-14 lg:py-20">
+    <div class="grid gap-8 lg:grid-cols-[1fr_1.25fr] lg:items-start lg:gap-12">
+      <div>
+        <h2 id="ban-do-h" class="text-2xl font-semibold md:text-3xl">{t('map.title')}</h2>
+        <p class="mt-3 max-w-[46ch] text-ink-2">{t('map.intro')}</p>
+
+        <dl class="mt-8 space-y-5">
+          <div class="mapsec-row">
+            <span class="mapsec-icon">
+              <Icon name="ph:map-pin" class="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <dt class="mapsec-label">{t('footer.address')}</dt>
+              <dd class="mt-0.5 leading-relaxed">
+                {clinic.address.street}<br />{clinic.address.ward}, {clinic.address.city}
+              </dd>
+            </div>
+          </div>
+
+          <div class="mapsec-row">
+            <span class="mapsec-icon">
+              <Icon name="ph:clock" class="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <dt class="mapsec-label">{t('footer.hours')}</dt>
+              <dd class="measure mt-0.5">
+                {
+                  sameEveryDay && first !== 'closed'
+                    ? `${t('map.everyDay')}, ${first.open} - ${first.close}`
+                    : t('map.seeContact')
+                }
+              </dd>
+            </div>
+          </div>
+
+          <div class="mapsec-row">
+            <span class="mapsec-icon">
+              <Icon name="ph:phone-call" class="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <dt class="mapsec-label">{t('footer.contact')}</dt>
+              <dd class="mt-0.5 flex flex-wrap items-center gap-x-4 gap-y-1">
+                <a href={telHref(clinic.phone)} class="link-slide measure">{clinic.phone}</a>
+                <a href={zaloHref(clinic.zalo)} class="link-slide">{t('cta.zalo')}</a>
+              </dd>
+            </div>
+          </div>
+        </dl>
+
+        <a href={clinic.mapsUrl} target="_blank" rel="noopener" class="mapsec-cta">
+          <Icon name="ph:navigation-arrow" class="size-5 shrink-0" aria-hidden="true" />
+          <span>{t('map.openMaps')}</span>
+          <Icon name="ph:arrow-up-right" class="size-4 shrink-0 opacity-70" aria-hidden="true" />
+        </a>
+      </div>
+
+      <div class="mapsec-frame">
+        <iframe
+          src={embed}
+          title={t('map.title')}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  /* Chừa chỗ cho header dính khi cuộn tới, nếu không tiêu đề bị header che. */
+  .mapsec {
+    scroll-margin-top: 6.5rem;
+  }
+
+  .mapsec-row {
+    display: flex;
+    gap: 0.85rem;
+  }
+  .mapsec-icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--r-md);
+    background: var(--secondary-quiet);
+    color: var(--secondary);
+  }
+  .mapsec-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+  }
+
+  .mapsec-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    margin-top: 2rem;
+    padding-inline: 1.5rem;
+    border-radius: var(--r-pill);
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 500;
+    box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--accent) 80%, transparent);
+    transition:
+      background-color 0.28s var(--ease-out),
+      box-shadow 0.28s var(--ease-out);
+  }
+  .mapsec-cta:hover {
+    background: var(--accent-hover);
+    box-shadow: 0 14px 28px -14px color-mix(in srgb, var(--accent) 85%, transparent);
+  }
+  .mapsec-cta:active {
+    translate: 0 1px;
+  }
+
+  .mapsec-frame {
+    overflow: hidden;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-lg);
+    background: var(--surface-sunken);
+    aspect-ratio: 4 / 3;
+  }
+  @media (min-width: 1024px) {
+    .mapsec-frame {
+      aspect-ratio: 16 / 11;
+    }
+  }
+  .mapsec-frame > iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+</style>
