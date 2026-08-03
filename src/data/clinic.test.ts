@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clinic, clinicSchema, PLACEHOLDER, telHref, zaloHref } from './clinic';
+import { assertNoPlaceholders, clinic, clinicSchema, telHref, zaloHref } from './clinic';
 
 describe('clinic', () => {
   it('hợp lệ theo schema', () => {
@@ -11,18 +11,10 @@ describe('clinic', () => {
   });
 });
 
-describe('bảo vệ giá trị giữ chỗ', () => {
-  it('cho phép sentinel khi KHÔNG phải build production', () => {
-    const result = clinicSchema.safeParse({ ...clinic, phone: PLACEHOLDER });
-    expect(result.success).toBe(true);
-  });
-
-  it('từ chối sentinel khi build production — không thể deploy với số điện thoại giả', () => {
-    const strict = clinicSchema.refine((c) => !JSON.stringify(c).includes(PLACEHOLDER), {
-      message: `Còn giá trị giữ chỗ ${PLACEHOLDER} trong clinic.ts`,
-    });
-    const result = strict.safeParse({ ...clinic, phone: PLACEHOLDER });
-    expect(result.success).toBe(false);
+describe('chốt chặn dữ liệu dựng tạm', () => {
+  it('chặn build production khi isDemoData còn bật', () => {
+    expect(clinic.isDemoData).toBe(true);
+    expect(() => assertNoPlaceholders()).toThrow(/DỰNG TẠM/);
   });
 });
 

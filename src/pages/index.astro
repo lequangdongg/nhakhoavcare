@@ -1,5 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
 import Container from '../components/Container.astro';
 import ShadeScale from '../components/ShadeScale.astro';
 import ActionBar from '../components/ActionBar.astro';
@@ -9,6 +11,8 @@ import { clinic } from '../data/clinic';
 import { pathFor } from '../i18n/routes';
 
 const locale = 'vi' as const;
+
+const serviceCount = (await getCollection('services', (e) => e.data.lang === locale)).length;
 
 /**
  * Dải sắc độ dùng làm điều hướng dịch vụ. Mã tab là mã VITA thật; thứ tự đi từ
@@ -50,30 +54,8 @@ const implantSteps = [
   description="Phòng khám nha khoa tại Đà Nẵng, chuyên sâu cấy ghép Implant. Bảng giá công khai, quy trình rõ ràng, bảo hành bằng văn bản."
 >
   {/* ── Hero. Bố cục lệch, chữ bên trái, khung ảnh bên phải. ───────────────── */}
-  <section class="border-b border-steel">
-    <Container
-      class="grid items-center gap-10 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:py-20"
-    >
-      <div class="max-w-[36ch]">
-        <h1 class="text-4xl leading-[1.08] font-semibold md:text-5xl lg:text-[3.4rem]">
-          Răng mới phải khớp đúng màu răng bạn đang có
-        </h1>
-        <p class="mt-5 max-w-[46ch] text-lg text-ink-2">
-          Phòng khám nha khoa tại Đà Nẵng, chuyên sâu cấy ghép Implant. Giá công khai, không phát
-          sinh.
-        </p>
-        <ActionBar locale={locale} class="mt-8" />
-      </div>
+  <Hero locale={locale} serviceCount={serviceCount} />
 
-      <ImageSlot
-        slot="hero"
-        ratio="3/2"
-        brief="Không gian phòng khám, ánh sáng tự nhiên, có bác sĩ đang làm việc trong khung hình"
-      />
-    </Container>
-  </section>
-
-  {/* ── Dải sắc độ làm điều hướng dịch vụ. Chữ ký thị giác, chỉ dùng một lần. ── */}
   <section aria-labelledby="dich-vu" class="border-b border-steel">
     <Container class="py-14 lg:py-20">
       <div class="mb-8 flex flex-wrap items-end justify-between gap-4">

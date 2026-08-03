@@ -1,12 +1,12 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { clinic, telHref } from '../data/clinic';
+import { clinic, telHref, zaloHref } from '../data/clinic';
+import type { Locale } from '../i18n/locales';
 import { pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
+import Container from './Container.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import SearchModal from './SearchModal.astro';
-import Container from './Container.astro';
-import type { Locale } from '../i18n/locales';
 
 interface Props {
   locale: Locale;
@@ -24,83 +24,162 @@ const nav = [
 ] as const;
 
 const current = Astro.url.pathname;
+
+// Giờ mở cửa hôm nay. Khách vào site buổi tối cần biết ngay mai mấy giờ mở.
+const DAYS = [
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
+] as const;
+const today = clinic.hours[DAYS[new Date().getDay()]!];
+const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${today.close}`;
 ---
 
-{/* Chiều cao 64px mobile, 72px desktop. Taste mục 4.7: nav một hàng, tối đa 80px. */}
-<header class="sticky top-0 z-40 border-b border-steel bg-surface/92 backdrop-blur-sm">
-  <Container as="div" wide class="flex h-16 items-center gap-4 lg:h-[4.5rem]">
-    <a
-      href={pathFor('home', locale)}
-      class="shrink-0 text-[1.05rem] font-semibold tracking-tight"
-      style="font-variation-settings: 'wdth' 112"
-    >
-      {clinic.name}
-    </a>
-
-    <nav aria-label={t('nav.primary')} class="ms-auto hidden lg:block">
-      <ul class="flex items-center gap-7">
-        {
-          nav.map(({ key, label }) => {
-            const href = pathFor(key, locale);
-            const active = current === href;
-            return (
-              <li>
-                <a
-                  href={href}
-                  aria-current={active ? 'page' : undefined}
-                  class:list={[
-                    'text-[0.95rem] transition-colors duration-300 hover:text-ink',
-                    active ? 'text-ink' : 'text-ink-2',
-                  ]}
-                >
-                  {label}
-                </a>
-              </li>
-            );
-          })
-        }
-      </ul>
-    </nav>
-
-    <div class="ms-auto flex items-center gap-3 lg:ms-0">
-      <SearchModal locale={locale} />
-      <LanguageSwitcher locale={locale} />
-
+<header class="sticky top-0 z-40">
+  {
+    /*
+    Thanh tiện ích. Nền tối tương phản với thân trang nên header có hai tầng rõ
+    rệt thay vì một dải phẳng. Ẩn trên mobile vì đã có nút gọi trong menu.
+  */
+  }
+  <div class="hidden bg-ink text-surface lg:block">
+    <Container wide class="flex h-10 items-center gap-6 text-[0.8125rem]">
+      <span class="flex items-center gap-1.5 opacity-85">
+        <Icon name="ph:map-pin" class="size-4 shrink-0" aria-hidden="true" />
+        {clinic.address.street}, {clinic.address.city}
+      </span>
+      <span class="flex items-center gap-1.5 opacity-85">
+        <Icon name="ph:clock" class="size-4 shrink-0" aria-hidden="true" />
+        {t('header.todayHours')}
+        {todayLabel}
+      </span>
       <a
-        href={telHref(clinic.phone)}
-        class="hidden min-h-10 items-center gap-2 bg-accent px-4 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px sm:inline-flex"
+        href={zaloHref(clinic.zalo)}
+        class="ms-auto flex items-center gap-1.5 opacity-85 transition-opacity duration-300 hover:opacity-100"
       >
-        <Icon name="ph:phone-call" class="size-4 shrink-0" aria-hidden="true" />
-        <span class="text-[0.95rem] font-medium">{t('cta.call')}</span>
+        <Icon name="ph:chat-circle-text" class="size-4 shrink-0" aria-hidden="true" />
+        {t('cta.zalo')}
+      </a>
+      <a href={clinic.sameAs.facebook} target="_blank" rel="noopener" aria-label="Facebook">
+        <Icon
+          name="ph:facebook-logo"
+          class="size-4 opacity-85 transition-opacity duration-300 hover:opacity-100"
+        />
+      </a>
+    </Container>
+  </div>
+
+  {/* Thanh chính. 64px mobile, 72px desktop, đúng trần 80px của Taste. */}
+  <div class="border-b border-steel bg-surface/95 backdrop-blur-sm">
+    <Container wide class="flex h-16 items-center gap-5 lg:h-[4.5rem]">
+      <a href={pathFor('home', locale)} class="flex shrink-0 items-center gap-2.5">
+        {
+          /*
+          Dấu hiệu nhận diện: một tab sứ trên khung thép, đúng vật thật của bộ so
+          màu. Không phải icon răng chung chung mà phòng khám nào cũng dùng.
+        */
+        }
+        <span
+          class="flex h-8 w-6 flex-col justify-end border border-steel-edge p-0.5"
+          aria-hidden="true"
+        >
+          <span class="h-4 w-full" style="background-color: var(--shade-a2)"></span>
+        </span>
+        <span class="leading-none">
+          <span
+            class="block text-[1.0625rem] font-semibold"
+            style="font-variation-settings: 'wdth' 112"
+          >
+            {clinic.name}
+          </span>
+          <span class="measure mt-0.5 block text-[0.6875rem] text-ink-3">{clinic.tagline}</span>
+        </span>
       </a>
 
-      {/* Menu mobile bằng details/summary: không cần JavaScript, bàn phím dùng được sẵn. */}
-      <details class="lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden">
-        <summary
-          class="flex size-10 cursor-pointer list-none items-center justify-center border border-steel-edge"
-          aria-label={t('nav.openMenu')}
-        >
-          <Icon name="ph:list" class="menu-open size-5" aria-hidden="true" />
-          <Icon name="ph:x" class="menu-close hidden size-5" aria-hidden="true" />
-        </summary>
-
-        <div class="absolute inset-x-0 top-16 border-y border-steel bg-surface">
-          <ul class="divide-y divide-steel">
-            {
-              nav.map(({ key, label }) => (
+      <nav aria-label={t('nav.primary')} class="ms-auto hidden lg:block">
+        <ul class="flex items-center gap-7">
+          {
+            nav.map(({ key, label }) => {
+              const href = pathFor(key, locale);
+              const active = current === href;
+              return (
                 <li>
                   <a
-                    href={pathFor(key, locale)}
-                    class="block px-5 py-4 text-[1.05rem] transition-colors duration-300 hover:bg-surface-raised"
+                    href={href}
+                    aria-current={active ? 'page' : undefined}
+                    class:list={[
+                      'relative block py-2 text-[0.9375rem] transition-colors duration-300 hover:text-ink',
+                      'after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-accent after:transition-transform after:duration-300',
+                      active
+                        ? 'text-ink after:scale-x-100'
+                        : 'text-ink-2 after:scale-x-0 hover:after:scale-x-100',
+                    ]}
                   >
                     {label}
                   </a>
                 </li>
-              ))
-            }
-          </ul>
-        </div>
-      </details>
-    </div>
-  </Container>
+              );
+            })
+          }
+        </ul>
+      </nav>
+
+      <div class="ms-auto flex items-center gap-2.5 lg:ms-0">
+        <SearchModal locale={locale} />
+        <LanguageSwitcher locale={locale} />
+
+        {/* Số điện thoại hiện rõ chứ không giấu sau chữ "Gọi ngay". */}
+        <a
+          href={telHref(clinic.phone)}
+          class="hidden min-h-11 items-center gap-2.5 bg-accent px-4 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px sm:inline-flex"
+        >
+          <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
+          <span class="leading-tight">
+            <span class="block text-[0.6875rem] opacity-80">{t('cta.call')}</span>
+            <span class="measure block text-[0.9375rem] font-semibold">{clinic.phone}</span>
+          </span>
+        </a>
+
+        <details class="lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden">
+          <summary
+            class="flex size-10 cursor-pointer list-none items-center justify-center border border-steel-edge"
+            aria-label={t('nav.openMenu')}
+          >
+            <Icon name="ph:list" class="menu-open size-5" aria-hidden="true" />
+            <Icon name="ph:x" class="menu-close hidden size-5" aria-hidden="true" />
+          </summary>
+
+          <div
+            class="absolute inset-x-0 top-16 border-y border-steel bg-surface shadow-lg shadow-ink/5"
+          >
+            <ul class="divide-y divide-steel">
+              {
+                nav.map(({ key, label }) => (
+                  <li>
+                    <a
+                      href={pathFor(key, locale)}
+                      class="block px-5 py-4 text-[1.0625rem] transition-colors duration-300 hover:bg-surface-raised"
+                    >
+                      {label}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+            <a
+              href={telHref(clinic.phone)}
+              class="flex min-h-14 items-center justify-center gap-2.5 bg-accent px-5 text-accent-contrast"
+            >
+              <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
+              <span class="measure font-semibold">{clinic.phone}</span>
+            </a>
+          </div>
+        </details>
+      </div>
+    </Container>
+  </div>
 </header>

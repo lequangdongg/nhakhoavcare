@@ -1,0 +1,83 @@
+---
+import { Icon } from 'astro-icon/components';
+import { clinic, yearsInOperation } from '../data/clinic';
+import type { Locale } from '../i18n/locales';
+import { pathFor } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+import ActionBar from './ActionBar.astro';
+import Container from './Container.astro';
+import ShadeFan from './ShadeFan.astro';
+
+interface Props {
+  locale: Locale;
+  serviceCount: number;
+}
+
+const { locale, serviceCount } = Astro.props;
+const t = useTranslations(locale);
+const years = yearsInOperation();
+---
+
+<section class="relative overflow-hidden border-b border-steel bg-surface-sunken">
+  {
+    /*
+    Nền: lưới thép mảnh, gợi mặt bàn dụng cụ. Đặt ở lớp dưới, không bắt sự kiện
+    chuột, và mờ dần về phía dưới để không cạnh tranh với chữ.
+  */
+  }
+  <div
+    class="pointer-events-none absolute inset-0 opacity-[0.35]"
+    style="background-image: linear-gradient(var(--steel-line) 1px, transparent 1px), linear-gradient(90deg, var(--steel-line) 1px, transparent 1px); background-size: 64px 64px; mask-image: linear-gradient(to bottom, black, transparent 78%)"
+    aria-hidden="true"
+  >
+  </div>
+
+  <Container
+    wide
+    class="relative grid items-center gap-10 py-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:py-20"
+  >
+    <div class="max-w-[38ch]">
+      <p class="measure text-sm text-accent">{t('hero.eyebrow')}</p>
+
+      <h1 class="mt-3 text-[2.1rem] leading-[1.06] font-semibold sm:text-5xl lg:text-[3.5rem]">
+        {t('hero.title')}
+      </h1>
+
+      <p class="mt-5 max-w-[44ch] text-lg text-ink-2">{t('hero.sub')}</p>
+
+      <ActionBar locale={locale} class="mt-8" />
+
+      {
+        /*
+        Hai con số thật lấy từ clinic.ts: năm hoạt động tính từ foundedYear, và
+        số dịch vụ đếm từ collection. Không bịa số ca hay số bệnh nhân.
+      */
+      }
+      <dl class="mt-10 flex gap-8 border-t border-steel pt-6">
+        <div>
+          <dt class="text-sm text-ink-2">{t('hero.years')}</dt>
+          <dd class="measure mt-0.5 text-2xl font-semibold">{years}</dd>
+        </div>
+        <div class="border-s border-steel ps-8">
+          <dt class="text-sm text-ink-2">{t('hero.services')}</dt>
+          <dd class="measure mt-0.5 text-2xl font-semibold">{serviceCount}</dd>
+        </div>
+      </dl>
+    </div>
+
+    {/* Bảng so màu dựng bằng CSS. Đây là hình ảnh chính, không phải ô giữ chỗ. */}
+    <div class="flex flex-col items-center">
+      <ShadeFan class="w-full" />
+      <p class="mt-6 max-w-[36ch] text-center text-sm leading-relaxed text-ink-2">
+        {t('hero.shadeNote')}
+      </p>
+      <a
+        href={pathFor('services', locale)}
+        class="mt-5 inline-flex items-center gap-1.5 text-sm underline-offset-4 transition-colors duration-300 hover:text-accent hover:underline"
+      >
+        {t('hero.explore')}
+        <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+      </a>
+    </div>
+  </Container>
+</section>

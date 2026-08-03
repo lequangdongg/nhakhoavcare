@@ -1,0 +1,127 @@
+---
+/**
+ * Bảng so màu răng VITA dựng bằng CSS thuần.
+ *
+ * Đây là hình ảnh chính của hero. Nó tồn tại vì hai lý do:
+ *
+ * 1. Phòng khám chưa có ảnh chụp. Ảnh stock nha khoa trông giả và phản tác dụng
+ *    đúng vào mục tiêu uy tín, còn ô gạch đứt rỗng thì không phải là hero.
+ * 2. Đây là vật thật khách đã thấy nếu từng bọc răng: bộ tab sứ bác sĩ giơ lên
+ *    cạnh răng để chọn màu. Nhận ra nó chính là niềm tin.
+ *
+ * Dựng bằng CSS chứ không phải SVG tự vẽ, đúng luật Taste mục 9.E: các tab là
+ * phần tử bố cục thật có màu là dữ liệu, không phải hình minh hoạ vẽ tay.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+
+// Sắc độ thật của bộ VITA classical, xếp từ sáng tới sẫm đúng cách bộ tab được sắp.
+const tabs = [
+  { code: 'B1', shade: 'var(--shade-b1)' },
+  { code: 'A1', shade: 'var(--shade-a1)' },
+  { code: 'A2', shade: 'var(--shade-a2)' },
+  { code: 'B3', shade: 'var(--shade-b3)' },
+  { code: 'A3', shade: 'var(--shade-a3)' },
+  { code: 'C3', shade: 'var(--shade-c3)' },
+  { code: 'A4', shade: 'var(--shade-a4)' },
+];
+---
+
+<div class:list={['shade-fan', className]} aria-hidden="true">
+  <div class="fan-rail"></div>
+  <ol class="fan-tabs">
+    {
+      tabs.map((tab, i) => (
+        <li class="fan-tab" style={`--i: ${i}; --tab-shade: ${tab.shade}`}>
+          <span class="tab-body" />
+          <span class="tab-code measure">{tab.code}</span>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .shade-fan {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-block: 2.5rem 1rem;
+  }
+
+  /* Khung thép giữ các tab, xoay quanh một trục ở trên */
+  .fan-rail {
+    position: absolute;
+    top: 1.5rem;
+    left: 50%;
+    width: 1.75rem;
+    height: 1.75rem;
+    translate: -50% 0;
+    border: 2px solid var(--steel-edge);
+    border-radius: 999px;
+    background: var(--surface-raised);
+  }
+  .fan-rail::after {
+    content: '';
+    position: absolute;
+    inset: 0.4rem;
+    border-radius: 999px;
+    background: var(--steel-edge);
+  }
+
+  .fan-tabs {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 2rem;
+  }
+
+  /* Xoè quạt: mỗi tab lệch một góc, gốc xoay ở đầu trên nơi khung thép giữ */
+  .fan-tab {
+    --spread: 9deg;
+    position: relative;
+    width: clamp(2.25rem, 5.2vw, 3.25rem);
+    margin-inline: clamp(-0.4rem, -0.6vw, -0.25rem);
+    transform-origin: top center;
+    rotate: calc((var(--i) - 3) * var(--spread));
+    transition: rotate 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .tab-body {
+    display: block;
+    height: clamp(7rem, 17vw, 10.5rem);
+    background: var(--tab-shade);
+    border: 1px solid rgb(0 0 0 / 0.12);
+    border-radius: 0.15rem 0.15rem 0.6rem 0.6rem;
+    /* Bóng có độ lệch và độ nhoè thật, không phải quầng sáng phẳng */
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 0.5) inset,
+      0 6px 14px -6px rgb(0 0 0 / 0.35);
+  }
+
+  .tab-code {
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1.5rem;
+    text-align: center;
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+  }
+
+  /* Quạt xoè rộng thêm khi rê chuột. Một chuyển động duy nhất, có lý do:
+     nó diễn tả đúng thao tác bác sĩ mở bộ tab ra để so màu. */
+  .shade-fan:hover .fan-tab {
+    --spread: 11.5deg;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fan-tab,
+    .shade-fan:hover .fan-tab {
+      transition: none;
+      --spread: 9deg;
+    }
+  }
+</style>

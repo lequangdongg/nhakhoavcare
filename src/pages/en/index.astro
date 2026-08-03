@@ -1,5 +1,7 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
 import Container from '../../components/Container.astro';
 import ShadeScale from '../../components/ShadeScale.astro';
 import ActionBar from '../../components/ActionBar.astro';
@@ -9,6 +11,8 @@ import { clinic } from '../../data/clinic';
 import { pathFor } from '../../i18n/routes';
 
 const locale = 'en' as const;
+
+const serviceCount = (await getCollection('services', (e) => e.data.lang === locale)).length;
 
 const shadeTabs = [
   { key: 'whitening', code: 'B1', label: 'Teeth whitening', shade: 'var(--shade-b1)' },
@@ -44,27 +48,7 @@ const implantSteps = [
   title={`${clinic.name}. Dental Clinic in Da Nang`}
   description="A dental clinic in Da Nang, Vietnam, focused on dental implants. Published prices, a clear treatment plan, and a written warranty."
 >
-  <section class="border-b border-steel">
-    <Container
-      class="grid items-center gap-10 py-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:py-20"
-    >
-      <div class="max-w-[36ch]">
-        <h1 class="text-4xl leading-[1.08] font-semibold md:text-5xl lg:text-[3.4rem]">
-          A new tooth should match the teeth you already have
-        </h1>
-        <p class="mt-5 max-w-[46ch] text-lg text-ink-2">
-          A dental clinic in Da Nang focused on implants. Prices published, nothing added later.
-        </p>
-        <ActionBar locale={locale} class="mt-8" />
-      </div>
-
-      <ImageSlot
-        slot="hero"
-        ratio="3/2"
-        brief="Clinic interior in natural light, with a dentist at work inside the frame"
-      />
-    </Container>
-  </section>
+  <Hero locale={locale} serviceCount={serviceCount} />
 
   <section aria-labelledby="services" class="border-b border-steel">
     <Container class="py-14 lg:py-20">

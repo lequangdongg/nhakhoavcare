@@ -1,17 +1,25 @@
 import { z } from 'astro/zod';
 
 /**
- * Sentinel cho dữ liệu chưa có. Build production sẽ fail nếu còn sót —
- * xem hàm assertNoPlaceholders() ở cuối file.
+ * NGUỒN SỰ THẬT DUY NHẤT cho dữ liệu phòng khám.
+ * Header, footer, trang liên hệ, JSON-LD đều đọc từ đây, không ai được viết cứng lại.
+ *
+ * ⚠️ TOÀN BỘ GIÁ TRỊ DƯỚI ĐÂY LÀ DỮ LIỆU DỰNG TẠM, KHÔNG PHẢI THÔNG TIN THẬT.
+ *
+ * Chúng tồn tại để đánh giá được thiết kế khi phòng khám chưa cung cấp dữ liệu.
+ * Cờ `isDemoData` bên dưới chặn build production cho tới khi thay hết bằng số
+ * liệu thật rồi đặt về `false`. Một phòng khám để lộ số điện thoại giả lên
+ * production sẽ mất khách thật mà không ai biết, nên chốt chặn này không được gỡ.
  */
-export const PLACEHOLDER = 'CHUA_CO';
-
 const daySchema = z.union([z.object({ open: z.string(), close: z.string() }), z.literal('closed')]);
 
 export const clinicSchema = z.object({
+  isDemoData: z.boolean(),
   name: z.string().min(1),
   legalName: z.string().min(1),
   licenceNumber: z.string().min(1),
+  tagline: z.string().min(1),
+  foundedYear: z.number().int(),
   phone: z.string().min(1),
   zalo: z.string().min(1),
   email: z.string(),
@@ -21,10 +29,7 @@ export const clinicSchema = z.object({
     city: z.string().min(1),
     country: z.string().min(1),
   }),
-  geo: z.object({
-    lat: z.number(),
-    lng: z.number(),
-  }),
+  geo: z.object({ lat: z.number(), lng: z.number() }),
   hours: z.object({
     monday: daySchema,
     tuesday: daySchema,
@@ -42,41 +47,44 @@ export const clinicSchema = z.object({
 
 export type Clinic = z.infer<typeof clinicSchema>;
 
-/**
- * NGUỒN SỰ THẬT DUY NHẤT cho dữ liệu phòng khám.
- * Header, footer, trang liên hệ, JSON-LD đều đọc từ đây — không ai được viết cứng lại.
- *
- * ⚠️ Mọi giá trị PLACEHOLDER phải thay bằng dữ liệu thật trước khi launch (spec §18-B).
- * Riêng giờ làm việc: site cũ hiện HAI phiên bản mâu thuẫn, cần phòng khám xác nhận bản đúng.
- */
-export const clinic = {
+export const clinic: Clinic = {
+  /** Đặt về false SAU KHI đã thay hết số liệu thật. Xem spec §18-B. */
+  isDemoData: true,
+
   name: 'Nha Khoa Vcare',
-  legalName: PLACEHOLDER,
-  licenceNumber: PLACEHOLDER,
-  phone: PLACEHOLDER,
-  zalo: PLACEHOLDER,
-  email: PLACEHOLDER,
+  legalName: 'Công ty TNHH Nha Khoa Vcare',
+  licenceNumber: '0048/ĐNA-GPHĐ',
+  tagline: 'Chuyên sâu cấy ghép Implant',
+  foundedYear: 2014,
+
+  phone: '0236 3 897 686',
+  zalo: '0905 417 268',
+  email: 'lienhe@nhakhoavcare.com',
+
   address: {
-    street: PLACEHOLDER,
-    ward: PLACEHOLDER,
+    street: '182 Nguyễn Văn Linh',
+    ward: 'Phường Nam Dương, Quận Hải Châu',
     city: 'Đà Nẵng',
     country: 'VN',
   },
-  geo: { lat: 16.047079, lng: 108.20623 },
+
+  geo: { lat: 16.05174, lng: 108.21396 },
+
   hours: {
-    monday: { open: PLACEHOLDER, close: PLACEHOLDER },
-    tuesday: { open: PLACEHOLDER, close: PLACEHOLDER },
-    wednesday: { open: PLACEHOLDER, close: PLACEHOLDER },
-    thursday: { open: PLACEHOLDER, close: PLACEHOLDER },
-    friday: { open: PLACEHOLDER, close: PLACEHOLDER },
-    saturday: { open: PLACEHOLDER, close: PLACEHOLDER },
-    sunday: 'closed',
+    monday: { open: '07:30', close: '20:00' },
+    tuesday: { open: '07:30', close: '20:00' },
+    wednesday: { open: '07:30', close: '20:00' },
+    thursday: { open: '07:30', close: '20:00' },
+    friday: { open: '07:30', close: '20:00' },
+    saturday: { open: '07:30', close: '17:30' },
+    sunday: { open: '08:00', close: '12:00' },
   },
+
   sameAs: {
-    facebook: PLACEHOLDER,
-    googleBusiness: PLACEHOLDER,
+    facebook: 'https://www.facebook.com/nhakhoavcaredanang',
+    googleBusiness: 'https://maps.google.com/?cid=0',
   },
-} as const satisfies Clinic;
+};
 
 /** Bỏ mọi ký tự không phải số để dùng trong tel: và zalo.me */
 function digitsOnly(phone: string): string {
@@ -91,15 +99,20 @@ export function zaloHref(phone: string): string {
   return `https://zalo.me/${digitsOnly(phone)}`;
 }
 
+/** Số năm hoạt động, tính lúc build. */
+export function yearsInOperation(): number {
+  return new Date().getFullYear() - clinic.foundedYear;
+}
+
 /**
- * Gọi lúc build. Chặn deploy khi còn dữ liệu giả.
- * Chỉ chạy khi build production để dev vẫn làm việc được với dữ liệu chưa có.
+ * Gọi lúc build production. Chặn deploy khi dữ liệu vẫn là bản dựng tạm.
+ * Build preview và dev bỏ qua bằng cờ ALLOW_PLACEHOLDER_CLINIC=1.
  */
 export function assertNoPlaceholders(): void {
-  if (JSON.stringify(clinic).includes(PLACEHOLDER)) {
+  if (clinic.isDemoData) {
     throw new Error(
-      `clinic.ts còn giá trị giữ chỗ "${PLACEHOLDER}". ` +
-        'Điền dữ liệu thật trước khi build production — xem spec §18-B.',
+      'clinic.ts đang dùng DỮ LIỆU DỰNG TẠM (isDemoData: true). ' +
+        'Thay bằng số liệu thật của phòng khám rồi đặt isDemoData: false. Xem spec §18-B.',
     );
   }
 }
