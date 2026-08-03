@@ -1737,6 +1737,50 @@ git commit -m "docs: README hướng dẫn lệnh và nơi sửa nội dung"
 - [ ] `npx astro build` (không có cờ) **fail** vì `clinic.ts` còn dữ liệu giả — đúng như thiết kế
 - [ ] Sửa `description` của một file markdown thành quá ngắn → build fail với lỗi Zod rõ ràng
 
+---
+
+## Lệch khỏi plan khi thi công (ghi ngày 2026-08-03)
+
+### Plan sai, đã sửa khi chạy
+
+1. **Astro thật là v7.1.6, không phải v5.** Nhãn phiên bản trong plan sai. API thì đúng — tài liệu tra cứu là bản live nên phản ánh v7: `src/content.config.ts`, `glob()` loader, `getViteConfig`, `astro add tailwind` đều hoạt động y như viết.
+
+2. **Thiếu `@astrojs/check` + `typescript`.** `astro check` hỏi cài tương tác rồi treo. Đã `npm i -D @astrojs/check typescript`.
+
+3. **Thiếu `/// <reference types="vitest/config" />` trong `vitest.config.ts`.** Không có nó thì `astro check` báo `'test' does not exist in type 'UserConfig'`.
+
+4. **Thiếu `@types/node`.** `process.env` trong `astro.config.mjs` không có kiểu.
+
+5. **Lỗi thật trong plan — chốt chặn dữ liệu giả bị vô hiệu.** Task 13 viết `"deploy": "npm run verify && wrangler pages deploy dist"`, mà Task 14 lại thêm cờ `ALLOW_PLACEHOLDER_CLINIC=1` vào `verify`. Kết quả: deploy production build với cờ bỏ qua rồi đẩy thẳng lên — đúng chỗ cần chặn nhất thì không chặn. Đã sửa `deploy` thành chuỗi lệnh riêng, build **không cờ**:
+   ```
+   "deploy": "astro check && vitest run && astro build && wrangler pages deploy dist"
+   ```
+   Đã xác minh: `astro build` không cờ trả exit code 1.
+
+6. **Scaffolder ghi đè `.gitignore`,** xoá mất phần chặn secrets (`.dev.vars`, `*-service-account*.json`, `.wrangler/`). Đã khôi phục và gộp với bản của Astro.
+
+### Chưa làm được
+
+7. **Task 13 bước 4–5: `wrangler login` + deploy preview.** Cần đăng nhập trình duyệt tương tác và **tài khoản Cloudflare của phòng khám** (spec §18-A). Cấu hình `wrangler.toml` và script đã sẵn sàng; chỉ thiếu bước đăng nhập.
+
+### Giá trị tôi tự đặt, chưa ai xác nhận
+
+Những thứ dưới đây không có trong spec và không lấy từ site cũ — tôi tự chọn để có cái chạy được. **Cần rà lại ở Plan 2:**
+
+8. **Danh sách 8 dịch vụ và slug của chúng** trong `src/i18n/routes.ts` — suy từ 16 trang liệt kê trong file tổng kết phiên trước, chưa đối chiếu site thật. GĐ 0 (crawl) sẽ xác nhận đúng/thiếu/thừa.
+
+9. **Slug trang tĩnh** (`gioi-thieu`, `bang-gia`, `lien-he`, `kien-thuc-nha-khoa` và bản tiếng Anh) — tôi tự đặt.
+
+10. **Toạ độ `geo` trong `clinic.ts`** = `16.047079, 108.20623`, đây là **trung tâm thành phố Đà Nẵng**, không phải vị trí phòng khám. Phải thay bằng toạ độ thật.
+
+11. **Trường `licenceNumber`** (số giấy phép hoạt động) — tôi tự thêm vào schema vì thấy nhiều site y tế Việt Nam hiển thị ở footer. Nếu không muốn hiện thì bỏ khỏi schema.
+
+12. **Bảng màu tạm trong `global.css`** — màu teal `#0f766e` là giá trị giữ chỗ để có cái nhìn được. Hệ màu thật do `/impeccable shape` quyết định ở Plan 2.
+
+13. **`priceFrom: 15000000`** trong file markdown mẫu — số bịa. Nội dung mẫu chỉ tồn tại để chứng minh schema chạy.
+
+---
+
 ## Sang Plan 2 cần gì
 
 - Dữ liệu thật cho `clinic.ts` (spec §18-B) — **đặc biệt là bản giờ làm việc nào đúng**
