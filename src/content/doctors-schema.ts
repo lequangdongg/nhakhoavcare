@@ -24,7 +24,7 @@ const certificateSchema = z.object({
   issuer: z.string().min(1, { message: 'Chứng chỉ phải ghi rõ nơi cấp' }),
   year: yearSchema,
   /** Link tới bản scan hoặc trang xác minh, nếu có. */
-  verifyUrl: z.string().url().optional(),
+  verifyUrl: z.url().optional(),
 });
 
 const educationSchema = z.object({
