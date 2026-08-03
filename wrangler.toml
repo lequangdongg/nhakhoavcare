@@ -1,3 +1,23 @@
+# Cấu hình cho Cloudflare Workers phục vụ tài nguyên tĩnh.
+#
+# Vì sao dùng dạng này thay vì Pages: pipeline trên Cloudflare đang gọi
+# `npx wrangler deploy`, đó là lệnh của Workers. Trước đây file này khai
+# `pages_build_output_dir` nên wrangler báo thiếu entry point và build hỏng.
+#
+# Khối [build] khiến wrangler tự dựng site trước khi đẩy, nên không cần điền ô
+# "Build command" trong dashboard nữa. Đây là điểm mấu chốt: trước đây CI chạy
+# thẳng lệnh deploy khi chưa có thư mục dist.
+
 name = "nhakhoavcare"
 compatibility_date = "2026-08-03"
-pages_build_output_dir = "dist"
+
+[build]
+# Dùng build:preview vì dữ liệu phòng khám còn ở dạng dựng tạm.
+# Khi đã điền số liệu thật và đặt isDemoData về false, đổi thành `pnpm run build`
+# để chốt chặn có hiệu lực trên CI.
+command = "pnpm run build:preview"
+
+[assets]
+directory = "./dist"
+# Trang 404 tự dựng sẵn được dùng cho mọi đường dẫn không khớp.
+not_found_handling = "404-page"

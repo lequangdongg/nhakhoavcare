@@ -25,6 +25,18 @@ Biome tắt phần format để không đánh nhau với Prettier, vì Biome ch�
 | Nội dung trang dịch vụ         | `src/content/services/{vi,en}/*.md`                                     |
 | Màu sắc                        | `src/styles/global.css`                                                 |
 
+## Deploy
+
+Cloudflare chạy `npx wrangler deploy`. Khối `[build]` trong `wrangler.toml` tự
+dựng site trước khi đẩy, nên **không cần điền ô Build command trong dashboard**.
+
+Khi đã có số liệu thật và đặt `isDemoData: false`, sửa `wrangler.toml`:
+
+```toml
+[build]
+command = "pnpm run build"   # bỏ :preview để chốt chặn có hiệu lực trên CI
+```
+
 ## Trước khi launch
 
 `pnpm deploy` **fail** nếu `src/data/clinic.ts` còn giá trị `CHUA_CO`.
