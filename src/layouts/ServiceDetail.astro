@@ -23,7 +23,12 @@ const priceLabel =
     : null;
 ---
 
-<BaseLayout locale={locale} title={`${title}. ${t('brand.short')}`} description={description}>
+<BaseLayout
+  locale={locale}
+  title={`${title}. ${t('brand.short')}`}
+  description={description}
+  service={entry}
+>
   <article>
     <Container class="py-12 lg:py-16">
       <nav aria-label={t('nav.breadcrumb')} class="mb-8">

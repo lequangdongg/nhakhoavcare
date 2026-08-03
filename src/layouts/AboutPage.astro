@@ -22,6 +22,7 @@ const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).
   locale={locale}
   title={`${t('about.title')}. ${t('brand.short')}`}
   description={t('about.doctorsPending')}
+  doctors={doctors}
 >
   <Container class="py-12 lg:py-16">
     <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('about.title')}</h1>
