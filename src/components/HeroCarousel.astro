@@ -5,8 +5,10 @@
  * Điều hướng bằng NÚT chứ không phải liên kết neo. Liên kết neo bắt trình duyệt
  * cuộn cả trang tới phần tử, gây giật; nút chỉ cuộn bên trong khung.
  *
- * Không tự chạy. Slide tự đổi khi người ta đang đọc là một trong những thứ khó
- * chịu nhất trên web, và site cũ đã mắc đúng lỗi đó với 6 slide rỗng.
+ * Tự chạy mỗi giây, nhưng dừng ngay khi có người rê chuột vào, đặt tay lên,
+ * dùng bàn phím, hoặc chuyển sang tab khác. Slide đổi giữa lúc đang đọc là thứ
+ * khó chịu nhất ở kiểu carousel này, nên điều kiện dừng phải rộng hơn điều kiện
+ * chạy. Ai bật giảm chuyển động thì không chạy lần nào.
  *
  * Vuốt trên mobile hoạt động sẵn vì đó là cuộn thật của trình duyệt, không phải
  * cử chỉ tự chế. Mỗi slide mang một thông tin thật, không phải ảnh trang trí.
@@ -150,12 +152,42 @@ const tabs = [t('slide.shadeTab'), t('slide.processTab'), t('slide.promiseTab')]
           }),
         );
 
+        // Vuốt tay để đổi slide cũng phải cập nhật chấm.
+        // Trước đây chỉ có go() đặt index, nên tự vuốt thì chấm đứng yên ở slide
+        // cũ và lần tự chuyển kế tiếp nhảy về sai chỗ. Ở đây đọc thẳng vị trí
+        // cuộn thật rồi tìm slide gần tâm khung nhất, nên mọi cách đổi slide,
+        // vuốt, bấm chấm, phím mũi tên hay tự chạy, đều quy về một nguồn.
+        let raf = 0;
+        track.addEventListener(
+          'scroll',
+          () => {
+            // Sự kiện cuộn bắn rất dày; gom về mỗi khung hình một lần.
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+              raf = 0;
+              const mid = track.scrollLeft + track.clientWidth / 2;
+              let best = 0;
+              let bestGap = Number.POSITIVE_INFINITY;
+              slides.forEach((s, n) => {
+                const center = s.offsetLeft - track.offsetLeft + s.offsetWidth / 2;
+                const gap = Math.abs(center - mid);
+                if (gap < bestGap) {
+                  bestGap = gap;
+                  best = n;
+                }
+              });
+              sync(best);
+            });
+          },
+          { passive: true },
+        );
+
         // Tự chuyển slide. Dừng khi người dùng đang xem hoặc đang thao tác, vì
         // slide đổi giữa lúc đọc là thứ gây khó chịu nhất ở kiểu carousel này.
         let timer = null;
         const start = () => {
           if (timer || reduced.matches) return;
-          timer = setInterval(() => go((index + 1) % slides.length), 2000);
+          timer = setInterval(() => go((index + 1) % slides.length), 1000);
         };
         const stop = () => {
           clearInterval(timer);

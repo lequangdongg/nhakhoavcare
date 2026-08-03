@@ -44,16 +44,21 @@ const services = (await getCollection('services', (e) => e.data.lang === locale)
   {
     services.map((s) => (
       <li>
-        <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="card">
-          <span class="card-icon">
+        <a
+          href={pathFor(`service:${s.data.key as ServiceKey}`, locale)}
+          class="group flex h-full flex-col gap-2.5 rounded-lg border border-steel bg-surface-raised p-[1.375rem] transition-[border-color,box-shadow,translate] duration-300 ease-[var(--ease-out)] hover:-translate-y-[3px] hover:border-accent hover:shadow-[0_18px_32px_-24px_color-mix(in_srgb,var(--accent)_60%,transparent)] focus-visible:border-accent"
+        >
+          <span class="bg-secondary-quiet text-secondary flex size-10 items-center justify-center rounded-md transition-colors duration-300 ease-[var(--ease-out)] group-hover:bg-accent-quiet group-hover:text-accent">
             <Icon name={ICON[s.data.key] ?? 'ph:tooth'} class="size-5" aria-hidden="true" />
           </span>
 
-          <h3 class="card-title">{s.data.title}</h3>
-          <p class="card-body">{s.data.description}</p>
+          <h3 class="text-[1.0625rem] font-semibold transition-colors duration-300 ease-[var(--ease-out)] group-hover:text-accent">
+            {s.data.title}
+          </h3>
+          <p class="line-clamp-3 text-sm leading-[1.55] text-ink-2">{s.data.description}</p>
 
-          <span class="card-more">
-            <span class="card-more-line" />
+          <span class="mt-auto flex items-center gap-2 pt-3 text-ink-3 transition-colors duration-300 ease-[var(--ease-out)] group-hover:text-accent">
+            <span class="block h-[1.5px] w-5 rounded-full bg-current transition-[width] duration-300 ease-[var(--ease-out)] group-hover:w-10" />
             <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
           </span>
         </a>
@@ -61,93 +66,3 @@ const services = (await getCollection('services', (e) => e.data.lang === locale)
     ))
   }
 </ul>
-
-<style>
-  .card {
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-    height: 100%;
-    padding: 1.375rem;
-    border: 1px solid var(--steel-line);
-    border-radius: var(--r-lg);
-    background: var(--surface-raised);
-    transition:
-      border-color 0.3s var(--ease-out),
-      box-shadow 0.3s var(--ease-out),
-      translate 0.3s var(--ease-out);
-  }
-
-  .card:hover,
-  .card:focus-visible {
-    border-color: var(--accent);
-    translate: 0 -3px;
-    box-shadow: 0 18px 32px -24px color-mix(in srgb, var(--accent) 60%, transparent);
-  }
-
-  .card-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--r-md);
-    background: var(--secondary-quiet);
-    color: var(--secondary);
-    transition:
-      background-color 0.3s var(--ease-out),
-      color 0.3s var(--ease-out);
-  }
-  .card:hover .card-icon {
-    background: var(--accent-quiet);
-    color: var(--accent);
-  }
-
-  .card-title {
-    font-size: 1.0625rem;
-    font-weight: 600;
-    transition: color 0.3s var(--ease-out);
-  }
-  .card:hover .card-title {
-    color: var(--accent);
-  }
-
-  /* Mô tả thật của dịch vụ, cắt gọn ba dòng để các thẻ đều nhau. */
-  .card-body {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-    overflow: hidden;
-    font-size: 0.875rem;
-    line-height: 1.55;
-    color: var(--text-secondary);
-  }
-
-  /* Mũi tên trượt ra khi rê chuột, kèm một vạch kéo dài. Nó nói rằng thẻ này
-     bấm được và còn nội dung phía sau. */
-  .card-more {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: auto;
-    padding-top: 0.75rem;
-    color: var(--text-tertiary);
-    transition: color 0.3s var(--ease-out);
-  }
-  .card:hover .card-more {
-    color: var(--accent);
-  }
-
-  .card-more-line {
-    display: block;
-    width: 1.25rem;
-    height: 1.5px;
-    border-radius: var(--r-pill);
-    background: currentColor;
-    transition: width 0.3s var(--ease-out);
-  }
-  .card:hover .card-more-line {
-    width: 2.5rem;
-  }
-</style>

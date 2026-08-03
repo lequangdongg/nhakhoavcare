@@ -29,120 +29,40 @@ const services = (await getCollection('services', (e) => e.data.lang === locale)
 const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
 ---
 
-<ul class="prows">
+{
+  /* min-w-0 ở cả ô lưới và hàng: ô lưới mặc định min-width:auto nên không co
+    dưới kích thước nội dung, khiến chuỗi nowrap bên trong làm tràn ngang mobile. */
+}
+<ul class="grid gap-2 md:grid-cols-2 [&>li]:min-w-0">
   {
     services.map((s) => (
       <li>
-        <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="prow">
+        <a
+          href={pathFor(`service:${s.data.key as ServiceKey}`, locale)}
+          class="group flex h-full min-w-0 items-center gap-[0.85rem] rounded-md border border-steel bg-surface-raised px-4 py-[0.9rem] transition-[border-color,background-color,translate] duration-250 ease-[var(--ease-out)] hover:-translate-y-0.5 hover:border-accent hover:bg-accent-quiet focus-visible:-translate-y-0.5 focus-visible:border-accent focus-visible:bg-accent-quiet"
+        >
           <span class="min-w-0">
-            <span class="prow-name">{s.data.title}</span>
-            <span class="prow-sub">{`${s.data.description.split('.')[0]}.`}</span>
+            <span class="block font-medium transition-colors duration-250 ease-[var(--ease-out)] group-hover:text-accent">
+              {s.data.title}
+            </span>
+            <span class="block truncate text-xs leading-[1.4] text-ink-3">{`${s.data.description.split('.')[0]}.`}</span>
           </span>
 
-          <span class="prow-price">
-            <span class="prow-label">{t('home.priceFrom')}</span>
-            <span class="prow-num measure">{fmt.format(s.data.priceFrom!)}</span>
-            <span class="prow-cur">đ</span>
+          <span class="ms-auto flex flex-none items-baseline gap-1 whitespace-nowrap">
+            <span class="text-xs text-ink-3">{t('home.priceFrom')}</span>
+            <span class="text-[1.0625rem] font-semibold measure text-accent">
+              {fmt.format(s.data.priceFrom!)}
+            </span>
+            <span class="text-[0.8125rem] font-medium text-accent">đ</span>
           </span>
 
-          <Icon name="ph:caret-right" class="prow-arrow size-4 shrink-0" aria-hidden="true" />
+          <Icon
+            name="ph:caret-right"
+            class="size-4 flex-none text-ink-3 transition-[color,translate] duration-250 ease-[var(--ease-out)] group-hover:translate-x-0.5 group-hover:text-accent"
+            aria-hidden="true"
+          />
         </a>
       </li>
     ))
   }
 </ul>
-
-<style>
-  .prows {
-    display: grid;
-    gap: 0.5rem;
-  }
-  /* Ô lưới mặc định có min-width: auto nên không co dưới kích thước nội dung.
-     Đây mới là mắt xích thiếu khiến hàng tràn ngang trên mobile. */
-  .prows > li {
-    min-width: 0;
-  }
-  @media (min-width: 768px) {
-    .prows {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .prow {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    height: 100%;
-    /* Cho phép hàng co nhỏ hơn nội dung. Không có dòng này, chuỗi nowrap bên
-       trong ép hàng rộng ra và tràn khỏi khung trên màn hẹp. */
-    min-width: 0;
-    padding: 0.9rem 1rem;
-    border: 1px solid var(--steel-line);
-    border-radius: var(--r-md);
-    background: var(--surface-raised);
-    transition:
-      border-color 0.25s var(--ease-out),
-      background-color 0.25s var(--ease-out),
-      translate 0.25s var(--ease-out);
-  }
-  .prow:hover,
-  .prow:focus-visible {
-    border-color: var(--accent);
-    background: var(--accent-quiet);
-    translate: 0 -2px;
-  }
-
-  .prow-name {
-    display: block;
-    font-weight: 500;
-    transition: color 0.25s var(--ease-out);
-  }
-  .prow:hover .prow-name {
-    color: var(--accent);
-  }
-
-  .prow-sub {
-    display: block;
-    overflow: hidden;
-    font-size: 0.75rem;
-    line-height: 1.4;
-    color: var(--text-tertiary);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .prow-price {
-    flex: none;
-    display: flex;
-    align-items: baseline;
-    gap: 0.25rem;
-    margin-inline-start: auto;
-    white-space: nowrap;
-  }
-  .prow-label {
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-  }
-  .prow-num {
-    font-size: 1.0625rem;
-    font-weight: 600;
-    color: var(--accent);
-  }
-  .prow-cur {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--accent);
-  }
-
-  .prow-arrow {
-    flex: none;
-    color: var(--text-tertiary);
-    transition:
-      color 0.25s var(--ease-out),
-      translate 0.25s var(--ease-out);
-  }
-  .prow:hover .prow-arrow {
-    color: var(--accent);
-    translate: 2px 0;
-  }
-</style>

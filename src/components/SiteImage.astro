@@ -23,7 +23,12 @@ const img = images[name];
 ---
 
 <figure
-  class:list={['site-image', img.clinical && 'clinical-frame', className]}
+  class:list={[
+    'relative overflow-hidden rounded-lg bg-surface-sunken',
+    '[&>img]:block [&>img]:size-full [&>img]:object-cover',
+    img.clinical && 'clinical-frame',
+    className,
+  ]}
   style={`aspect-ratio: ${img.ratio}`}
   data-image-slot={name}
 >
@@ -37,48 +42,12 @@ const img = images[name];
 
   {
     img.placeholder && (
-      <figcaption class="ph-note">
+      <figcaption class="absolute inset-x-2 bottom-2 flex gap-[0.45rem] rounded-sm bg-[rgb(15_23_42/0.82)] px-2.5 py-2 text-[0.6875rem] leading-snug text-[#f8fafc] backdrop-blur-[6px]">
         <Icon name="ph:camera" class="size-4 shrink-0" aria-hidden="true" />
         <span>
-          <strong>{name}</strong> {img.brief}
+          <strong class="text-warning font-semibold">{name}</strong> {img.brief}
         </span>
       </figcaption>
     )
   }
 </figure>
-
-<style>
-  .site-image {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--r-lg);
-    background: var(--surface-sunken);
-  }
-
-  .site-image > img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  /* Nhãn ảnh tạm. Nền tối để đọc được trên mọi ảnh, không phụ thuộc màu ảnh. */
-  .ph-note {
-    position: absolute;
-    inset-inline: 0.5rem;
-    bottom: 0.5rem;
-    display: flex;
-    gap: 0.45rem;
-    padding: 0.5rem 0.65rem;
-    border-radius: var(--r-sm);
-    background: rgb(15 23 42 / 0.82);
-    backdrop-filter: blur(6px);
-    color: #f8fafc;
-    font-size: 0.6875rem;
-    line-height: 1.4;
-  }
-  .ph-note strong {
-    font-weight: 600;
-    color: var(--warning);
-  }
-</style>

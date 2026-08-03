@@ -42,19 +42,26 @@ const hoursByDay = HOUR_KEYS.map((k) => {
 });
 ---
 
-<div class="util">
+<div class="overflow-hidden border-b border-steel bg-surface-sunken text-ink-2">
   <Container wide class="flex h-9 items-center gap-4 text-[0.8125rem] lg:h-10 lg:gap-5">
     {
       /* Trạng thái mở cửa. Hiện sau khi trình duyệt tính xong, tránh nhấp nháy sai.
         Đây là thứ giá trị nhất trên mobile: người tra cứu lúc 21h cần biết ngay
         gọi bây giờ có ai nghe máy không. */
     }
-    <span class="status" data-status hidden>
-      <span class="status-dot" data-status-dot></span>
+    <span
+      data-status
+      hidden
+      class="flex flex-none items-center gap-[0.4rem] rounded-full py-[0.15rem] pr-2.5 pl-2 font-medium whitespace-nowrap data-[open=false]:bg-steel data-[open=false]:text-ink-3 data-[open=true]:bg-[color-mix(in_srgb,var(--success)_14%,transparent)] data-[open=true]:text-[color-mix(in_srgb,var(--success)_78%,var(--text-primary))]"
+    >
+      <span
+        data-status-dot
+        class="size-[0.45rem] rounded-full bg-current motion-reduce:animate-none [[data-open=true]_&]:animate-status-pulse"
+      ></span>
       <span data-status-text></span>
     </span>
 
-    <span class="util-item util-desktop">
+    <span class="hidden items-center gap-[0.4rem] whitespace-nowrap lg:flex">
       <Icon name="ph:clock" class="size-4 shrink-0 text-ink-3" aria-hidden="true" />
       <span>{t('header.todayHours')}: <span data-today-hours></span></span>
     </span>
@@ -63,7 +70,7 @@ const hoursByDay = HOUR_KEYS.map((k) => {
       href={clinic.mapsUrl}
       target="_blank"
       rel="noopener"
-      class="util-item util-link util-desktop"
+      class="hidden items-center gap-[0.4rem] whitespace-nowrap transition-colors duration-250 ease-[var(--ease-out)] hover:text-accent lg:flex"
     >
       <Icon name="ph:map-pin" class="size-4 shrink-0 text-ink-3" aria-hidden="true" />
       <span>{clinic.address.street}, {clinic.address.city}</span>
@@ -72,7 +79,7 @@ const hoursByDay = HOUR_KEYS.map((k) => {
     <div class="ms-auto flex items-center gap-1.5">
       <a
         href={zaloHref(clinic.zalo)}
-        class="util-icon"
+        class="flex size-7 items-center justify-center rounded-full text-ink-3 transition-colors duration-250 ease-[var(--ease-out)] hover:bg-accent-quiet hover:text-accent"
         aria-label={t('cta.zalo')}
         title={t('cta.zalo')}
       >
@@ -82,7 +89,7 @@ const hoursByDay = HOUR_KEYS.map((k) => {
         href={clinic.sameAs.facebook}
         target="_blank"
         rel="noopener"
-        class="util-icon"
+        class="flex size-7 items-center justify-center rounded-full text-ink-3 transition-colors duration-250 ease-[var(--ease-out)] hover:bg-accent-quiet hover:text-accent"
         aria-label="Facebook"
       >
         <Icon name="simple-icons:facebook" class="size-4" aria-hidden="true" />
@@ -131,95 +138,3 @@ const hoursByDay = HOUR_KEYS.map((k) => {
     wrap.hidden = false;
   })();
 </script>
-
-<style>
-  .util {
-    border-bottom: 1px solid var(--steel-line);
-    background: var(--surface-sunken);
-    color: var(--text-secondary);
-    overflow: hidden;
-  }
-
-  .util-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    white-space: nowrap;
-  }
-
-  /* Mục chỉ dành cho desktop.
-     KHÔNG dùng lớp hidden của Tailwind ở đây: style phạm vi của component có độ
-     ưu tiên cao hơn lớp tiện ích, nên display:flex ở trên sẽ thắng và mọi mục
-     vẫn hiện trên mobile rồi tràn dòng. */
-  .util-desktop {
-    display: none;
-  }
-  @media (min-width: 1024px) {
-    .util-desktop {
-      display: flex;
-    }
-  }
-
-  .util-link {
-    transition: color 0.25s var(--ease-out);
-  }
-  .util-link:hover {
-    color: var(--accent);
-  }
-
-  /* Trạng thái mở cửa: viên thuốc có chấm. Chấm mang trạng thái thật nên nó
-     không rơi vào luật cấm chấm màu trang trí. */
-  .status {
-    display: flex;
-    flex: none;
-    white-space: nowrap;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.15rem 0.6rem 0.15rem 0.5rem;
-    border-radius: var(--r-pill);
-    font-weight: 500;
-  }
-  .status[data-open='true'] {
-    background: color-mix(in srgb, var(--success) 14%, transparent);
-    color: color-mix(in srgb, var(--success) 78%, var(--text-primary));
-  }
-  .status[data-open='false'] {
-    background: var(--steel-line);
-    color: var(--text-tertiary);
-  }
-
-  .status-dot {
-    width: 0.45rem;
-    height: 0.45rem;
-    border-radius: var(--r-pill);
-    background: currentColor;
-  }
-  /* Nhịp đập nhẹ khi đang mở, báo đây là trạng thái sống chứ không phải nhãn tĩnh. */
-  @media (prefers-reduced-motion: no-preference) {
-    .status[data-open='true'] .status-dot {
-      animation: status-pulse 2.4s ease-in-out infinite;
-    }
-    @keyframes status-pulse {
-      50% {
-        opacity: 0.35;
-      }
-    }
-  }
-
-  .util-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: var(--r-pill);
-    color: var(--text-tertiary);
-    transition:
-      background-color 0.25s var(--ease-out),
-      color 0.25s var(--ease-out);
-  }
-  .util-icon:hover {
-    background: var(--accent-quiet);
-    color: var(--accent);
-  }
-</style>

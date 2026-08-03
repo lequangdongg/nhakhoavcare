@@ -108,9 +108,15 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
   title={`${t('pricing.title')}. ${t('brand.short')}`}
   description={t('pricing.intro')}
 >
-  <section class="head reveal">
+  <section
+    class="reveal bg-[radial-gradient(60%_70%_at_50%_0%,var(--accent-quiet),transparent_70%),var(--surface)]"
+  >
     <Container class="py-12 text-center lg:py-16">
-      <p class="eyebrow">{t('pr.eyebrow')}</p>
+      <p
+        class="inline-block rounded-full border border-steel bg-surface-raised px-[0.9rem] py-[0.3rem] text-[0.8125rem] font-medium text-accent"
+      >
+        {t('pr.eyebrow')}
+      </p>
       <h1 class="mt-4 text-3xl font-semibold md:text-4xl lg:text-[2.7rem]">{t('pr.title')}</h1>
       <p class="mx-auto mt-4 max-w-[58ch] text-lg text-ink-2">{t('pricing.intro')}</p>
     </Container>
@@ -118,27 +124,40 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
 
   <section aria-labelledby="noi-bat" class="reveal border-t border-steel">
     <Container wide class="py-12 lg:py-16">
-      <h2 id="noi-bat" class="section-title">{t('pr.featured')}</h2>
+      <h2 id="noi-bat" class="text-[1.375rem] font-semibold">{t('pr.featured')}</h2>
 
-      <ul class="ftrack mt-8">
+      <ul class="mt-8 grid gap-4 py-3 sm:grid-cols-2 xl:grid-cols-4">
         {
           FEATURED.map(({ key, unit, points }, i) => {
             const s = byKey[key];
             return s ? (
               <li>
-                <article class:list={['fcard', i === 0 && 'fcard-lead']}>
-                  {i === 0 && <span class="fcard-flag">{clinic.tagline}</span>}
+                <article
+                  class:list={[
+                    'group relative flex h-full flex-col rounded-lg border border-steel bg-surface-raised p-6 transition-[border-color,box-shadow,translate] duration-300 ease-[var(--ease-out)] hover:-translate-y-[3px] hover:border-accent hover:shadow-[0_20px_36px_-26px_color-mix(in_srgb,var(--accent)_60%,transparent)]',
+                    // Thẻ đầu là dịch vụ trọng tâm. Phân biệt bằng độ đậm của MỘT màu,
+                    // không phải bằng bốn màu khác nhau như mẫu tham khảo.
+                    i === 0 && 'border-accent shadow-[0_0_0_1px_var(--accent)_inset]',
+                  ]}
+                >
+                  {i === 0 && (
+                    <span class="absolute -top-[0.7rem] left-5 rounded-full bg-accent px-[0.7rem] py-[0.2rem] text-[0.6875rem] font-semibold whitespace-nowrap text-accent-contrast">
+                      {clinic.tagline}
+                    </span>
+                  )}
 
-                  <h3 class="fcard-name">{s.data.title}</h3>
-                  <p class="fcard-sub">{`${s.data.description.split('.')[0]}.`}</p>
+                  <h3 class="text-lg font-semibold">{s.data.title}</h3>
+                  <p class="mt-[0.35rem] text-[0.8125rem] leading-normal text-ink-2">{`${s.data.description.split('.')[0]}.`}</p>
 
-                  <p class="fcard-price">
-                    <span class="fcard-num measure">{fmt.format(s.data.priceFrom ?? 0)}</span>
-                    <span class="fcard-cur">đ</span>
+                  <p class="mt-5 flex items-baseline gap-1 text-accent">
+                    <span class="text-[1.65rem] leading-[1.1] font-bold measure">
+                      {fmt.format(s.data.priceFrom ?? 0)}
+                    </span>
+                    <span class="text-[0.9375rem] font-semibold">đ</span>
                   </p>
-                  <p class="fcard-unit">{unit}</p>
+                  <p class="mt-[0.15rem] text-xs text-ink-3">{unit}</p>
 
-                  <ul class="fcard-points">
+                  <ul class="[&_svg]:text-secondary mt-5 grid gap-[0.55rem] border-t border-steel pt-5 [&_svg]:mt-[0.15rem] [&>li]:flex [&>li]:gap-2 [&>li]:text-[0.8125rem] [&>li]:leading-[1.45] [&>li]:text-ink-2">
                     {points.map((pt) => (
                       <li>
                         <Icon name="ph:check-circle" class="size-4 shrink-0" aria-hidden="true" />
@@ -147,7 +166,10 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
                     ))}
                   </ul>
 
-                  <a href={pathFor(`service:${key as ServiceKey}`, locale)} class="fcard-link">
+                  <a
+                    href={pathFor(`service:${key as ServiceKey}`, locale)}
+                    class="mt-auto flex min-h-11 items-center justify-center gap-[0.45rem] pt-5 text-sm font-medium text-accent transition-[gap] duration-250 ease-[var(--ease-out)] group-hover:gap-3"
+                  >
                     {t('nav.services')}
                     <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
                   </a>
@@ -162,24 +184,28 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
 
   <section aria-labelledby="khac" class="reveal border-t border-steel bg-surface-sunken">
     <Container wide class="py-12 lg:py-16">
-      <h2 id="khac" class="section-title">{t('pr.others')}</h2>
+      <h2 id="khac" class="text-[1.375rem] font-semibold">{t('pr.others')}</h2>
 
       <div class="mt-8 grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
-        <ul class="olist grid gap-2 sm:grid-cols-2">
+        <ul class="grid gap-2 sm:grid-cols-2 [&>li]:min-w-0">
           {
             others.map((s) => (
               <li>
-                <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="orow">
+                <a
+                  href={pathFor(`service:${s.data.key as ServiceKey}`, locale)}
+                  class="flex h-full min-w-0 items-center gap-[0.85rem] rounded-md border border-steel bg-surface-raised px-4 py-[0.9rem] transition-[border-color,background-color] duration-250 ease-[var(--ease-out)] hover:border-accent hover:bg-accent-quiet"
+                >
                   <span class="min-w-0">
-                    <span class="orow-name">{s.data.title}</span>
-                    <span class="orow-sub">{`${s.data.description.split('.')[0]}.`}</span>
+                    <span class="block font-medium">{s.data.title}</span>
+                    <span class="block truncate text-xs leading-[1.4] text-ink-3">{`${s.data.description.split('.')[0]}.`}</span>
                   </span>
-                  <span class="orow-price measure">
-                    {fmt.format(s.data.priceFrom ?? 0)} <span class="orow-cur">đ</span>
+                  <span class="ms-auto flex-none font-semibold measure whitespace-nowrap text-accent">
+                    {fmt.format(s.data.priceFrom ?? 0)}{' '}
+                    <span class="text-[0.8125rem] font-medium">đ</span>
                   </span>
                   <Icon
                     name="ph:caret-right"
-                    class="orow-arrow size-4 shrink-0"
+                    class="size-4 flex-none text-ink-3"
                     aria-hidden="true"
                   />
                 </a>
@@ -194,12 +220,18 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
           lời hứa về vật liệu hay thời hạn bảo hành mà tôi không được bịa.
         */
         }
-        <aside class="pledge">
-          <span class="pledge-icon">
+        <aside
+          class="rounded-lg border border-steel bg-[radial-gradient(90%_60%_at_100%_0%,var(--accent-quiet),transparent_62%),var(--surface-raised)] p-6"
+        >
+          <span
+            class="flex size-11 items-center justify-center rounded-md bg-accent text-accent-contrast"
+          >
             <Icon name="ph:shield-check" class="size-6" aria-hidden="true" />
           </span>
-          <h2 class="pledge-title">{t('pricing.commitment')}</h2>
-          <ul class="pledge-list">
+          <h2 class="mt-4 text-lg font-semibold">{t('pricing.commitment')}</h2>
+          <ul
+            class="mt-4 grid gap-[0.7rem] [&>li]:flex [&>li]:gap-[0.6rem] [&>li]:text-sm [&>li]:leading-normal [&>li]:text-ink-2"
+          >
             {
               commitments.map((c) => (
                 <li>
@@ -221,13 +253,18 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
 
   <section class="reveal border-t border-steel">
     <Container wide class="py-10 lg:py-12">
-      <div class="note">
+      <div
+        class="flex flex-wrap items-start gap-4 rounded-lg border border-steel bg-surface-raised p-5"
+      >
         <Icon name="ph:info" class="mt-0.5 size-5 shrink-0 text-accent" aria-hidden="true" />
         <div class="min-w-0 flex-1">
           <p class="font-semibold">{t('pr.noteTitle')}</p>
           <p class="mt-1 max-w-[70ch] text-sm text-ink-2">{t('pr.noteBody')}</p>
         </div>
-        <a href={telHref(clinic.phone)} class="note-cta">
+        <a
+          href={telHref(clinic.phone)}
+          class="inline-flex min-h-11 items-center gap-[0.6rem] rounded-full bg-accent px-5 text-accent-contrast transition-colors duration-250 ease-[var(--ease-out)] hover:bg-accent-hover active:translate-y-px"
+        >
           <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
           <span class="font-medium measure">{clinic.phone}</span>
         </a>
@@ -235,277 +272,3 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
     </Container>
   </section>
 </BaseLayout>
-
-<style>
-  .head {
-    background:
-      radial-gradient(60% 70% at 50% 0%, var(--accent-quiet), transparent 70%), var(--surface);
-  }
-
-  .eyebrow {
-    display: inline-block;
-    padding: 0.3rem 0.9rem;
-    border: 1px solid var(--steel-line);
-    border-radius: var(--r-pill);
-    background: var(--surface-raised);
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--accent);
-  }
-
-  .section-title {
-    font-size: 1.375rem;
-    font-weight: 600;
-  }
-
-  /* ── Băng thẻ nổi bật ────────────────────────────────────────────────── */
-
-  /* Xếp dọc trên mobile. Bản trước cuộn ngang theo mẫu tham khảo, nhưng thẻ bị
-     cắt mất mép phải nên người dùng không biết còn nội dung bên cạnh. Xếp dọc
-     thì thấy trọn từng thẻ, đọc được hết gạch đầu dòng. */
-  .ftrack {
-    display: grid;
-    gap: 1rem;
-    padding-block: 0.75rem;
-  }
-
-  @media (min-width: 640px) {
-    .ftrack {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  @media (min-width: 1280px) {
-    .ftrack {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  .fcard {
-    position: relative;
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    padding: 1.5rem;
-    border: 1px solid var(--steel-line);
-    border-radius: var(--r-lg);
-    background: var(--surface-raised);
-    transition:
-      border-color 0.3s var(--ease-out),
-      box-shadow 0.3s var(--ease-out),
-      translate 0.3s var(--ease-out);
-  }
-  .fcard:hover {
-    border-color: var(--accent);
-    translate: 0 -3px;
-    box-shadow: 0 20px 36px -26px color-mix(in srgb, var(--accent) 60%, transparent);
-  }
-
-  /* Thẻ đầu là dịch vụ trọng tâm. Phân biệt bằng độ đậm của MỘT màu, không phải
-     bằng bốn màu khác nhau như mẫu tham khảo. */
-  .fcard-lead {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 1px var(--accent) inset;
-  }
-
-  .fcard-flag {
-    position: absolute;
-    top: -0.7rem;
-    left: 1.25rem;
-    padding: 0.2rem 0.7rem;
-    border-radius: var(--r-pill);
-    background: var(--accent);
-    color: var(--accent-contrast);
-    font-size: 0.6875rem;
-    font-weight: 600;
-    white-space: nowrap;
-  }
-
-  .fcard-name {
-    font-size: 1.125rem;
-    font-weight: 600;
-  }
-  .fcard-sub {
-    margin-top: 0.35rem;
-    font-size: 0.8125rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
-  }
-
-  .fcard-price {
-    display: flex;
-    align-items: baseline;
-    gap: 0.25rem;
-    margin-top: 1.25rem;
-    color: var(--accent);
-  }
-  .fcard-num {
-    font-size: 1.65rem;
-    font-weight: 700;
-    line-height: 1.1;
-  }
-  .fcard-cur {
-    font-size: 0.9375rem;
-    font-weight: 600;
-  }
-  .fcard-unit {
-    margin-top: 0.15rem;
-    font-size: 0.75rem;
-    color: var(--text-tertiary);
-  }
-
-  .fcard-points {
-    display: grid;
-    gap: 0.55rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid var(--steel-line);
-  }
-  .fcard-points li {
-    display: flex;
-    gap: 0.5rem;
-    font-size: 0.8125rem;
-    line-height: 1.45;
-    color: var(--text-secondary);
-  }
-  .fcard-points :global(svg) {
-    margin-top: 0.15rem;
-    color: var(--secondary);
-  }
-
-  .fcard-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.45rem;
-    min-height: 2.75rem;
-    margin-top: auto;
-    padding-top: 1.25rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--accent);
-    transition: gap 0.25s var(--ease-out);
-  }
-  .fcard:hover .fcard-link {
-    gap: 0.75rem;
-  }
-
-  /* ── Hàng dịch vụ khác ───────────────────────────────────────────────── */
-
-  /* Ô lưới mặc định có min-width: auto nên không co dưới kích thước nội dung. */
-  .olist > li {
-    min-width: 0;
-  }
-
-  .orow {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-    height: 100%;
-    /* Cho phép hàng co nhỏ hơn nội dung. Không có dòng này, chuỗi nowrap bên
-       trong ép hàng rộng ra và tràn khỏi khung trên màn hẹp. */
-    min-width: 0;
-    padding: 0.9rem 1rem;
-    border: 1px solid var(--steel-line);
-    border-radius: var(--r-md);
-    background: var(--surface-raised);
-    transition:
-      border-color 0.25s var(--ease-out),
-      background-color 0.25s var(--ease-out);
-  }
-  .orow:hover {
-    border-color: var(--accent);
-    background: var(--accent-quiet);
-  }
-
-  .orow-name {
-    display: block;
-    font-weight: 500;
-  }
-  .orow-sub {
-    display: block;
-    overflow: hidden;
-    font-size: 0.75rem;
-    line-height: 1.4;
-    color: var(--text-tertiary);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .orow-price {
-    flex: none;
-    margin-inline-start: auto;
-    font-weight: 600;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-  .orow-cur {
-    font-size: 0.8125rem;
-    font-weight: 500;
-  }
-  .orow-arrow {
-    flex: none;
-    color: var(--text-tertiary);
-  }
-
-  /* ── Khối cam kết ────────────────────────────────────────────────────── */
-  .pledge {
-    padding: 1.5rem;
-    border: 1px solid var(--steel-line);
-    border-radius: var(--r-lg);
-    background:
-      radial-gradient(90% 60% at 100% 0%, var(--accent-quiet), transparent 62%),
-      var(--surface-raised);
-  }
-  .pledge-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: var(--r-md);
-    background: var(--accent);
-    color: var(--accent-contrast);
-  }
-  .pledge-title {
-    margin-top: 1rem;
-    font-size: 1.125rem;
-    font-weight: 600;
-  }
-  .pledge-list {
-    display: grid;
-    gap: 0.7rem;
-    margin-top: 1rem;
-  }
-  .pledge-list li {
-    display: flex;
-    gap: 0.6rem;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
-  }
-
-  /* ── Ghi chú cuối ────────────────────────────────────────────────────── */
-  .note {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1.25rem;
-    border: 1px solid var(--steel-line);
-    border-radius: var(--r-lg);
-    background: var(--surface-raised);
-  }
-  .note-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    min-height: 2.75rem;
-    padding-inline: 1.25rem;
-    border-radius: var(--r-pill);
-    background: var(--accent);
-    color: var(--accent-contrast);
-    transition: background-color 0.25s var(--ease-out);
-  }
-  .note-cta:hover {
-    background: var(--accent-hover);
-  }
-</style>

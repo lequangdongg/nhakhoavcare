@@ -145,9 +145,7 @@ const mobileNav = [
           </span>
         </a>
 
-        <details
-          class="disclosure lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden"
-        >
+        <details class="lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden">
           <summary
             class="flex size-10 cursor-pointer list-none items-center justify-center rounded-full border border-steel-edge transition-colors duration-300 hover:bg-surface-sunken"
             aria-label={t('nav.openMenu')}
@@ -157,7 +155,7 @@ const mobileNav = [
           </summary>
 
           <div
-            class="m-panel absolute inset-x-0 top-16 border-y border-steel bg-surface-raised shadow-xl shadow-ink/10"
+            class="absolute inset-x-0 top-16 border-y border-steel bg-surface-raised shadow-xl shadow-ink/10 [[open]>&]:animate-menu-in motion-reduce:[[open]>&]:animate-none"
           >
             <ul class="divide-y divide-steel">
               {

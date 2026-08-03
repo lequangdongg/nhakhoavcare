@@ -6,7 +6,9 @@
  * định gọi. Bắt họ cuộn ngược lên đầu trang để tìm nút gọi là mất khách. Thanh
  * này giữ hai kênh liên hệ thật luôn trong tầm ngón tay.
  *
- * Ẩn trên desktop vì header đã có số điện thoại hiện rõ.
+ * Ẩn trên desktop vì header đã có số điện thoại hiện rõ. Trước đây phải ẩn
+ * bằng CSS phạm vi component vì display:grid trong khối <style> thắng lg:hidden;
+ * bỏ khối style đi thì lg:hidden hoạt động bình thường.
  */
 import { Icon } from 'astro-icon/components';
 import { clinic, telHref, zaloHref } from '../data/clinic';
@@ -21,77 +23,23 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 
-<div class="sticky-actions" role="group" aria-label={t('cta.call')}>
-  <a href={telHref(clinic.phone)} class="act act-call">
+<div
+  role="group"
+  class="fixed inset-x-0 bottom-0 z-45 grid grid-cols-2 gap-2.5 border-t border-steel bg-[color-mix(in_srgb,var(--surface-raised)_92%,transparent)] px-3.5 py-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] backdrop-blur-[10px] lg:hidden"
+  aria-label={t('cta.call')}
+>
+  <a
+    href={telHref(clinic.phone)}
+    class="flex min-h-12 items-center justify-center gap-2 rounded-full bg-accent font-medium text-accent-contrast shadow-[0_6px_16px_-8px_color-mix(in_srgb,var(--accent)_70%,transparent)] transition-colors duration-250 ease-[var(--ease-out)] hover:bg-accent-hover active:translate-y-px"
+  >
     <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
     <span>{t('sticky.call')}</span>
   </a>
-  <a href={zaloHref(clinic.zalo)} class="act act-zalo">
+  <a
+    href={zaloHref(clinic.zalo)}
+    class="flex min-h-12 items-center justify-center gap-2 rounded-full border border-steel-edge bg-surface-raised font-medium text-ink transition-colors duration-250 ease-[var(--ease-out)] hover:border-accent hover:text-accent active:translate-y-px"
+  >
     <Icon name="simple-icons:zalo" class="size-5 shrink-0" aria-hidden="true" />
     <span>{t('sticky.zalo')}</span>
   </a>
 </div>
-
-<style>
-  .sticky-actions {
-    position: fixed;
-    inset-inline: 0;
-    bottom: 0;
-    z-index: 45;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.625rem;
-    padding: 0.625rem 0.875rem;
-    /* Chừa chỗ cho thanh điều hướng của iOS và Android */
-    padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
-    border-top: 1px solid var(--steel-line);
-    background: color-mix(in srgb, var(--surface-raised) 92%, transparent);
-    backdrop-filter: blur(10px);
-  }
-
-  .act {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    /* Cao 48px, vượt mức tối thiểu 44px cho vùng chạm */
-    min-height: 3rem;
-    border-radius: var(--r-pill);
-    font-weight: 500;
-    transition:
-      background-color 0.25s var(--ease-out),
-      border-color 0.25s var(--ease-out);
-  }
-  .act:active {
-    translate: 0 1px;
-  }
-
-  .act-call {
-    background: var(--accent);
-    color: var(--accent-contrast);
-    box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--accent) 70%, transparent);
-  }
-  .act-call:hover {
-    background: var(--accent-hover);
-  }
-
-  .act-zalo {
-    border: 1px solid var(--steel-edge);
-    background: var(--surface-raised);
-    color: var(--text-primary);
-  }
-  .act-zalo:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-  }
-
-  /* Ẩn trên desktop.
-     Phải khai ở đây chứ không dựa vào lg:hidden của Tailwind: style phạm vi của
-     component có độ ưu tiên cao hơn lớp tiện ích, nên display:grid ở trên sẽ
-     thắng và thanh vẫn hiện trên desktop. */
-  @media (min-width: 1024px) {
-    .sticky-actions {
-      display: none;
-    }
-  }
-</style>
