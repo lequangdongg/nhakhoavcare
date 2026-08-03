@@ -1,1 +1,72 @@
 @import "tailwindcss";
+
+/*
+  Màu khai theo VAI TRÒ, không theo tên màu. Đổi theme là đổi một tầng biến.
+  Giá trị dưới đây là tạm — hệ màu thật do /impeccable shape quyết định ở Plan 2.
+*/
+:root {
+  --surface: #ffffff;
+  --surface-raised: #f6f7f9;
+  --text-primary: #14181d;
+  --text-secondary: #4b5563;
+  --border: #e2e5ea;
+  --accent: #0f766e;
+  --accent-contrast: #ffffff;
+
+  /*
+    Nền cho ảnh lâm sàng. GIỮ NGUYÊN Ở CẢ HAI CHẾ ĐỘ — spec §8.
+    Mắt người đánh giá độ trắng của răng theo nền xung quanh; nền tối làm
+    kết quả trước/sau trông phóng đại. Đây là ràng buộc đạo đức, không phải thẩm mỹ.
+  */
+  --clinical-surface: #f4f5f7;
+  --clinical-text: #14181d;
+}
+
+:root.dark {
+  --surface: #101418;
+  --surface-raised: #181d23;
+  --text-primary: #f2f4f7;
+  --text-secondary: #a8b0ba;
+  --border: #2a313a;
+  --accent: #2dd4bf;
+  --accent-contrast: #06201d;
+
+  /* Cố tình KHÔNG đổi. Xem ghi chú trên. */
+  --clinical-surface: #f4f5f7;
+  --clinical-text: #14181d;
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-clinical-surface: var(--clinical-surface);
+  --color-clinical-text: var(--clinical-text);
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--text-primary);
+}
+
+/* Vùng ảnh lâm sàng: dùng class này cho mọi gallery trước/sau và ảnh cận cảnh răng. */
+.clinical-frame {
+  background-color: var(--clinical-surface);
+  color: var(--clinical-text);
+}
+
+/* Tôn trọng toàn cục — bắt buộc, không phải tuỳ chọn. Spec §9. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
