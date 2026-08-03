@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Container from '../components/Container.astro';
-import ImageSlot from '../components/ImageSlot.astro';
+import SiteImage from '../components/SiteImage.astro';
 import { useTranslations } from '../i18n/ui';
 import type { Locale } from '../i18n/locales';
 
@@ -38,12 +38,7 @@ const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).
           <ul class="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-12">
             {doctors.map((d) => (
               <li class="grid gap-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
-                <ImageSlot
-                  slot="doctor-portrait"
-                  ratio="4/5"
-                  brief={d.data.name}
-                  class="sm:max-w-36"
-                />
+                <span class="doctor-ph" aria-hidden="true" />
 
                 <div>
                   <h3 class="text-lg font-semibold">{d.data.name}</h3>
@@ -113,21 +108,9 @@ const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).
     <section aria-labelledby="co-so" class="reveal mt-16">
       <h2 id="co-so" class="text-2xl font-semibold">{t('about.facility')}</h2>
       <div class="mt-8 grid gap-4 sm:grid-cols-3">
-        <ImageSlot
-          slot="facility-chair"
-          ratio="3/2"
-          brief={locale === 'vi' ? 'Ghế nha khoa, góc rộng' : 'Treatment chair, wide angle'}
-        />
-        <ImageSlot
-          slot="facility-sterile"
-          ratio="3/2"
-          brief={locale === 'vi' ? 'Khu vực tiệt trùng dụng cụ' : 'Instrument sterilisation area'}
-        />
-        <ImageSlot
-          slot="facility-waiting"
-          ratio="3/2"
-          brief={locale === 'vi' ? 'Khu chờ, ánh sáng tự nhiên' : 'Waiting area in natural light'}
-        />
+        <SiteImage name="facilityChair" />
+        <SiteImage name="facilitySterile" />
+        <SiteImage name="facilityWaiting" />
       </div>
     </section>
   </Container>

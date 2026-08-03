@@ -1,12 +1,30 @@
 ---
+/**
+ * Trang bảng giá.
+ *
+ * Bố cục theo mẫu tham khảo: bốn dịch vụ nổi bật thành thẻ có giá lớn và vài
+ * gạch đầu dòng, phần còn lại thành danh sách hai cột, cuối là khối cam kết.
+ *
+ * Hai chỗ tôi KHÔNG làm theo mẫu:
+ *
+ * 1. Mẫu dùng bốn màu khác nhau cho bốn thẻ (xanh dương, xanh lá, cam, tím).
+ *    Bảng màu đã chốt chỉ có hai màu nhấn, và Taste bắt khoá một màu cho cả
+ *    trang. Ở đây dùng một màu, phân biệt thẻ trọng tâm bằng viền đậm.
+ *
+ * 2. Mẫu ghi những lời hứa như "Bảo hành trọn đời", "Bền đẹp đến 15 năm",
+ *    "Trụ Implant chính hãng". Đó là cam kết riêng của phòng khám mà tôi không
+ *    được bịa. Gạch đầu dòng ở đây chỉ nói sự thật chung về kỹ thuật, lấy từ
+ *    chính nội dung đã viết cho từng trang dịch vụ.
+ */
 import { getCollection } from 'astro:content';
-import BaseLayout from './BaseLayout.astro';
-import Container from '../components/Container.astro';
-import ActionBar from '../components/ActionBar.astro';
 import { Icon } from 'astro-icon/components';
-import { pathFor, type ServiceKey } from '../i18n/routes';
-import { useTranslations } from '../i18n/ui';
+import ActionBar from '../components/ActionBar.astro';
+import Container from '../components/Container.astro';
+import { clinic, telHref } from '../data/clinic';
 import type { Locale } from '../i18n/locales';
+import { type ServiceKey, pathFor } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+import BaseLayout from './BaseLayout.astro';
 
 interface Props {
   locale: Locale;
@@ -15,13 +33,73 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 
-const services = (await getCollection('services', (e) => e.data.lang === locale)).sort(
+const all = (await getCollection('services', (e) => e.data.lang === locale)).sort(
   (a, b) => a.data.order - b.data.order,
 );
-
-const anyPrice = services.some((s) => s.data.priceFrom !== undefined);
+const byKey = Object.fromEntries(all.map((s) => [s.data.key, s]));
 const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
 
+const FEATURED = [
+  {
+    key: 'implant',
+    unit: t('pr.unitTru'),
+    points:
+      locale === 'vi'
+        ? [
+            'Không mài hai răng bên cạnh',
+            'Cố định, không tháo ra ban đêm',
+            'Cần chụp CT trước khi làm',
+          ]
+        : [
+            'Neighbouring teeth left untouched',
+            'Fixed in place, stays in at night',
+            'Needs a CT scan first',
+          ],
+  },
+  {
+    key: 'veneer',
+    unit: t('pr.unitRang'),
+    points:
+      locale === 'vi'
+        ? [
+            'Chỉ mài mặt ngoài, giữ phần lớn mô răng',
+            'Chỉnh màu và hình dáng răng cửa',
+            'Không hợp với răng đã trám lớn',
+          ]
+        : [
+            'Only the outer face is prepared',
+            'Changes colour and shape',
+            'Not for heavily filled teeth',
+          ],
+  },
+  {
+    key: 'crown',
+    unit: t('pr.unitRang'),
+    points:
+      locale === 'vi'
+        ? ['Chụp toàn bộ thân răng', 'Cần thiết sau khi chữa tủy', 'Zirconia bền nhất cho răng hàm']
+        : ['Covers the whole tooth', 'Needed after root canal', 'Zirconia is strongest for molars'],
+  },
+  {
+    key: 'braces',
+    unit: t('pr.unitGoi'),
+    points:
+      locale === 'vi'
+        ? [
+            'Thường kéo dài một tới ba năm',
+            'Người lớn lâu hơn trẻ em',
+            'Bắt buộc đeo hàm duy trì sau đó',
+          ]
+        : [
+            'Usually one to three years',
+            'Adults take longer than children',
+            'A retainer afterwards is required',
+          ],
+  },
+] as const;
+
+const featuredKeys = new Set<string>(FEATURED.map((f) => f.key));
+const others = all.filter((s) => !featuredKeys.has(s.data.key));
 const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
 ---
 
@@ -30,65 +108,411 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
   title={`${t('pricing.title')}. ${t('brand.short')}`}
   description={t('pricing.intro')}
 >
-  <Container class="py-12 lg:py-16">
-    <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('pricing.title')}</h1>
-    <p class="mt-4 max-w-[62ch] text-lg text-ink-2">{t('pricing.intro')}</p>
+  <section class="head reveal">
+    <Container class="py-12 text-center lg:py-16">
+      <p class="eyebrow">{t('pr.eyebrow')}</p>
+      <h1 class="mt-4 text-3xl font-semibold md:text-4xl lg:text-[2.7rem]">{t('pr.title')}</h1>
+      <p class="mx-auto mt-4 max-w-[58ch] text-lg text-ink-2">{t('pricing.intro')}</p>
+    </Container>
+  </section>
 
-    {
-      !anyPrice && (
-        <p class="measure mt-8 inline-block border border-warning/40 bg-warning/5 px-4 py-2 text-sm text-signal">
-          {t('pricing.pending')}
-        </p>
-      )
-    }
+  <section aria-labelledby="noi-bat" class="reveal border-t border-steel">
+    <Container wide class="py-12 lg:py-16">
+      <h2 id="noi-bat" class="section-title">{t('pr.featured')}</h2>
 
-    {
-      /*
-      Bảng giá dạng danh sách hai cột. Taste mục 9.F cấm border-t + border-b trên
-      mọi hàng, nên chỉ dùng một đường phân cách giữa các hàng.
-    */
-    }
-    <div class="mt-10 border-t border-steel">
-      <dl>
+      <ul class="ftrack mt-8">
         {
-          services.map((s) => (
-            <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-steel py-4">
-              <dt>
-                <a
-                  href={pathFor(`service:${s.data.key as ServiceKey}`, locale)}
-                  class="font-medium underline-offset-4 transition-colors duration-300 hover:text-accent hover:underline"
-                >
-                  {s.data.title}
-                </a>
-              </dt>
-              <dd class="measure text-ink-2">
-                {s.data.priceFrom !== undefined ? (
-                  <span class="text-ink">
-                    {fmt.format(s.data.priceFrom)} <span class="text-ink-2">đ</span>
-                  </span>
-                ) : (
-                  t('service.priceOnRequest')
-                )}
-              </dd>
-            </div>
-          ))
-        }
-      </dl>
-    </div>
+          FEATURED.map(({ key, unit, points }, i) => {
+            const s = byKey[key];
+            return s ? (
+              <li>
+                <article class:list={['fcard', i === 0 && 'fcard-lead']}>
+                  {i === 0 && <span class="fcard-flag">{clinic.tagline}</span>}
 
-    <section aria-labelledby="cam-ket" class="reveal mt-14 max-w-[60ch]">
-      <h2 id="cam-ket" class="text-2xl font-semibold">{t('pricing.commitment')}</h2>
-      <ul class="mt-5 space-y-3">
-        {
-          commitments.map((c) => (
-            <li class="flex gap-3">
-              <Icon name="ph:check" class="mt-1 size-5 shrink-0 text-success" aria-hidden="true" />
-              <span class="text-ink-2">{c}</span>
-            </li>
-          ))
+                  <h3 class="fcard-name">{s.data.title}</h3>
+                  <p class="fcard-sub">{`${s.data.description.split('.')[0]}.`}</p>
+
+                  <p class="fcard-price">
+                    <span class="measure fcard-num">{fmt.format(s.data.priceFrom ?? 0)}</span>
+                    <span class="fcard-cur">đ</span>
+                  </p>
+                  <p class="fcard-unit">{unit}</p>
+
+                  <ul class="fcard-points">
+                    {points.map((pt) => (
+                      <li>
+                        <Icon name="ph:check-circle" class="size-4 shrink-0" aria-hidden="true" />
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <a href={pathFor(`service:${key as ServiceKey}`, locale)} class="fcard-link">
+                    {t('nav.services')}
+                    <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+                  </a>
+                </article>
+              </li>
+            ) : null;
+          })
         }
       </ul>
-      <ActionBar locale={locale} class="mt-8" />
-    </section>
-  </Container>
+    </Container>
+  </section>
+
+  <section aria-labelledby="khac" class="reveal border-t border-steel bg-surface-sunken">
+    <Container wide class="py-12 lg:py-16">
+      <h2 id="khac" class="section-title">{t('pr.others')}</h2>
+
+      <div class="mt-8 grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
+        <ul class="grid gap-2 sm:grid-cols-2">
+          {
+            others.map((s) => (
+              <li>
+                <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="orow">
+                  <span class="min-w-0">
+                    <span class="orow-name">{s.data.title}</span>
+                    <span class="orow-sub">{`${s.data.description.split('.')[0]}.`}</span>
+                  </span>
+                  <span class="measure orow-price">
+                    {fmt.format(s.data.priceFrom ?? 0)} <span class="orow-cur">đ</span>
+                  </span>
+                  <Icon
+                    name="ph:caret-right"
+                    class="orow-arrow size-4 shrink-0"
+                    aria-hidden="true"
+                  />
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        {
+          /*
+          Khối cam kết. Ba dòng này là cam kết THẬT về cách báo giá, không phải
+          lời hứa về vật liệu hay thời hạn bảo hành mà tôi không được bịa.
+        */
+        }
+        <aside class="pledge">
+          <span class="pledge-icon">
+            <Icon name="ph:shield-check" class="size-6" aria-hidden="true" />
+          </span>
+          <h2 class="pledge-title">{t('pricing.commitment')}</h2>
+          <ul class="pledge-list">
+            {
+              commitments.map((c) => (
+                <li>
+                  <Icon
+                    name="ph:check"
+                    class="mt-0.5 size-4 shrink-0 text-success"
+                    aria-hidden="true"
+                  />
+                  <span>{c}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <ActionBar locale={locale} class="mt-6 flex-col items-stretch [&>a]:justify-center" />
+        </aside>
+      </div>
+    </Container>
+  </section>
+
+  <section class="reveal border-t border-steel">
+    <Container wide class="py-10 lg:py-12">
+      <div class="note">
+        <Icon name="ph:info" class="mt-0.5 size-5 shrink-0 text-accent" aria-hidden="true" />
+        <div class="min-w-0 flex-1">
+          <p class="font-semibold">{t('pr.noteTitle')}</p>
+          <p class="mt-1 max-w-[70ch] text-sm text-ink-2">{t('pr.noteBody')}</p>
+        </div>
+        <a href={telHref(clinic.phone)} class="note-cta">
+          <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
+          <span class="measure font-medium">{clinic.phone}</span>
+        </a>
+      </div>
+    </Container>
+  </section>
 </BaseLayout>
+
+<style>
+  .head {
+    background:
+      radial-gradient(60% 70% at 50% 0%, var(--accent-quiet), transparent 70%), var(--surface);
+  }
+
+  .eyebrow {
+    display: inline-block;
+    padding: 0.3rem 0.9rem;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-pill);
+    background: var(--surface-raised);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  .section-title {
+    font-size: 1.375rem;
+    font-weight: 600;
+  }
+
+  /* ── Băng thẻ nổi bật ────────────────────────────────────────────────── */
+
+  /* Trên mobile: cuộn ngang có điểm dừng. Bốn thẻ cao xếp dọc bắt người dùng
+     cuộn rất nhiều mới thấy hết, còn cuộn ngang thì so sánh được giá cạnh nhau. */
+  .ftrack {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    /* Tràn ra mép màn hình để thẻ cuối không bị cắt cụt trong lề container */
+    margin-inline: -1.25rem;
+    padding-inline: 1.25rem;
+    padding-block: 0.75rem;
+  }
+  .ftrack::-webkit-scrollbar {
+    display: none;
+  }
+  .ftrack > li {
+    scroll-snap-align: center;
+  }
+
+  @media (min-width: 640px) {
+    .ftrack {
+      grid-auto-flow: row;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+  }
+  @media (min-width: 1280px) {
+    .ftrack {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .fcard {
+    position: relative;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-lg);
+    background: var(--surface-raised);
+    transition:
+      border-color 0.3s var(--ease-out),
+      box-shadow 0.3s var(--ease-out),
+      translate 0.3s var(--ease-out);
+  }
+  .fcard:hover {
+    border-color: var(--accent);
+    translate: 0 -3px;
+    box-shadow: 0 20px 36px -26px color-mix(in srgb, var(--accent) 60%, transparent);
+  }
+
+  /* Thẻ đầu là dịch vụ trọng tâm. Phân biệt bằng độ đậm của MỘT màu, không phải
+     bằng bốn màu khác nhau như mẫu tham khảo. */
+  .fcard-lead {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent) inset;
+  }
+
+  .fcard-flag {
+    position: absolute;
+    top: -0.7rem;
+    left: 1.25rem;
+    padding: 0.2rem 0.7rem;
+    border-radius: var(--r-pill);
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .fcard-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .fcard-sub {
+    margin-top: 0.35rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .fcard-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    margin-top: 1.25rem;
+    color: var(--accent);
+  }
+  .fcard-num {
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+  .fcard-cur {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+  .fcard-unit {
+    margin-top: 0.15rem;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+  }
+
+  .fcard-points {
+    display: grid;
+    gap: 0.55rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--steel-line);
+  }
+  .fcard-points li {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+  }
+  .fcard-points :global(svg) {
+    margin-top: 0.15rem;
+    color: var(--secondary);
+  }
+
+  .fcard-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    min-height: 2.75rem;
+    margin-top: auto;
+    padding-top: 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--accent);
+    transition: gap 0.25s var(--ease-out);
+  }
+  .fcard:hover .fcard-link {
+    gap: 0.75rem;
+  }
+
+  /* ── Hàng dịch vụ khác ───────────────────────────────────────────────── */
+  .orow {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    height: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-md);
+    background: var(--surface-raised);
+    transition:
+      border-color 0.25s var(--ease-out),
+      background-color 0.25s var(--ease-out);
+  }
+  .orow:hover {
+    border-color: var(--accent);
+    background: var(--accent-quiet);
+  }
+
+  .orow-name {
+    display: block;
+    font-weight: 500;
+  }
+  .orow-sub {
+    display: block;
+    overflow: hidden;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: var(--text-tertiary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .orow-price {
+    margin-inline-start: auto;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .orow-cur {
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+  .orow-arrow {
+    color: var(--text-tertiary);
+  }
+
+  /* ── Khối cam kết ────────────────────────────────────────────────────── */
+  .pledge {
+    padding: 1.5rem;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-lg);
+    background:
+      radial-gradient(90% 60% at 100% 0%, var(--accent-quiet), transparent 62%),
+      var(--surface-raised);
+  }
+  .pledge-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--r-md);
+    background: var(--accent);
+    color: var(--accent-contrast);
+  }
+  .pledge-title {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+  }
+  .pledge-list {
+    display: grid;
+    gap: 0.7rem;
+    margin-top: 1rem;
+  }
+  .pledge-list li {
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  /* ── Ghi chú cuối ────────────────────────────────────────────────────── */
+  .note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-lg);
+    background: var(--surface-raised);
+  }
+  .note-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    border-radius: var(--r-pill);
+    background: var(--accent);
+    color: var(--accent-contrast);
+    transition: background-color 0.25s var(--ease-out);
+  }
+  .note-cta:hover {
+    background: var(--accent-hover);
+  }
+</style>

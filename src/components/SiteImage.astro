@@ -1,0 +1,84 @@
+---
+/**
+ * Ảnh của site, đọc từ src/data/images.ts.
+ *
+ * Ảnh tạm hiện thêm một nhãn góc dưới ghi rõ "ảnh tạm" kèm mô tả cảnh cần chụp,
+ * nên vừa đánh giá được bố cục vừa không thể lỡ tay tưởng đó là ảnh thật.
+ *
+ * Ảnh lâm sàng (trước/sau) giữ nền sáng ở cả chế độ tối: mắt người đánh giá độ
+ * trắng của răng theo nền xung quanh, nền tối làm kết quả trông phóng đại.
+ */
+import { Icon } from 'astro-icon/components';
+import { type ImageKey, images } from '../data/images';
+
+interface Props {
+  name: ImageKey;
+  class?: string;
+  /** Ảnh trong màn hình đầu tiên nên tải sớm để không kéo tụt LCP */
+  eager?: boolean;
+}
+
+const { name, class: className = '', eager = false } = Astro.props;
+const img = images[name];
+---
+
+<figure
+  class:list={['site-image', img.clinical && 'clinical-frame', className]}
+  style={`aspect-ratio: ${img.ratio}`}
+  data-image-slot={name}
+>
+  <img
+    src={img.src}
+    alt={img.alt}
+    loading={eager ? 'eager' : 'lazy'}
+    fetchpriority={eager ? 'high' : undefined}
+    decoding="async"
+  />
+
+  {
+    img.placeholder && (
+      <figcaption class="ph-note">
+        <Icon name="ph:camera" class="size-4 shrink-0" aria-hidden="true" />
+        <span>
+          <strong>{name}</strong> {img.brief}
+        </span>
+      </figcaption>
+    )
+  }
+</figure>
+
+<style>
+  .site-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--r-lg);
+    background: var(--surface-sunken);
+  }
+
+  .site-image > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Nhãn ảnh tạm. Nền tối để đọc được trên mọi ảnh, không phụ thuộc màu ảnh. */
+  .ph-note {
+    position: absolute;
+    inset-inline: 0.5rem;
+    bottom: 0.5rem;
+    display: flex;
+    gap: 0.45rem;
+    padding: 0.5rem 0.65rem;
+    border-radius: var(--r-sm);
+    background: rgb(15 23 42 / 0.82);
+    backdrop-filter: blur(6px);
+    color: #f8fafc;
+    font-size: 0.6875rem;
+    line-height: 1.4;
+  }
+  .ph-note strong {
+    font-weight: 600;
+    color: var(--warning);
+  }
+</style>

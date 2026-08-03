@@ -5,7 +5,7 @@ import Hero from '../components/Hero.astro';
 import PricePreview from '../components/PricePreview.astro';
 import Container from '../components/Container.astro';
 import ServiceCards from '../components/ServiceCards.astro';
-import ImageSlot from '../components/ImageSlot.astro';
+import SiteImage from '../components/SiteImage.astro';
 import { Icon } from 'astro-icon/components';
 import { clinic } from '../data/clinic';
 import { pathFor } from '../i18n/routes';
@@ -107,18 +107,8 @@ const implantSteps = [
       </p>
 
       <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:max-w-3xl">
-        <ImageSlot
-          slot="case-before"
-          ratio="1/1"
-          brief="Ảnh trước điều trị. Ghi lại thông số máy ảnh để chụp ảnh sau giống hệt."
-          clinical
-        />
-        <ImageSlot
-          slot="case-after"
-          ratio="1/1"
-          brief="Ảnh sau điều trị. Cùng góc, cùng ánh sáng, cùng khoảng cách."
-          clinical
-        />
+        <SiteImage name="caseBefore" />
+        <SiteImage name="caseAfter" />
       </div>
     </Container>
   </section>
