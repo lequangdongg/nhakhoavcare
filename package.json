@@ -18,7 +18,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "./node_modules/.bin/biome check src",
-    "lint:fix": "./node_modules/.bin/biome check --write src"
+    "lint:fix": "./node_modules/.bin/biome check --write src",
+    "build:preview": "ALLOW_PLACEHOLDER_CLINIC=1 astro build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -40,5 +41,13 @@
     "vitest": "^4.1.10",
     "wrangler": "^4.118.0"
   },
-  "packageManager": "pnpm@10.6.3"
+  "packageManager": "pnpm@10.6.3",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd",
+      "@biomejs/biome",
+      "sharp"
+    ]
+  }
 }
