@@ -73,7 +73,9 @@ Cả 4 nhóm đều được làm, nhưng độ sâu và thứ tự khác nhau. 
 
 | Hạng mục | Lựa chọn | Lý do |
 |---|---|---|
-| Framework | **Astro 5** | Mặc định xuất HTML tĩnh, 0 KB JavaScript. Content Collections khớp với mô hình "sửa file markdown trong repo". i18n routing gốc. Tối ưu ảnh sẵn có. |
+| Framework | **Astro 7** (`output: 'static'`) | Mặc định xuất HTML tĩnh, 0 KB JavaScript. Content Collections khớp với mô hình "sửa file markdown trong repo". i18n routing gốc. Tối ưu ảnh sẵn có. |
+| Kiểu render | **SSG — dựng sẵn toàn bộ lúc build** | Xem §4.1 |
+| Sitemap | **`@astrojs/sitemap`** có khai i18n | Xem §4.2 |
 | CSS | **Tailwind 4** | Mobile-first theo mặc định (class không tiền tố = mobile). |
 | Ngôn ngữ | **TypeScript**, strict mode | |
 | Hosting | **Cloudflare Pages** | Có PoP tại Việt Nam; Vercel free tier gần nhất là Singapore. Với khách Đà Nẵng, chênh lệch này đo được. |
@@ -85,6 +87,39 @@ Cả 4 nhóm đều được làm, nhưng độ sâu và thứ tự khác nhau. 
 | Lưu lịch hẹn | **Google Sheets API** | Nhân viên xem/lọc/ghi chú bằng công cụ đã dùng hàng ngày. Không phải xây trang quản trị. |
 | Thông báo | **Google Calendar API + email** | Calendar hiện ngay trên điện thoại nhân viên, không cần cài gì. |
 | Chống bot | **Cloudflare Turnstile** | Miễn phí, chạy sẵn trên Cloudflare, không dùng CAPTCHA gây khó chịu. |
+
+### 4.1 SSG — dựng sẵn tĩnh
+
+`output: 'static'`. Mọi trang được dựng thành file HTML **lúc build**, không có máy chủ nào chạy lúc khách truy cập.
+
+Vì sao chọn kiểu này chứ không phải SSR:
+
+- **Tốc độ chỉ phụ thuộc CDN.** Không có thời gian máy chủ nghĩ, không có truy vấn cơ sở dữ liệu. Trên 4G ở Đà Nẵng, đây là khác biệt đo được.
+- **Không có gì để hỏng lúc chạy.** Không có máy chủ sập, không có tràn kết nối. Site nha khoa không cần dữ liệu thay đổi theo từng khách.
+- **Rẻ.** Cloudflare Pages phục vụ file tĩnh miễn phí, không giới hạn băng thông.
+- **Bảo mật.** Không có mã chạy phía máy chủ trên đường tải thông thường ⇒ gần như không có bề mặt tấn công.
+
+Ngoại lệ duy nhất là endpoint đặt lịch `/api/booking` (§11, hoãn sau launch) — nó là Cloudflare Pages Function riêng, không đổi bản chất tĩnh của phần còn lại.
+
+Hệ quả cần nhớ: **đổi nội dung phải build lại.** Với site này là chấp nhận được vì chủ dự án sửa file trong repo rồi deploy, không có ai đăng bài lúc nửa đêm.
+
+### 4.2 Sitemap
+
+`@astrojs/sitemap` sinh `sitemap-index.xml` + `sitemap-0.xml` tự động lúc build.
+
+Cấu hình quan trọng: khai `i18n` để mỗi URL mang đầy đủ thẻ `xhtml:link rel="alternate"` trỏ sang bản dịch. Không có phần này, Google dễ coi hai bản ngôn ngữ là **nội dung trùng lặp** thay vì bản dịch của nhau.
+
+```xml
+<url>
+  <loc>https://www.nhakhoavcare.com/</loc>
+  <xhtml:link rel="alternate" hreflang="vi-VN" href="https://www.nhakhoavcare.com/"/>
+  <xhtml:link rel="alternate" hreflang="en-US" href="https://www.nhakhoavcare.com/en/"/>
+</url>
+```
+
+Kèm theo: `filter` loại trang 404 và trang kỹ thuật khỏi sitemap; `robots.txt` trỏ tới `sitemap-index.xml`.
+
+Lưu ý phối hợp: sitemap dùng mã đầy đủ (`vi-VN`, `en-US`) còn thẻ `hreflang` trong `<head>` dùng mã ngắn (`vi`, `en`). Cả hai đều hợp lệ với Google.
 
 ### Wrangler
 
@@ -522,7 +557,7 @@ Khi làm §11 ở v1.2, bổ sung: dữ liệu sai bị chặn phía server; ghi
 
 | GĐ | Việc | Kết quả cụ thể |
 |---|---|---|
-| **0** | **Kiểm kê** — cài Tavily CLI, crawl toàn site kể cả pagination | Nội dung cũ lưu local làm nguyên liệu viết lại + danh sách URL hợp lệ |
+| **0** | ✅ **XONG 2026-08-03** — crawl qua Blogger feed API, không cần Tavily | `docs/superpowers/specs/2026-08-03-kiem-ke-site-cu.md`: 15 bài + 2 trang, bảng redirect đầy đủ |
 | 1 | Nền tảng — Astro/Tailwind/TS, i18n routing, `clinic.ts`, Zod schema, wrangler, deploy preview | Site trắng nhưng deploy được, CI chạy |
 | 2 | Ngôn ngữ thiết kế — `npx impeccable install` → `/impeccable init` → `/impeccable shape` | `PRODUCT.md` + `DESIGN.md`, bảng màu 2 chế độ, thang font tiếng Việt |
 | 3 | Nội dung — viết lại vi sạch (bỏ emoji Facebook), dịch en + hiệu đính bản ngữ, bộ từ khóa 2 lớp, FAQ | Markdown đầy đủ, qua được Zod |

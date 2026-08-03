@@ -1,15 +1,24 @@
 import { DEFAULT_LOCALE, LOCALES, type Locale } from './locales';
 
-/** Slug từng dịch vụ theo ngôn ngữ. Đây là nguồn sự thật — không viết URL tay ở bất kỳ đâu khác. */
+/**
+ * Slug từng dịch vụ theo ngôn ngữ. Đây là nguồn sự thật — không viết URL tay ở bất kỳ đâu khác.
+ *
+ * Danh sách đối chiếu với kiểm kê site cũ ngày 2026-08-03
+ * (docs/superpowers/specs/2026-08-03-kiem-ke-site-cu.md).
+ * `whitening` và `braces` KHÔNG có nội dung trên site cũ — phải viết mới 100%.
+ */
 export const SERVICE_SLUGS = {
   implant: { vi: 'cay-ghep-implant', en: 'dental-implant' },
   veneer: { vi: 'dan-su-veneer', en: 'porcelain-veneers' },
   crown: { vi: 'boc-rang-su', en: 'dental-crowns' },
+  bridge: { vi: 'cau-rang', en: 'dental-bridges' },
+  denture: { vi: 'phuc-hinh-thao-lap', en: 'dentures' },
+  gummySmile: { vi: 'cuoi-ho-loi', en: 'gummy-smile-treatment' },
+  rootCanal: { vi: 'chua-tuy-rang', en: 'root-canal-treatment' },
+  scaling: { vi: 'lay-cao-rang', en: 'teeth-scaling' },
+  fluoride: { vi: 'vecni-flour-tre-em', en: 'fluoride-varnish-for-children' },
   whitening: { vi: 'tay-trang-rang', en: 'teeth-whitening' },
   braces: { vi: 'nieng-rang-chinh-nha', en: 'orthodontics' },
-  scaling: { vi: 'lay-cao-rang', en: 'teeth-scaling' },
-  rootCanal: { vi: 'chua-tuy-rang', en: 'root-canal-treatment' },
-  denture: { vi: 'phuc-hinh-thao-lap', en: 'dentures' },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type ServiceKey = keyof typeof SERVICE_SLUGS;

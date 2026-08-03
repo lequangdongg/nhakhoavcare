@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import { assertNoPlaceholders } from './src/data/clinic.ts';
 
+import sitemap from '@astrojs/sitemap';
+
 /** Chặn deploy khi clinic.ts còn giá trị giữ chỗ. Chỉ áp dụng lúc build, không cản dev. */
 function guardClinicData() {
   return {
@@ -25,7 +27,25 @@ function guardClinicData() {
 // https://astro.build/config
 export default defineConfig({
   site: 'https://www.nhakhoavcare.com',
-  integrations: [guardClinicData()],
+
+  // SSG: mọi trang dựng sẵn thành HTML tĩnh lúc build. Không có máy chủ chạy lúc khách truy cập,
+  // nên tốc độ chỉ phụ thuộc CDN — đúng mục tiêu nhanh trên 4G ở Đà Nẵng (spec §4).
+  output: 'static',
+
+  integrations: [
+    guardClinicData(),
+    sitemap({
+      // Sitemap khai đầy đủ quan hệ hai ngôn ngữ để Google hiểu đây là bản dịch
+      // của nhau, không phải nội dung trùng lặp.
+      i18n: {
+        defaultLocale: 'vi',
+        locales: { vi: 'vi-VN', en: 'en-US' },
+      },
+      // Trang hỏng hoặc trang kỹ thuật không được vào sitemap.
+      filter: (page) => !page.includes('/404'),
+    }),
+  ],
+
   i18n: {
     locales: ['vi', 'en'],
     defaultLocale: 'vi',
