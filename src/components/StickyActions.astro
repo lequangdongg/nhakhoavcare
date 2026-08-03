@@ -1,0 +1,87 @@
+---
+/**
+ * Thanh hành động cố định đáy màn hình, chỉ hiện trên mobile.
+ *
+ * Khách tra cứu nha khoa trên điện thoại thường đọc giữa chừng rồi mới quyết
+ * định gọi. Bắt họ cuộn ngược lên đầu trang để tìm nút gọi là mất khách. Thanh
+ * này giữ hai kênh liên hệ thật luôn trong tầm ngón tay.
+ *
+ * Ẩn trên desktop vì header đã có số điện thoại hiện rõ.
+ */
+import { Icon } from 'astro-icon/components';
+import { clinic, telHref, zaloHref } from '../data/clinic';
+import type { Locale } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<div class="sticky-actions lg:hidden" role="group" aria-label={t('cta.call')}>
+  <a href={telHref(clinic.phone)} class="act act-call">
+    <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
+    <span>{t('sticky.call')}</span>
+  </a>
+  <a href={zaloHref(clinic.zalo)} class="act act-zalo">
+    <Icon name="simple-icons:zalo" class="size-5 shrink-0" aria-hidden="true" />
+    <span>{t('sticky.zalo')}</span>
+  </a>
+</div>
+
+<style>
+  .sticky-actions {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 45;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+    padding: 0.625rem 0.875rem;
+    /* Chừa chỗ cho thanh điều hướng của iOS và Android */
+    padding-bottom: max(0.625rem, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--steel-line);
+    background: color-mix(in srgb, var(--surface-raised) 92%, transparent);
+    backdrop-filter: blur(10px);
+  }
+
+  .act {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    /* Cao 48px, vượt mức tối thiểu 44px cho vùng chạm */
+    min-height: 3rem;
+    border-radius: var(--r-pill);
+    font-weight: 500;
+    transition:
+      background-color 0.25s var(--ease-out),
+      border-color 0.25s var(--ease-out);
+  }
+  .act:active {
+    translate: 0 1px;
+  }
+
+  .act-call {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .act-call:hover {
+    background: var(--accent-hover);
+  }
+
+  .act-zalo {
+    border: 1px solid var(--steel-edge);
+    background: var(--surface-raised);
+    color: var(--text-primary);
+  }
+  .act-zalo:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

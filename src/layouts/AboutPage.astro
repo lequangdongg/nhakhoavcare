@@ -28,7 +28,7 @@ const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).
     <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('about.title')}</h1>
 
     {/* ── Đội ngũ bác sĩ. Phần có sức nặng nhất với mục tiêu uy tín. ────────── */}
-    <section aria-labelledby="bac-si" class="mt-14">
+    <section aria-labelledby="bac-si" class="reveal mt-14">
       <h2 id="bac-si" class="text-2xl font-semibold">{t('about.doctors')}</h2>
 
       {
@@ -110,7 +110,7 @@ const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).
     </section>
 
     {/* ── Cơ sở vật chất ───────────────────────────────────────────────────── */}
-    <section aria-labelledby="co-so" class="mt-16">
+    <section aria-labelledby="co-so" class="reveal mt-16">
       <h2 id="co-so" class="text-2xl font-semibold">{t('about.facility')}</h2>
       <div class="mt-8 grid gap-4 sm:grid-cols-3">
         <ImageSlot

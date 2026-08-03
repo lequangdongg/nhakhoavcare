@@ -6,7 +6,7 @@ import { pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
 import ActionBar from './ActionBar.astro';
 import Container from './Container.astro';
-import ShadeFan from './ShadeFan.astro';
+import HeroCarousel from './HeroCarousel.astro';
 
 interface Props {
   locale: Locale;
@@ -73,19 +73,8 @@ const years = yearsInOperation();
       </dl>
     </div>
 
-    {/* Bảng so màu dựng bằng CSS. Đây là hình ảnh chính, không phải ô giữ chỗ. */}
     <div class="rise" style="--d: 3">
-      <ShadeFan>
-        {t('hero.shadeNote')}
-      </ShadeFan>
-
-      <a
-        href={pathFor('services', locale)}
-        class="mt-5 inline-flex items-center gap-1.5 text-sm underline-offset-4 transition-colors duration-300 hover:text-accent hover:underline"
-      >
-        {t('hero.explore')}
-        <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
-      </a>
+      <HeroCarousel locale={locale} />
     </div>
   </Container>
 </section>

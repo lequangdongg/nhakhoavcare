@@ -111,12 +111,12 @@ const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${
         href={zaloHref(clinic.zalo)}
         class="ms-auto flex items-center gap-1.5 opacity-85 transition-opacity duration-300 hover:opacity-100"
       >
-        <Icon name="ph:chat-circle-text" class="size-4 shrink-0" aria-hidden="true" />
+        <Icon name="simple-icons:zalo" class="size-4 shrink-0" aria-hidden="true" />
         <span>{t('cta.zalo')}</span>
       </a>
       <a href={clinic.sameAs.facebook} target="_blank" rel="noopener" aria-label="Facebook">
         <Icon
-          name="ph:facebook-logo"
+          name="simple-icons:facebook"
           class="size-4 opacity-85 transition-opacity duration-300 hover:opacity-100"
         />
       </a>
@@ -145,7 +145,7 @@ const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${
         </span>
       </a>
 
-      <nav aria-label={t('nav.primary')} class="ms-auto hidden items-center gap-1 lg:flex">
+      <nav aria-label={t('nav.primary')} class="ms-auto hidden items-center gap-6 lg:flex">
         <NavDropdown
           label={t('nav.services')}
           items={serviceItems}
@@ -164,8 +164,8 @@ const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${
           href={pathFor('contact', locale)}
           aria-current={current === pathFor('contact', locale) ? 'page' : undefined}
           class:list={[
-            'rounded-full px-3 py-2 text-[0.9375rem] transition-colors duration-300 hover:bg-surface-sunken hover:text-ink',
-            current === pathFor('contact', locale) ? 'text-ink' : 'text-ink-2',
+            'nav-link relative px-1 py-2 text-[0.9375rem] transition-colors duration-300 hover:text-ink',
+            current === pathFor('contact', locale) ? 'is-active text-ink' : 'text-ink-2',
           ]}
         >
           {t('nav.contact')}
@@ -230,3 +230,22 @@ const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${
     </Container>
   </div>
 </header>
+
+<style>
+  /* Cùng kiểu gạch chân với mục có menu con, để hàng nav thống nhất. */
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.125rem;
+    height: 2px;
+    border-radius: var(--r-pill);
+    background: var(--accent);
+    scale: 0 1;
+    transition: scale 0.28s var(--ease-out);
+  }
+  .nav-link:hover::after,
+  .nav-link.is-active::after {
+    scale: 1 1;
+  }
+</style>

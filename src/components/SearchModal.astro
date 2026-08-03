@@ -28,7 +28,7 @@ const other = alternateLinks(Astro.url.pathname).find((a) => a.locale !== locale
 
 const quickActions = [
   { href: telHref(clinic.phone), icon: 'ph:phone-call', label: `${t('cta.call')} ${clinic.phone}` },
-  { href: zaloHref(clinic.zalo), icon: 'ph:chat-circle-text', label: t('cta.zalo') },
+  { href: zaloHref(clinic.zalo), icon: 'simple-icons:zalo', label: t('cta.zalo') },
   { href: mapsHref, icon: 'ph:map-pin-area', label: t('cta.directions') },
 ];
 

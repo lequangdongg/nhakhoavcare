@@ -2,12 +2,12 @@
 /**
  * Mục điều hướng có bảng con, mở khi rê chuột.
  *
- * Không dùng JavaScript. Bảng hiện bằng :hover cho chuột và :focus-within cho
- * bàn phím, nên tab vào là mở, tab ra là đóng. Nút bấm vẫn là liên kết thật tới
- * trang tổng, nên chạm trên mobile hoặc bấm bằng chuột đều đi đúng chỗ.
+ * Nhãn là <button> chứ không phải liên kết: mục có menu con thì không tự đi đâu
+ * cả, người dùng chọn mục con hoặc bấm dòng "xem tất cả" ở cuối bảng.
  *
- * Có một dải đệm vô hình giữa nút và bảng để chuột đi xuống không làm bảng tắt
- * giữa chừng.
+ * Không dùng JavaScript. Bảng hiện bằng :hover cho chuột và :focus-within cho
+ * bàn phím lẫn thiết bị chạm, vì chạm vào nút là nút nhận focus. Có dải đệm vô
+ * hình giữa nút và bảng để chuột đi xuống không làm bảng tắt giữa chừng.
  */
 import { Icon } from 'astro-icon/components';
 
@@ -23,7 +23,7 @@ export interface DropdownItem {
 interface Props {
   label: string;
   items: DropdownItem[];
-  /** Liên kết tới trang tổng, cũng là đích khi bấm thẳng vào nhãn */
+  /** Trang tổng, đặt ở dòng cuối bảng */
   allHref: string;
   allLabel: string;
   active?: boolean;
@@ -33,17 +33,17 @@ const { label, items, allHref, allLabel, active = false } = Astro.props;
 ---
 
 <div class="nav-dropdown">
-  <a
-    href={allHref}
-    aria-current={active ? 'page' : undefined}
+  <button
+    type="button"
+    aria-expanded="false"
     class:list={[
-      'trigger flex items-center gap-1.5 rounded-full px-3 py-2 text-[0.9375rem] transition-colors duration-300 hover:bg-surface-sunken hover:text-ink',
-      active ? 'text-ink' : 'text-ink-2',
+      'trigger flex items-center gap-1.5 px-1 py-2 text-[0.9375rem] transition-colors duration-300 hover:text-ink',
+      active ? 'is-active text-ink' : 'text-ink-2',
     ]}
   >
     {label}
     <Icon name="ph:caret-down" class="caret size-3.5" aria-hidden="true" />
-  </a>
+  </button>
 
   <div class="panel-wrap">
     <div
@@ -98,6 +98,28 @@ const { label, items, allHref, allLabel, active = false } = Astro.props;
     position: relative;
   }
 
+  /* Gạch chân trượt vào từ giữa. Nó cho biết mục nào đang được nhắm tới. */
+  .trigger {
+    position: relative;
+    cursor: pointer;
+  }
+  .trigger::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0.125rem;
+    height: 2px;
+    border-radius: var(--r-pill);
+    background: var(--accent);
+    scale: 0 1;
+    transition: scale 0.28s var(--ease-out);
+  }
+  .trigger.is-active::after,
+  .nav-dropdown:hover .trigger::after,
+  .nav-dropdown:focus-within .trigger::after {
+    scale: 1 1;
+  }
+
   .panel-wrap {
     position: absolute;
     top: 100%;
@@ -148,14 +170,6 @@ const { label, items, allHref, allLabel, active = false } = Astro.props;
     .nav-dropdown:hover .panel-wrap,
     .nav-dropdown:focus-within .panel-wrap {
       translate: -50% 0;
-    }
-  }
-
-  /* Trên thiết bị chạm không có hover thật, bảng con không bung ra;
-     nhãn vẫn là liên kết tới trang tổng nên chạm vào đi đúng chỗ. */
-  @media (hover: none) {
-    .panel-wrap {
-      display: none;
     }
   }
 </style>
