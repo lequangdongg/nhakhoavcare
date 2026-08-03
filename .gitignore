@@ -1,0 +1,18 @@
+# build
+dist/
+.astro/
+
+# deps
+node_modules/
+
+# env & secrets — không bao giờ commit khóa service account
+.env
+.env.*
+.dev.vars
+*-service-account*.json
+
+# cloudflare
+.wrangler/
+
+# os
+.DS_Store
