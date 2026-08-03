@@ -6,8 +6,8 @@
  */
 import { Icon } from 'astro-icon/components';
 import { clinic, telHref, zaloHref } from '../data/clinic';
-import { useTranslations } from '../i18n/ui';
 import type { Locale } from '../i18n/locales';
+import { useTranslations } from '../i18n/ui';
 
 interface Props {
   locale: Locale;
@@ -23,7 +23,7 @@ const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.l
 <div class:list={['flex flex-wrap items-center gap-3', className]}>
   <a
     href={telHref(clinic.phone)}
-    class="inline-flex min-h-11 items-center gap-2 bg-accent px-5 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px"
+    class="inline-flex min-h-12 items-center gap-2.5 rounded-full bg-accent px-6 text-accent-contrast shadow-sm shadow-accent/25 transition-all duration-300 hover:bg-accent-hover hover:shadow-lg hover:shadow-accent/25 active:translate-y-px"
   >
     <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
     <span class="font-medium">{t('cta.call')}</span>
@@ -31,7 +31,7 @@ const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.l
 
   <a
     href={zaloHref(clinic.zalo)}
-    class="inline-flex min-h-11 items-center gap-2 border border-steel-edge px-5 transition-colors duration-300 hover:bg-surface-raised active:translate-y-px"
+    class="inline-flex min-h-12 items-center gap-2.5 rounded-full border border-steel-edge bg-surface-raised px-6 transition-all duration-300 hover:border-accent hover:text-accent active:translate-y-px"
   >
     <Icon name="ph:chat-circle-text" class="size-5 shrink-0" aria-hidden="true" />
     <span class="font-medium">{t('cta.zalo')}</span>
@@ -41,7 +41,7 @@ const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.l
     href={mapsHref}
     target="_blank"
     rel="noopener"
-    class="inline-flex min-h-11 items-center gap-2 px-2 text-ink-2 underline-offset-4 transition-colors duration-300 hover:text-ink hover:underline"
+    class="inline-flex min-h-12 items-center gap-2 rounded-full px-3 text-ink-2 underline-offset-4 transition-colors duration-300 hover:text-accent hover:underline"
   >
     <Icon name="ph:map-pin-area" class="size-5 shrink-0" aria-hidden="true" />
     <span>{t('cta.directions')}</span>

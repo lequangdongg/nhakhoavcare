@@ -18,42 +18,50 @@ const t = useTranslations(locale);
 const years = yearsInOperation();
 ---
 
-<section class="relative overflow-hidden border-b border-steel bg-surface-sunken">
+<section class="relative overflow-hidden border-b border-steel">
   {
     /*
-    Nền: lưới thép mảnh, gợi mặt bàn dụng cụ. Đặt ở lớp dưới, không bắt sự kiện
-    chuột, và mờ dần về phía dưới để không cạnh tranh với chữ.
+    Nền: quầng sáng lạnh từ trên xuống, gợi đèn điều trị. Rất nhạt để không
+    cạnh tranh với chữ. Không dùng lưới kẻ vì nó đọc ra "hoạ tiết trang trí"
+    chứ không phải chất liệu.
   */
   }
   <div
-    class="pointer-events-none absolute inset-0 opacity-[0.35]"
-    style="background-image: linear-gradient(var(--steel-line) 1px, transparent 1px), linear-gradient(90deg, var(--steel-line) 1px, transparent 1px); background-size: 64px 64px; mask-image: linear-gradient(to bottom, black, transparent 78%)"
+    class="pointer-events-none absolute inset-0"
+    style="background: radial-gradient(80% 60% at 50% -10%, var(--accent-quiet), transparent 62%)"
     aria-hidden="true"
   >
   </div>
 
   <Container
     wide
-    class="relative grid items-center gap-10 py-12 lg:grid-cols-[1.08fr_0.92fr] lg:gap-16 lg:py-20"
+    class="relative grid items-center gap-10 py-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:py-20"
   >
-    <div class="max-w-[38ch]">
-      <p class="measure text-sm text-accent">{t('hero.eyebrow')}</p>
+    <div class="max-w-[40ch]">
+      <p class="rise measure text-sm font-medium text-accent" style="--d: 0">
+        {t('hero.eyebrow')}
+      </p>
 
-      <h1 class="mt-3 text-[2.1rem] leading-[1.06] font-semibold sm:text-5xl lg:text-[3.5rem]">
+      <h1
+        class="rise mt-3 text-[2.1rem] leading-[1.04] font-semibold sm:text-5xl lg:text-[3.4rem]"
+        style="--d: 1"
+      >
         {t('hero.title')}
       </h1>
 
-      <p class="mt-5 max-w-[44ch] text-lg text-ink-2">{t('hero.sub')}</p>
+      <p class="rise mt-5 max-w-[46ch] text-lg text-ink-2" style="--d: 2">{t('hero.sub')}</p>
 
-      <ActionBar locale={locale} class="mt-8" />
+      <div class="rise" style="--d: 3">
+        <ActionBar locale={locale} class="mt-8" />
+      </div>
 
       {
         /*
-        Hai con số thật lấy từ clinic.ts: năm hoạt động tính từ foundedYear, và
-        số dịch vụ đếm từ collection. Không bịa số ca hay số bệnh nhân.
+        Hai con số thật lấy từ dữ liệu: năm hoạt động tính từ foundedYear, số
+        dịch vụ đếm từ collection. Không bịa số ca hay số bệnh nhân.
       */
       }
-      <dl class="mt-10 flex gap-8 border-t border-steel pt-6">
+      <dl class="rise mt-10 flex gap-8 border-t border-steel pt-6" style="--d: 4">
         <div>
           <dt class="text-sm text-ink-2">{t('hero.years')}</dt>
           <dd class="measure mt-0.5 text-2xl font-semibold">{years}</dd>
@@ -66,11 +74,11 @@ const years = yearsInOperation();
     </div>
 
     {/* Bảng so màu dựng bằng CSS. Đây là hình ảnh chính, không phải ô giữ chỗ. */}
-    <div class="flex flex-col items-center">
-      <ShadeFan class="w-full" />
-      <p class="mt-6 max-w-[36ch] text-center text-sm leading-relaxed text-ink-2">
+    <div class="rise" style="--d: 3">
+      <ShadeFan>
         {t('hero.shadeNote')}
-      </p>
+      </ShadeFan>
+
       <a
         href={pathFor('services', locale)}
         class="mt-5 inline-flex items-center gap-1.5 text-sm underline-offset-4 transition-colors duration-300 hover:text-accent hover:underline"

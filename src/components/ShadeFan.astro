@@ -30,45 +30,62 @@ const tabs = [
 ];
 ---
 
-<div class:list={['shade-fan', className]} aria-hidden="true">
-  <div class="fan-rail"></div>
-  <ol class="fan-tabs">
-    {
-      tabs.map((tab, i) => (
-        <li class="fan-tab" style={`--i: ${i}; --tab-shade: ${tab.shade}`}>
-          <span class="tab-body" />
-          <span class="tab-code measure">{tab.code}</span>
-        </li>
-      ))
-    }
-  </ol>
-</div>
+{/* Khối chắc chắn có nền và viền, không để quạt trôi lơ lửng giữa khoảng trống. */}
+<figure class:list={['shade-card', className]}>
+  <div class="shade-fan" aria-hidden="true">
+    <span class="fan-pivot"></span>
+    <ol class="fan-tabs">
+      {
+        tabs.map((tab, i) => (
+          <li class="fan-tab" style={`--i: ${i}; --tab-shade: ${tab.shade}`}>
+            <span class="tab-body" />
+            <span class="tab-code measure">{tab.code}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <figcaption class="shade-caption">
+    <slot />
+  </figcaption>
+</figure>
 
 <style>
+  .shade-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-lg);
+    background:
+      radial-gradient(120% 80% at 50% 0%, var(--surface-raised), transparent 70%), var(--surface);
+    box-shadow: 0 24px 48px -32px rgb(15 26 28 / 0.35);
+  }
+
   .shade-fan {
     position: relative;
     display: flex;
     justify-content: center;
-    padding-block: 2.5rem 1rem;
+    padding-block: 3.5rem 3rem;
   }
 
-  /* Khung thép giữ các tab, xoay quanh một trục ở trên */
-  .fan-rail {
+  /* Khung thép giữ các tab, trục xoay ở trên */
+  .fan-pivot {
     position: absolute;
-    top: 1.5rem;
+    top: 1.75rem;
     left: 50%;
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 2rem;
+    height: 2rem;
     translate: -50% 0;
     border: 2px solid var(--steel-edge);
-    border-radius: 999px;
+    border-radius: var(--r-pill);
     background: var(--surface-raised);
   }
-  .fan-rail::after {
+  .fan-pivot::after {
     content: '';
     position: absolute;
-    inset: 0.4rem;
-    border-radius: 999px;
+    inset: 0.45rem;
+    border-radius: var(--r-pill);
     background: var(--steel-edge);
   }
 
@@ -76,52 +93,64 @@ const tabs = [
     display: flex;
     align-items: flex-start;
     justify-content: center;
-    padding-top: 2rem;
+    padding-top: 2.4rem;
   }
 
   /* Xoè quạt: mỗi tab lệch một góc, gốc xoay ở đầu trên nơi khung thép giữ */
   .fan-tab {
-    --spread: 9deg;
+    --spread: 10deg;
     position: relative;
-    width: clamp(2.25rem, 5.2vw, 3.25rem);
-    margin-inline: clamp(-0.4rem, -0.6vw, -0.25rem);
+    width: clamp(2.6rem, 6vw, 3.6rem);
+    margin-inline: clamp(-0.5rem, -0.8vw, -0.3rem);
     transform-origin: top center;
     rotate: calc((var(--i) - 3) * var(--spread));
-    transition: rotate 400ms cubic-bezier(0.16, 1, 0.3, 1);
+    transition: rotate 450ms var(--ease-out);
   }
 
   .tab-body {
     display: block;
-    height: clamp(7rem, 17vw, 10.5rem);
+    height: clamp(8.5rem, 20vw, 12rem);
     background: var(--tab-shade);
-    border: 1px solid rgb(0 0 0 / 0.12);
-    border-radius: 0.15rem 0.15rem 0.6rem 0.6rem;
+    border: 1px solid rgb(15 26 28 / 0.14);
+    border-radius: 0.2rem 0.2rem 0.7rem 0.7rem;
     /* Bóng có độ lệch và độ nhoè thật, không phải quầng sáng phẳng */
     box-shadow:
-      0 1px 0 rgb(255 255 255 / 0.5) inset,
-      0 6px 14px -6px rgb(0 0 0 / 0.35);
+      0 1px 0 rgb(255 255 255 / 0.55) inset,
+      0 10px 20px -10px rgb(15 26 28 / 0.4);
   }
 
+  /* Mã hiệu xoay ngược lại đúng bằng góc nghiêng của tab, nên luôn đọc ngang. */
   .tab-code {
     position: absolute;
     inset-inline: 0;
-    bottom: -1.5rem;
+    bottom: -1.75rem;
     text-align: center;
     font-size: 0.6875rem;
     color: var(--text-tertiary);
+    rotate: calc((var(--i) - 3) * var(--spread) * -1);
   }
 
   /* Quạt xoè rộng thêm khi rê chuột. Một chuyển động duy nhất, có lý do:
      nó diễn tả đúng thao tác bác sĩ mở bộ tab ra để so màu. */
-  .shade-fan:hover .fan-tab {
-    --spread: 11.5deg;
+  .shade-card:hover .fan-tab {
+    --spread: 12.5deg;
+  }
+
+  .shade-caption {
+    border-top: 1px solid var(--steel-line);
+    background: var(--surface-raised);
+    padding: 1.125rem 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
   }
 
   @media (prefers-reduced-motion: reduce) {
     .fan-tab,
-    .shade-fan:hover .fan-tab {
+    .shade-card:hover .fan-tab {
       transition: none;
-      --spread: 9deg;
+      --spread: 10deg;
     }
   }
 </style>

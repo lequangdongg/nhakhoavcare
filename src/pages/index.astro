@@ -57,7 +57,7 @@ const implantSteps = [
   <Hero locale={locale} serviceCount={serviceCount} />
 
   <section aria-labelledby="dich-vu" class="border-b border-steel">
-    <Container class="py-14 lg:py-20">
+    <Container class="reveal py-14 lg:py-20">
       <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
         <h2 id="dich-vu" class="text-2xl font-semibold md:text-3xl">Dịch vụ</h2>
         <a
@@ -75,7 +75,7 @@ const implantSteps = [
 
   {/* ── Implant. Khối rộng, nền chìm, nói thẳng vào định vị. ───────────────── */}
   <section aria-labelledby="implant" class="border-b border-steel bg-surface-sunken">
-    <Container class="py-14 lg:py-20">
+    <Container class="reveal py-14 lg:py-20">
       <div class="max-w-[52ch]">
         <h2 id="implant" class="text-2xl font-semibold md:text-3xl">
           Cấy ghép Implant là việc chúng tôi làm nhiều nhất
@@ -100,7 +100,7 @@ const implantSteps = [
 
       <a
         href={pathFor('service:implant', locale)}
-        class="mt-8 inline-flex min-h-11 items-center gap-2 border border-steel-edge px-5 transition-colors duration-300 hover:bg-surface active:translate-y-px"
+        class="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-steel-edge px-5 transition-colors duration-300 hover:bg-surface active:translate-y-px"
       >
         <span class="font-medium">Chi tiết về Implant</span>
         <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
@@ -110,7 +110,7 @@ const implantSteps = [
 
   {/* ── Gallery trước/sau. Khung nền sáng ở cả hai chế độ màu. ─────────────── */}
   <section aria-labelledby="ket-qua" class="border-b border-steel">
-    <Container class="py-14 lg:py-20">
+    <Container class="reveal py-14 lg:py-20">
       <h2 id="ket-qua" class="text-2xl font-semibold md:text-3xl">Kết quả điều trị</h2>
       <p class="mt-3 max-w-[58ch] text-ink-2">
         Ảnh trước và sau chụp cùng góc, cùng ánh sáng, cùng khoảng cách. Vùng ảnh giữ nền sáng ở cả
@@ -148,7 +148,7 @@ const implantSteps = [
       </div>
       <a
         href={pathFor('pricing', locale)}
-        class="inline-flex min-h-11 shrink-0 items-center gap-2 bg-accent px-5 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px"
+        class="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full bg-accent px-5 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px"
       >
         <span class="font-medium">Xem bảng giá</span>
         <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />

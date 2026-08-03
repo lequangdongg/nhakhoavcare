@@ -1,7 +1,8 @@
 ---
-import { alternateLinks } from '../i18n/routes';
-import { useTranslations, UI } from '../i18n/ui';
+import { Icon } from 'astro-icon/components';
 import type { Locale } from '../i18n/locales';
+import { alternateLinks } from '../i18n/routes';
+import { UI, useTranslations } from '../i18n/ui';
 
 interface Props {
   locale: Locale;
@@ -14,6 +15,24 @@ const t = useTranslations(locale);
 const other = alternateLinks(Astro.url.pathname).find((a) => a.locale !== locale)!;
 ---
 
-<a href={other.path} hreflang={other.locale} rel="alternate" aria-label={t('lang.switchTo')}>
-  {UI[other.locale]['lang.current']}
+<a
+  href={other.path}
+  hreflang={other.locale}
+  rel="alternate"
+  aria-label={t('lang.switchTo')}
+  title={UI[other.locale]['lang.current']}
+  class="group relative flex size-10 items-center justify-center rounded-full border border-steel-edge transition-colors duration-300 hover:border-accent hover:bg-accent-quiet"
+>
+  <Icon
+    name="ph:translate"
+    class="size-[1.15rem] transition-colors duration-300 group-hover:text-accent"
+    aria-hidden="true"
+  />
+  {/* Mã ngôn ngữ đích, nhỏ, ở góc dưới. Cho biết bấm vào sẽ sang đâu. */}
+  <span
+    class="measure absolute -end-0.5 -bottom-0.5 rounded-full bg-surface px-1 text-[0.5625rem] leading-[1.35] font-semibold text-ink-3 ring-1 ring-steel-edge transition-colors duration-300 group-hover:text-accent group-hover:ring-accent"
+    aria-hidden="true"
+  >
+    {other.locale.toUpperCase()}
+  </span>
 </a>

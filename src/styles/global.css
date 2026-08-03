@@ -4,43 +4,55 @@
 @import '@fontsource-variable/archivo/wght-italic.css';
 
 /* ===========================================================================
-   HỆ MÀU: BẢNG SO MÀU RĂNG VITA
+   HỆ MÀU
 
-   Mọi màu dưới đây có nguồn gốc thật trong thế giới nha khoa. Không màu nào
-   được chọn vì "trông đẹp".
+   Bảng màu do chủ dự án chốt. Vai trò từng màu:
 
-   - Nền graphite  = tấm nền tối bác sĩ đặt sau răng khi so màu, để mắt không
-                     bị nền sáng đánh lừa.
-   - Xám thép      = khung kim loại giữ các tab sứ.
-   - Dải A1 tới D4 = sắc độ sứ thật của bộ VITA classical. Dùng làm DỮ LIỆU
-                     (bậc giá, giai đoạn điều trị), không dùng trang trí.
-   - Xanh phẫu thuật = màu khăn mổ. Ngành y chọn nó vì nó là màu bù của đỏ máu,
-                     giúp mắt bác sĩ đỡ mỏi. Đây là màu hành động của site.
+   - Xanh dương #2563EB  = HÀNH ĐỘNG. Nút gọi, nút chính, liên kết đang hoạt động.
+   - Mint      #14B8A6   = HỖ TRỢ. Icon, điểm nhấn phụ, trạng thái tích cực nhẹ.
+                           Không dùng cho nút chính, tránh hai màu tranh nhau.
+   - Trắng ngà #F8FAFC   = nền trang.
+   - Trắng     #FFFFFF   = mặt thẻ và bảng nổi lên trên nền.
+
+   Ghi chú: trắng thuần nằm trong danh sách Taste khuyên tránh, nhưng brief của
+   chủ dự án được ưu tiên hơn quy tắc mặc định.
+
+   Chế độ tối do brief không quy định nên suy ra từ họ slate, giữ nguyên nhận
+   diện xanh dương và mint ở cả hai chế độ.
+
+   Dải A1 tới D4 là sắc độ sứ thật của bộ so màu VITA. Dùng làm DỮ LIỆU (bậc
+   giá, giai đoạn điều trị), không dùng trang trí.
    =========================================================================== */
 
 :root {
-  /* Nền và chữ */
-  --surface: #f3f2ef;
-  --surface-raised: #fbfaf8;
-  --surface-sunken: #e7e5e0;
-  --text-primary: #1a1c1e;
-  --text-secondary: #55585c;
-  --text-tertiary: #7c8085;
+  --surface: #f8fafc;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f1f5f9;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-tertiary: #9ca3af;
 
-  /* Khung thép giữ tab */
-  --steel-line: #c9c7c1;
-  --steel-edge: #a8a6a0;
+  --steel-line: #e5e7eb;
+  --steel-edge: #d1d5db;
 
-  /* Màu hành động: xanh khăn phẫu thuật, đã giảm bão hoà */
-  --accent: #14655d;
-  --accent-hover: #0f4f49;
-  --accent-contrast: #f6f8f7;
-  --accent-quiet: #d8e5e3;
+  /* Hành động */
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-contrast: #ffffff;
+  --accent-quiet: #eff6ff;
 
-  /* Cảnh báo: chỉ thị đổi màu trên túi hấp tiệt trùng */
-  --signal: #8a4b20;
+  /* Hỗ trợ */
+  --secondary: #14b8a6;
+  --secondary-hover: #0d9488;
+  --secondary-quiet: #f0fdfa;
 
-  /* Dải sắc độ sứ VITA classical, dùng làm thang dữ liệu */
+  /* Trạng thái */
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --signal: #b45309;
+
+  /* Sắc độ sứ VITA classical, thang dữ liệu */
   --shade-b1: #eae4d6;
   --shade-a1: #e5ddcc;
   --shade-a2: #ddd2bd;
@@ -52,33 +64,48 @@
 
   /* Khung ảnh lâm sàng: GIỮ NGUYÊN Ở CẢ HAI CHẾ ĐỘ.
      Mắt người đánh giá độ trắng của răng theo nền xung quanh. Nền tối làm ảnh
-     trước/sau trông phóng đại kết quả. Đây là ràng buộc đạo đức nghề nghiệp,
-     không phải lựa chọn thẩm mỹ. */
-  --clinical-surface: #eeece7;
-  --clinical-text: #1a1c1e;
-  --clinical-edge: #cfccc5;
+     trước/sau trông phóng đại kết quả. Ràng buộc đạo đức, không phải thẩm mỹ. */
+  --clinical-surface: #f1f5f9;
+  --clinical-text: #1f2937;
+  --clinical-edge: #d1d5db;
+
+  /* THANG BO GÓC. Taste mục 4.4 bắt khoá một hệ duy nhất cho cả site:
+     nút bo tròn hết, thẻ và bảng 12px, ô nhập 8px. Không trộn kiểu khác. */
+  --r-sm: 0.5rem;
+  --r-md: 0.75rem;
+  --r-lg: 1.125rem;
+  --r-pill: 9999px;
+
+  /* Đường cong chuyển động dùng chung, dạng thoát nhanh rồi chậm dần */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 :root.dark {
-  --surface: #16181a;
-  --surface-raised: #1e2124;
-  --surface-sunken: #101214;
-  --text-primary: #f0efec;
-  --text-secondary: #a8aaad;
-  --text-tertiary: #7e8184;
+  --surface: #0f172a;
+  --surface-raised: #1e293b;
+  --surface-sunken: #0b1220;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
 
-  --steel-line: #33373b;
-  --steel-edge: #4a4f54;
+  --steel-line: #1e293b;
+  --steel-edge: #334155;
 
-  --accent: #4fbfae;
-  --accent-hover: #6ad3c2;
-  --accent-contrast: #0b1c1a;
-  --accent-quiet: #16302d;
+  --accent: #60a5fa;
+  --accent-hover: #93c5fd;
+  --accent-contrast: #0b1220;
+  --accent-quiet: #172554;
 
-  --signal: #c98a55;
+  --secondary: #2dd4bf;
+  --secondary-hover: #5eead4;
+  --secondary-quiet: #10312c;
 
-  /* Dải sắc độ sứ giữ nguyên: nó là dữ liệu, không phải giao diện.
-     Thang màu răng không đổi theo chế độ xem. */
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --signal: #fbbf24;
+
+  /* Thang sắc độ sứ giữ nguyên: nó là dữ liệu, không phải giao diện. */
   --shade-b1: #eae4d6;
   --shade-a1: #e5ddcc;
   --shade-a2: #ddd2bd;
@@ -89,9 +116,9 @@
   --shade-c4: #94856d;
 
   /* Cố tình KHÔNG đổi. Xem ghi chú ở khối trên. */
-  --clinical-surface: #eeece7;
-  --clinical-text: #1a1c1e;
-  --clinical-edge: #cfccc5;
+  --clinical-surface: #f1f5f9;
+  --clinical-text: #1f2937;
+  --clinical-edge: #d1d5db;
 }
 
 @theme inline {
@@ -107,20 +134,26 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-contrast: var(--accent-contrast);
   --color-accent-quiet: var(--accent-quiet);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-secondary-quiet: var(--secondary-quiet);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
   --color-signal: var(--signal);
   --color-clinical: var(--clinical-surface);
   --color-clinical-ink: var(--clinical-text);
   --color-clinical-edge: var(--clinical-edge);
+
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r-md);
+  --radius-lg: var(--r-lg);
 
   --font-sans: 'Archivo Variable', system-ui, sans-serif;
 }
 
 /* ===========================================================================
    CHỮ
-
-   Archivo có trục độ rộng. Tiêu đề dùng bản mở rộng để đọc như nhãn dập trên
-   thân bảng đo; nội dung dùng bản thường để đọc thoải mái.
-   Tiếng Việt có dấu chồng cao nên line-height rộng hơn mặc định.
    =========================================================================== */
 
 @layer base {
@@ -139,9 +172,9 @@
   h1,
   h2,
   h3 {
-    font-variation-settings: 'wdth' 112;
-    letter-spacing: -0.02em;
-    line-height: 1.12;
+    font-variation-settings: 'wdth' 108;
+    letter-spacing: -0.022em;
+    line-height: 1.1;
     text-wrap: balance;
   }
 
@@ -152,13 +185,14 @@
   /* Số đo, mã hiệu, giá: chữ số đều bề rộng để cột thẳng hàng như trên bảng đo */
   .measure {
     font-variant-numeric: tabular-nums;
-    font-variation-settings: 'wdth' 92;
-    letter-spacing: 0.02em;
+    font-variation-settings: 'wdth' 94;
+    letter-spacing: 0.015em;
   }
 
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
+    border-radius: var(--r-sm);
   }
 }
 
@@ -167,6 +201,51 @@
   background-color: var(--clinical-surface);
   color: var(--clinical-text);
   border: 1px solid var(--clinical-edge);
+  border-radius: var(--r-md);
+}
+
+/* ===========================================================================
+   CHUYỂN ĐỘNG
+
+   Mức 4 trên thang Taste: CSS mượt, có cascade khi tải, không hijack cuộn.
+   Mỗi hiệu ứng phải nói được nó truyền đạt cái gì:
+
+   - .rise      : thứ tự đọc của hero. Chữ vào trước, ảnh vào sau.
+   - .reveal    : nội dung xuất hiện khi lọt vào tầm mắt, báo còn nội dung bên dưới.
+
+   Cả hai mặc định HIỆN SẴN rồi mới animate, nên tắt JavaScript hay trình duyệt
+   cũ vẫn đọc được bình thường.
+   =========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  .rise {
+    animation: rise 0.7s var(--ease-out) backwards;
+    animation-delay: calc(var(--d, 0) * 90ms);
+  }
+
+  /* Hiện dần khi cuộn tới. Dùng scroll-driven animation của CSS nên không
+     cần JavaScript, không có listener cuộn nào. */
+  @supports (animation-timeline: view()) {
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+    }
+
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 8% cover 26%;
+    }
+  }
 }
 
 /* Tôn trọng toàn cục, bắt buộc. */

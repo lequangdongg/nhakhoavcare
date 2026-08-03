@@ -27,7 +27,7 @@ const { slot, ratio, brief, clinical = false, class: className = '' } = Astro.pr
 
 <figure
   class:list={[
-    'flex flex-col items-center justify-center gap-3 border border-dashed p-6 text-center',
+    'flex flex-col items-center justify-center gap-3 rounded-md border border-dashed p-6 text-center',
     clinical ? 'clinical-frame' : 'border-steel-edge bg-surface-sunken',
     className,
   ]}

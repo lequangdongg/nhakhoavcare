@@ -102,14 +102,18 @@ const todayYear = new Date().getFullYear();
             rel="noopener"
             class="flex gap-2.5 transition-colors duration-300 hover:text-ink"
           >
-            <Icon name="ph:map-pin" class="mt-0.5 size-4 shrink-0 text-accent" aria-hidden="true" />
+            <Icon
+              name="ph:map-pin"
+              class="mt-0.5 size-4 shrink-0 text-secondary"
+              aria-hidden="true"
+            />
             <span>{clinic.address.street}<br />{clinic.address.ward}, {clinic.address.city}</span>
           </a>
           <a
             href={telHref(clinic.phone)}
             class="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink"
           >
-            <Icon name="ph:phone-call" class="size-4 shrink-0 text-accent" aria-hidden="true" />
+            <Icon name="ph:phone-call" class="size-4 shrink-0 text-secondary" aria-hidden="true" />
             <span class="measure">{clinic.phone}</span>
           </a>
           <a
@@ -118,7 +122,7 @@ const todayYear = new Date().getFullYear();
           >
             <Icon
               name="ph:chat-circle-text"
-              class="size-4 shrink-0 text-accent"
+              class="size-4 shrink-0 text-secondary"
               aria-hidden="true"
             />
             <span class="measure">{clinic.zalo}</span>
@@ -129,7 +133,7 @@ const todayYear = new Date().getFullYear();
           >
             <Icon
               name="ph:envelope-simple"
-              class="size-4 shrink-0 text-accent"
+              class="size-4 shrink-0 text-secondary"
               aria-hidden="true"
             />
             <span>{clinic.email}</span>
@@ -215,7 +219,7 @@ const todayYear = new Date().getFullYear();
 
     {
       clinic.isDemoData && (
-        <p class="mt-10 flex gap-2.5 border border-signal/40 p-3 text-sm text-signal">
+        <p class="mt-10 flex gap-2.5 rounded-md border border-warning/40 bg-warning/5 p-3 text-sm text-signal">
           <Icon name="ph:warning" class="mt-0.5 size-4 shrink-0" aria-hidden="true" />
           {t('footer.demoWarning')}
         </p>

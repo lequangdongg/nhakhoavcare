@@ -1,0 +1,161 @@
+---
+/**
+ * Mục điều hướng có bảng con, mở khi rê chuột.
+ *
+ * Không dùng JavaScript. Bảng hiện bằng :hover cho chuột và :focus-within cho
+ * bàn phím, nên tab vào là mở, tab ra là đóng. Nút bấm vẫn là liên kết thật tới
+ * trang tổng, nên chạm trên mobile hoặc bấm bằng chuột đều đi đúng chỗ.
+ *
+ * Có một dải đệm vô hình giữa nút và bảng để chuột đi xuống không làm bảng tắt
+ * giữa chừng.
+ */
+import { Icon } from 'astro-icon/components';
+
+export interface DropdownItem {
+  href: string;
+  title: string;
+  description: string;
+  icon: string;
+  /** Ô màu sắc độ sứ, nếu mục này là một dịch vụ */
+  shade?: string;
+}
+
+interface Props {
+  label: string;
+  items: DropdownItem[];
+  /** Liên kết tới trang tổng, cũng là đích khi bấm thẳng vào nhãn */
+  allHref: string;
+  allLabel: string;
+  active?: boolean;
+}
+
+const { label, items, allHref, allLabel, active = false } = Astro.props;
+---
+
+<div class="nav-dropdown">
+  <a
+    href={allHref}
+    aria-current={active ? 'page' : undefined}
+    class:list={[
+      'trigger flex items-center gap-1.5 rounded-full px-3 py-2 text-[0.9375rem] transition-colors duration-300 hover:bg-surface-sunken hover:text-ink',
+      active ? 'text-ink' : 'text-ink-2',
+    ]}
+  >
+    {label}
+    <Icon name="ph:caret-down" class="caret size-3.5" aria-hidden="true" />
+  </a>
+
+  <div class="panel-wrap">
+    <div
+      class="panel w-[min(44rem,90vw)] rounded-lg border border-steel bg-surface-raised p-2 shadow-xl shadow-ink/10"
+    >
+      <ul class="grid gap-0.5 sm:grid-cols-2">
+        {
+          items.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="group/i flex gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-surface-sunken focus-visible:bg-surface-sunken"
+              >
+                {item.shade ? (
+                  <span
+                    class="mt-0.5 h-9 w-6 shrink-0 rounded-sm border border-steel-edge"
+                    style={`background-color: ${item.shade}`}
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <span class="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-md bg-secondary-quiet text-secondary">
+                    <Icon name={item.icon} class="size-5" aria-hidden="true" />
+                  </span>
+                )}
+                <span class="min-w-0">
+                  <span class="block text-[0.9375rem] font-medium transition-colors duration-200 group-hover/i:text-accent">
+                    {item.title}
+                  </span>
+                  <span class="mt-0.5 block text-[0.8125rem] leading-snug text-ink-2">
+                    {item.description}
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <a
+        href={allHref}
+        class="mt-1 flex items-center justify-between gap-2 rounded-md border-t border-steel px-3 py-2.5 text-sm text-ink-2 transition-colors duration-200 hover:bg-surface-sunken hover:text-ink"
+      >
+        {allLabel}
+        <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .panel-wrap {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    z-index: 50;
+    translate: -50% 0;
+    /* Dải đệm để chuột đi từ nút xuống bảng không rơi ra ngoài */
+    padding-top: 0.625rem;
+    visibility: hidden;
+    opacity: 0;
+    transition:
+      opacity 0.2s var(--ease-out),
+      visibility 0.2s,
+      translate 0.2s var(--ease-out);
+  }
+
+  .panel {
+    /* Bảng chưa mở thì không nhận chuột, tránh chắn nội dung phía dưới */
+    pointer-events: none;
+  }
+
+  .nav-dropdown:hover .panel-wrap,
+  .nav-dropdown:focus-within .panel-wrap {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .nav-dropdown:hover .panel,
+  .nav-dropdown:focus-within .panel {
+    pointer-events: auto;
+  }
+
+  .caret {
+    transition: rotate 0.25s var(--ease-out);
+  }
+
+  .nav-dropdown:hover .caret,
+  .nav-dropdown:focus-within .caret {
+    rotate: 180deg;
+  }
+
+  /* Bảng trượt xuống nhẹ khi hiện. Chuyển động có lý do: nó cho biết bảng
+     thuộc về mục đang rê chứ không phải nổi lên từ đâu đó. */
+  @media (prefers-reduced-motion: no-preference) {
+    .panel-wrap {
+      translate: -50% -6px;
+    }
+    .nav-dropdown:hover .panel-wrap,
+    .nav-dropdown:focus-within .panel-wrap {
+      translate: -50% 0;
+    }
+  }
+
+  /* Trên thiết bị chạm không có hover thật, bảng con không bung ra;
+     nhãn vẫn là liên kết tới trang tổng nên chạm vào đi đúng chỗ. */
+  @media (hover: none) {
+    .panel-wrap {
+      display: none;
+    }
+  }
+</style>

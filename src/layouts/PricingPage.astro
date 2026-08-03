@@ -36,7 +36,7 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
 
     {
       !anyPrice && (
-        <p class="measure mt-8 inline-block border border-signal/40 px-4 py-2 text-sm text-signal">
+        <p class="measure mt-8 inline-block border border-warning/40 bg-warning/5 px-4 py-2 text-sm text-signal">
           {t('pricing.pending')}
         </p>
       )
@@ -82,7 +82,7 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
         {
           commitments.map((c) => (
             <li class="flex gap-3">
-              <Icon name="ph:check" class="mt-1 size-5 shrink-0 text-accent" aria-hidden="true" />
+              <Icon name="ph:check" class="mt-1 size-5 shrink-0 text-success" aria-hidden="true" />
               <span class="text-ink-2">{c}</span>
             </li>
           ))

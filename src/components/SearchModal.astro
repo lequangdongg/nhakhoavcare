@@ -39,13 +39,39 @@ const themeOptions = [
 ];
 ---
 
+{
+  /*
+  Nút mở tìm kiếm. Trên màn rộng hiện dạng thanh có chữ gợi ý và phím tắt, để
+  khách biết tính năng tồn tại mà không phải mò. Trên mobile thu về nút tròn
+  vì chỗ trên header có hạn và bàn phím vật lý không có.
+*/
+}
 <button
   type="button"
   data-search-open
-  class="flex size-10 items-center justify-center border border-steel-edge transition-colors duration-300 hover:bg-surface-raised"
+  class="group flex size-10 items-center justify-center rounded-full border border-steel-edge transition-colors duration-300 hover:border-accent hover:bg-accent-quiet md:h-10 md:w-auto md:gap-2.5 md:rounded-full md:px-3.5"
   aria-label={t('search.open')}
 >
-  <Icon name="ph:magnifying-glass" class="size-5" aria-hidden="true" />
+  <Icon
+    name="ph:magnifying-glass"
+    class="size-[1.15rem] shrink-0 text-ink-3 transition-colors duration-300 group-hover:text-accent"
+    aria-hidden="true"
+  />
+  <span
+    class="hidden text-sm text-ink-3 transition-colors duration-300 group-hover:text-ink md:inline"
+  >
+    {t('search.placeholderShort')}
+  </span>
+  <kbd class="hidden items-center gap-1 md:flex" aria-hidden="true">
+    <span
+      class="measure rounded-sm border border-steel-edge bg-surface-raised px-1.5 py-px text-[0.6875rem] leading-[1.4] text-ink-3"
+      data-search-modkey>⌘</span
+    >
+    <span
+      class="measure rounded-sm border border-steel-edge bg-surface-raised px-1.5 py-px text-[0.6875rem] leading-[1.4] text-ink-3"
+      >K</span
+    >
+  </kbd>
 </button>
 
 {
@@ -57,7 +83,7 @@ const themeOptions = [
 <dialog
   data-search-dialog
   aria-label={t('search.open')}
-  class="m-0 h-full max-h-none w-full max-w-none bg-surface p-0 backdrop:bg-ink/40 sm:mx-auto sm:mt-[8vh] sm:h-auto sm:max-h-[80vh] sm:w-[min(42rem,92vw)] sm:border sm:border-steel-edge"
+  class="m-0 h-full max-h-none w-full max-w-none bg-surface p-0 backdrop:bg-ink/40 sm:mx-auto sm:mt-[8vh] sm:h-auto sm:max-h-[80vh] sm:w-[min(42rem,92vw)] sm:rounded-lg sm:border sm:border-steel-edge sm:shadow-2xl sm:shadow-ink/20"
 >
   <div class="flex h-full flex-col sm:max-h-[80vh]">
     <div class="flex items-center gap-3 border-b border-steel px-4 py-3">
@@ -74,7 +100,7 @@ const themeOptions = [
       <button
         type="button"
         data-search-close
-        class="flex size-9 shrink-0 items-center justify-center text-ink-2 transition-colors duration-300 hover:text-ink"
+        class="flex size-9 shrink-0 items-center justify-center rounded-full text-ink-2 transition-colors duration-300 hover:bg-surface-sunken hover:text-ink"
         aria-label={t('search.close')}
       >
         <Icon name="ph:x" class="size-5" aria-hidden="true" />
@@ -172,6 +198,11 @@ const themeOptions = [
   }}
 >
   (() => {
+    // Máy không phải Mac thì phím tắt là Ctrl, hiển thị cho đúng.
+    if (!/Mac|iPhone|iPad/.test(navigator.platform || '')) {
+      for (const el of document.querySelectorAll('[data-search-modkey]')) el.textContent = 'Ctrl';
+    }
+
     const dialog = document.querySelector('[data-search-dialog]');
     const input = document.querySelector('[data-search-input]');
     const hits = document.querySelector('[data-search-hits]');
