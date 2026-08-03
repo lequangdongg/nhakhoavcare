@@ -260,36 +260,18 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
 
   /* ── Băng thẻ nổi bật ────────────────────────────────────────────────── */
 
-  /* Trên mobile: cuộn ngang có điểm dừng. Bốn thẻ cao xếp dọc bắt người dùng
-     cuộn rất nhiều mới thấy hết, còn cuộn ngang thì so sánh được giá cạnh nhau. */
+  /* Xếp dọc trên mobile. Bản trước cuộn ngang theo mẫu tham khảo, nhưng thẻ bị
+     cắt mất mép phải nên người dùng không biết còn nội dung bên cạnh. Xếp dọc
+     thì thấy trọn từng thẻ, đọc được hết gạch đầu dòng. */
   .ftrack {
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 82%;
-    gap: 0.75rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-    /* Tràn ra mép màn hình để thẻ cuối không bị cắt cụt trong lề container */
-    margin-inline: -1.25rem;
-    padding-inline: 1.25rem;
+    gap: 1rem;
     padding-block: 0.75rem;
-  }
-  .ftrack::-webkit-scrollbar {
-    display: none;
-  }
-  .ftrack > li {
-    scroll-snap-align: center;
   }
 
   @media (min-width: 640px) {
     .ftrack {
-      grid-auto-flow: row;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      overflow: visible;
-      margin-inline: 0;
-      padding-inline: 0;
     }
   }
   @media (min-width: 1280px) {
