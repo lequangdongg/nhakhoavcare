@@ -30,6 +30,7 @@ export const clinicSchema = z.object({
     country: z.string().min(1),
   }),
   geo: z.object({ lat: z.number(), lng: z.number() }),
+  mapsUrl: z.string().min(1),
   hours: z.object({
     monday: daySchema,
     tuesday: daySchema,
@@ -61,14 +62,15 @@ export const clinic: Clinic = {
   zalo: '0905 417 268',
   email: 'lienhe@nhakhoavcare.com',
 
+  // Địa chỉ và toạ độ THẬT, lấy từ trang Google Maps của phòng khám.
   address: {
-    street: '182 Nguyễn Văn Linh',
-    ward: 'Phường Nam Dương, Quận Hải Châu',
+    street: '190 Kinh Dương Vương',
+    ward: 'Quận Liên Chiểu',
     city: 'Đà Nẵng',
     country: 'VN',
   },
 
-  geo: { lat: 16.05174, lng: 108.21396 },
+  geo: { lat: 16.0748384, lng: 108.1693839 },
 
   hours: {
     monday: { open: '07:30', close: '20:00' },
@@ -80,9 +82,14 @@ export const clinic: Clinic = {
     sunday: { open: '08:00', close: '12:00' },
   },
 
+  /** Link chỉ đường. Dùng URL trang phòng khám để mở đúng hồ sơ có tên, ảnh và
+      đánh giá, thay vì một điểm ghim vô danh theo toạ độ. */
+  mapsUrl:
+    'https://www.google.com/maps/place/Nha+Khoa+Vcare/@16.0748435,108.1671952,17z/data=!3m1!4b1!4m5!3m4!1s0x3142192f0778c899:0xcd85626021f5f21e!8m2!3d16.0748384!4d108.1693839',
+
   sameAs: {
     facebook: 'https://www.facebook.com/nhakhoavcaredanang',
-    googleBusiness: 'https://maps.google.com/?cid=0',
+    googleBusiness: 'https://maps.google.com/?cid=14808150936133423134',
   },
 };
 

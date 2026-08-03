@@ -1,0 +1,11 @@
+{
+  "name": "Nha Khoa Vcare",
+  "short_name": "Vcare",
+  "description": "Phòng khám nha khoa tại Đà Nẵng, chuyên sâu cấy ghép Implant.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#2563EB",
+  "lang": "vi",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

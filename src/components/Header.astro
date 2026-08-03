@@ -5,6 +5,7 @@ import { clinic, telHref, zaloHref } from '../data/clinic';
 import type { Locale } from '../i18n/locales';
 import { type ServiceKey, pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
+import BrandMark from './BrandMark.astro';
 import Container from './Container.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 import NavDropdown, { type DropdownItem } from './NavDropdown.astro';
@@ -18,21 +19,6 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 const current = Astro.url.pathname;
 
-// Ô màu sắc độ theo dịch vụ, dùng lại thang của bảng so màu.
-const SHADE: Record<string, string> = {
-  implant: 'var(--shade-b3)',
-  veneer: 'var(--shade-a1)',
-  crown: 'var(--shade-a2)',
-  bridge: 'var(--shade-a3)',
-  denture: 'var(--shade-c3)',
-  gummySmile: 'var(--shade-a4)',
-  rootCanal: 'var(--shade-c4)',
-  scaling: 'var(--shade-b1)',
-  fluoride: 'var(--shade-b1)',
-  whitening: 'var(--shade-b1)',
-  braces: 'var(--shade-a3)',
-};
-
 const serviceItems: DropdownItem[] = (
   await getCollection('services', (e) => e.data.lang === locale)
 )
@@ -44,7 +30,6 @@ const serviceItems: DropdownItem[] = (
     // Câu đầu của mô tả, đủ để phân biệt mà không tràn dòng.
     description: `${s.data.description.split('.')[0]}.`,
     icon: 'ph:tooth',
-    shade: SHADE[s.data.key],
   }));
 
 const aboutItems: DropdownItem[] = [
@@ -127,13 +112,7 @@ const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${
     <Container wide class="flex h-16 items-center gap-4 lg:h-[4.5rem]">
       <a href={pathFor('home', locale)} class="flex shrink-0 items-center gap-2.5">
         {/* Nhận diện: một tab sứ trên khung thép, vật thật của bộ so màu. */}
-        <span
-          class="flex h-8 w-6 flex-col justify-end rounded-sm border border-steel-edge p-0.5"
-          aria-hidden="true"
-        >
-          <span class="h-4 w-full rounded-[0.15rem]" style="background-color: var(--shade-a2)"
-          ></span>
-        </span>
+        <BrandMark class="size-9" />
         <span class="leading-none">
           <span
             class="block text-[1.0625rem] font-semibold"
@@ -199,7 +178,7 @@ const todayLabel = today === 'closed' ? t('footer.closed') : `${today.open} - ${
           </summary>
 
           <div
-            class="absolute inset-x-0 top-16 border-y border-steel bg-surface-raised shadow-xl shadow-ink/10"
+            class="m-panel absolute inset-x-0 top-16 border-y border-steel bg-surface-raised shadow-xl shadow-ink/10"
           >
             <ul class="divide-y divide-steel">
               {

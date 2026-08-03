@@ -1,0 +1,46 @@
+---
+/**
+ * Dấu hiệu nhận diện Nha Khoa Vcare.
+ *
+ * Giữ DNA của logo cũ: chữ V ghép thành hình răng, hai màu. Bản cũ dùng cam và
+ * xanh lá với nét viền mảnh, chữ nghiêng, không đọc được ở cỡ nhỏ và lệch hẳn
+ * với bảng màu đã chốt.
+ *
+ * Bản này: thân răng đặc màu trắng trên nền xanh dương thương hiệu, rãnh giữa
+ * răng vẽ thành chữ V màu mint. Rãnh giữa là chi tiết giải phẫu có thật của
+ * răng hàm, nên chữ V không phải gán ghép mà mọc ra từ chính hình dạng.
+ *
+ * Vẽ tay có chủ đích: Taste mục 4.8 cho phép khi brief yêu cầu logo và hình đủ
+ * đơn giản. Toàn bộ là một hình khối, đọc được ở 16px.
+ */
+interface Props {
+  class?: string;
+  /** Bỏ nền, chỉ lấy hình răng. Dùng khi đặt trên nền màu sẵn. */
+  bare?: boolean;
+}
+
+const { class: className = '', bare = false } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 32 32"
+  class:list={['shrink-0', className]}
+  role="img"
+  aria-label="Nha Khoa Vcare"
+  fill="none"
+>
+  {!bare && <rect width="32" height="32" rx="9" fill="var(--accent)" />}
+
+  {/* Thân răng: hai múi trên, hai chân dưới */}
+  <path
+    d="M16 6.2c-4.4 0-8 1.9-8 6.1 0 3.1.9 5.7 1.7 8.4.5 1.7 1 3.9 2.2 3.9 1.2 0 1.5-2 2-4.1.3-1.5 1.1-2.4 2.1-2.4s1.8.9 2.1 2.4c.5 2.1.8 4.1 2 4.1 1.2 0 1.7-2.2 2.2-3.9.8-2.7 1.7-5.3 1.7-8.4 0-4.2-3.6-6.1-8-6.1Z"
+    fill={bare ? 'var(--accent)' : 'var(--accent-contrast)'}></path>
+
+  {/* Rãnh giữa răng, vẽ thành chữ V */}
+  <path
+    d="m12.6 11.4 3.4 5.2 3.4-5.2"
+    stroke="var(--secondary)"
+    stroke-width="2.4"
+    stroke-linecap="round"
+    stroke-linejoin="round"></path>
+</svg>

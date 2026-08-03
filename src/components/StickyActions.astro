@@ -84,4 +84,14 @@ const t = useTranslations(locale);
     border-color: var(--accent);
     color: var(--accent);
   }
+
+  /* Ẩn trên desktop.
+     Phải khai ở đây chứ không dựa vào lg:hidden của Tailwind: style phạm vi của
+     component có độ ưu tiên cao hơn lớp tiện ích, nên display:grid ở trên sẽ
+     thắng và thanh vẫn hiện trên desktop. */
+  @media (min-width: 1024px) {
+    .sticky-actions {
+      display: none;
+    }
+  }
 </style>

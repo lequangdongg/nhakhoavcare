@@ -5,6 +5,7 @@ import { clinic, telHref, zaloHref } from '../data/clinic';
 import type { Locale } from '../i18n/locales';
 import { type ServiceKey, pathFor } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
+import BrandMark from './BrandMark.astro';
 import Container from './Container.astro';
 
 interface Props {
@@ -51,43 +52,31 @@ const clinicLinks = [
   { key: 'contact', label: t('nav.contact') },
 ] as const;
 
-const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.lat},${clinic.geo.lng}`;
+const mapsHref = clinic.mapsUrl;
 const todayYear = new Date().getFullYear();
 ---
 
 <footer class="border-t border-steel bg-surface-sunken">
   {
-    /*
-    Dải sắc độ ngăn giữa thân trang và footer. Nhắc lại chữ ký thị giác một lần
-    ở cuối, dưới dạng đường viền chứ không phải khối nội dung, nên không cạnh
-    tranh với dải điều hướng ở trang chủ.
-  */
+    /* Dải phân cách mang màu thương hiệu, không phải màu sứ.
+      Màu sứ là dữ liệu sắc độ răng, dùng làm trang trí là gán nghĩa sai. */
   }
-  <div class="flex h-1.5" aria-hidden="true">
-    <span class="flex-1" style="background-color: var(--shade-b1)"></span>
-    <span class="flex-1" style="background-color: var(--shade-a1)"></span>
-    <span class="flex-1" style="background-color: var(--shade-a2)"></span>
-    <span class="flex-1" style="background-color: var(--shade-b3)"></span>
-    <span class="flex-1" style="background-color: var(--shade-a3)"></span>
-    <span class="flex-1" style="background-color: var(--shade-c3)"></span>
-    <span class="flex-1" style="background-color: var(--shade-a4)"></span>
-    <span class="flex-1" style="background-color: var(--shade-c4)"></span>
+  <div
+    class="h-1"
+    style="background: linear-gradient(90deg, var(--accent), var(--secondary))"
+    aria-hidden="true"
+  >
   </div>
 
   <Container wide class="py-12 lg:py-16">
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.3fr] lg:gap-12">
       <div>
         <div class="flex items-center gap-2.5">
-          <span
-            class="flex h-8 w-6 flex-col justify-end border border-steel-edge p-0.5"
-            aria-hidden="true"
-          >
-            <span class="h-4 w-full" style="background-color: var(--shade-a2)"></span>
-          </span>
+          <BrandMark class="size-9" />
           <span class="leading-none">
             <span
               class="block text-[1.0625rem] font-semibold"
-              style="font-variation-settings: 'wdth' 112"
+              style="font-variation-settings: 'wdth' 108"
             >
               {clinic.name}
             </span>

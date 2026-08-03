@@ -38,7 +38,7 @@ const DAY_LABELS: Record<Locale, Record<DayKey, string>> = {
 };
 
 const days = Object.entries(clinic.hours) as Array<[DayKey, (typeof clinic.hours)[DayKey]]>;
-const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.lat},${clinic.geo.lng}`;
+const mapsHref = clinic.mapsUrl;
 ---
 
 <BaseLayout

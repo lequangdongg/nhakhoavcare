@@ -16,8 +16,6 @@ export interface DropdownItem {
   title: string;
   description: string;
   icon: string;
-  /** Ô màu sắc độ sứ, nếu mục này là một dịch vụ */
-  shade?: string;
 }
 
 interface Props {
@@ -57,17 +55,9 @@ const { label, items, allHref, allLabel, active = false } = Astro.props;
                 href={item.href}
                 class="group/i flex gap-3 rounded-md p-3 transition-colors duration-200 hover:bg-surface-sunken focus-visible:bg-surface-sunken"
               >
-                {item.shade ? (
-                  <span
-                    class="mt-0.5 h-9 w-6 shrink-0 rounded-sm border border-steel-edge"
-                    style={`background-color: ${item.shade}`}
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <span class="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-md bg-secondary-quiet text-secondary">
-                    <Icon name={item.icon} class="size-5" aria-hidden="true" />
-                  </span>
-                )}
+                <span class="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-md bg-secondary-quiet text-secondary">
+                  <Icon name={item.icon} class="size-5" aria-hidden="true" />
+                </span>
                 <span class="min-w-0">
                   <span class="block text-[0.9375rem] font-medium transition-colors duration-200 group-hover/i:text-accent">
                     {item.title}

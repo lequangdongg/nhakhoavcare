@@ -23,7 +23,7 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 
 const indexUrl = locale === 'vi' ? '/search-index.json' : '/en/search-index.json';
-const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.lat},${clinic.geo.lng}`;
+const mapsHref = clinic.mapsUrl;
 const other = alternateLinks(Astro.url.pathname).find((a) => a.locale !== locale)!;
 
 const quickActions = [

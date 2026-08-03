@@ -17,7 +17,7 @@ interface Props {
 const { locale, class: className = '' } = Astro.props;
 const t = useTranslations(locale);
 
-const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.lat},${clinic.geo.lng}`;
+const mapsHref = clinic.mapsUrl;
 ---
 
 <div class:list={['flex flex-wrap items-center gap-3', className]}>
