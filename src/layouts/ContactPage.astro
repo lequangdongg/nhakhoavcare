@@ -1,0 +1,92 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Container from '../components/Container.astro';
+import ActionBar from '../components/ActionBar.astro';
+import { Icon } from 'astro-icon/components';
+import { clinic } from '../data/clinic';
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+type DayKey = keyof typeof clinic.hours;
+
+const DAY_LABELS: Record<Locale, Record<DayKey, string>> = {
+  vi: {
+    monday: 'Thứ Hai',
+    tuesday: 'Thứ Ba',
+    wednesday: 'Thứ Tư',
+    thursday: 'Thứ Năm',
+    friday: 'Thứ Sáu',
+    saturday: 'Thứ Bảy',
+    sunday: 'Chủ Nhật',
+  },
+  en: {
+    monday: 'Monday',
+    tuesday: 'Tuesday',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    friday: 'Friday',
+    saturday: 'Saturday',
+    sunday: 'Sunday',
+  },
+};
+
+const days = Object.entries(clinic.hours) as Array<[DayKey, (typeof clinic.hours)[DayKey]]>;
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${clinic.geo.lat},${clinic.geo.lng}`;
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t('contact.title')}. ${t('brand.short')}`}
+  description={`${clinic.name}, ${clinic.address.city}. ${t('contact.hoursNote')}`}
+>
+  <Container class="py-12 lg:py-16">
+    <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('contact.title')}</h1>
+
+    <ActionBar locale={locale} class="mt-8" />
+
+    <div class="mt-14 grid gap-12 lg:grid-cols-2 lg:gap-16">
+      <section aria-labelledby="dia-chi">
+        <h2 id="dia-chi" class="text-xl font-semibold">{t('footer.address')}</h2>
+        {/* Mọi giá trị đọc từ clinic.ts, nguồn duy nhất. */}
+        <address class="mt-3 leading-relaxed text-ink-2 not-italic">
+          {clinic.name}<br />
+          {clinic.address.street}<br />
+          {clinic.address.ward}, {clinic.address.city}
+        </address>
+        <a
+          href={mapsHref}
+          target="_blank"
+          rel="noopener"
+          class="mt-4 inline-flex items-center gap-1.5 underline-offset-4 transition-colors duration-300 hover:text-accent hover:underline"
+        >
+          <Icon name="ph:map-pin-area" class="size-4 shrink-0" aria-hidden="true" />
+          {t('contact.map')}
+        </a>
+      </section>
+
+      <section aria-labelledby="gio-lam-viec">
+        <h2 id="gio-lam-viec" class="text-xl font-semibold">{t('footer.hours')}</h2>
+        <dl class="mt-3 border-t border-steel">
+          {
+            days.map(([day, value]) => (
+              <div class="flex items-baseline justify-between gap-6 border-b border-steel py-2.5">
+                <dt class="text-ink-2">{DAY_LABELS[locale][day]}</dt>
+                <dd class="measure">
+                  {value === 'closed' ? t('footer.closed') : `${value.open} - ${value.close}`}
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+        <p class="mt-4 text-sm text-ink-2">{t('contact.hoursNote')}</p>
+      </section>
+    </div>
+  </Container>
+</BaseLayout>

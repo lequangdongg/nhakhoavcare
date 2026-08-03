@@ -1,0 +1,108 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Container from '../components/Container.astro';
+import ActionBar from '../components/ActionBar.astro';
+import { Icon } from 'astro-icon/components';
+import { pathFor, type ServiceKey } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+  entry: CollectionEntry<'services'>;
+}
+
+const { locale, entry } = Astro.props;
+const t = useTranslations(locale);
+const { title, description, priceFrom, faq } = entry.data;
+
+const priceLabel =
+  priceFrom !== undefined
+    ? new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US').format(priceFrom)
+    : null;
+---
+
+<BaseLayout locale={locale} title={`${title}. ${t('brand.short')}`} description={description}>
+  <article>
+    <Container class="py-12 lg:py-16">
+      <nav aria-label={t('nav.breadcrumb')} class="mb-8">
+        <a
+          href={pathFor('services', locale)}
+          class="inline-flex items-center gap-1.5 text-sm text-ink-2 underline-offset-4 transition-colors duration-300 hover:text-ink hover:underline"
+        >
+          <Icon name="ph:arrow-left" class="size-4" aria-hidden="true" />
+          {t('nav.services')}
+        </a>
+      </nav>
+
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-14">
+        <div>
+          <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem] lg:leading-[1.1]">
+            {title}
+          </h1>
+          <p class="mt-4 max-w-[62ch] text-lg text-ink-2">{description}</p>
+
+          {/* Nội dung markdown. Bảng kiểu chữ định trong prose bên dưới. */}
+          <div class="service-prose mt-10 max-w-[68ch]">
+            <slot />
+          </div>
+
+          {
+            faq.length > 0 && (
+              <section aria-labelledby="faq" class="mt-14">
+                <h2 id="faq" class="text-2xl font-semibold">
+                  {t('faq.title')}
+                </h2>
+                <dl class="mt-6 divide-y divide-steel border-t border-steel">
+                  {faq.map((item) => (
+                    <div class="py-5">
+                      <dt class="font-semibold">{item.question}</dt>
+                      <dd class="mt-2 max-w-[62ch] text-ink-2">{item.answer}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
+            )
+          }
+        </div>
+
+        {/* Cột phụ: giá và đường liên hệ. Dính theo cuộn ở màn rộng. */}
+        <aside class="lg:sticky lg:top-28 lg:self-start">
+          <div class="border border-steel-edge p-5">
+            <h2 class="text-sm font-semibold text-ink-2">{t('service.priceFrom')}</h2>
+            {
+              priceLabel ? (
+                <p class="measure mt-1 text-2xl font-semibold">
+                  {priceLabel} <span class="text-base font-normal text-ink-2">đ</span>
+                </p>
+              ) : (
+                <p class="mt-1 text-lg font-medium">{t('service.priceOnRequest')}</p>
+              )
+            }
+            <p class="mt-3 text-sm leading-relaxed text-ink-2">{t('service.priceNote')}</p>
+            <ActionBar locale={locale} class="mt-5 flex-col items-stretch [&>a]:justify-center" />
+          </div>
+        </aside>
+      </div>
+    </Container>
+  </article>
+</BaseLayout>
+
+<style>
+  .service-prose :global(h2) {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.375rem;
+    font-weight: 600;
+  }
+  .service-prose :global(p) {
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+  .service-prose :global(p:first-child) {
+    color: var(--text-primary);
+    font-size: 1.0625rem;
+  }
+</style>

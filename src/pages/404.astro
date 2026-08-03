@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/Container.astro';
+import ActionBar from '../components/ActionBar.astro';
+import { Icon } from 'astro-icon/components';
+import { pathFor } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+
+/**
+ * Trang 404 dùng tiếng Việt vì đó là ngôn ngữ mặc định ở gốc.
+ * Phần lớn lượt vào đây sẽ là link Blogger cũ chưa khớp dòng redirect nào,
+ * nên trang này đưa ra đường đi tiếp thay vì chỉ báo lỗi.
+ */
+const locale = 'vi' as const;
+const t = useTranslations(locale);
+---
+
+<BaseLayout locale={locale} title={`${t('notFound.title')}. ${t('brand.short')}`} description={t('notFound.body')}>
+  <Container class="flex min-h-[50vh] flex-col justify-center py-16">
+    <p class="measure text-sm text-ink-3">404</p>
+    <h1 class="mt-2 text-3xl font-semibold md:text-4xl">{t('notFound.title')}</h1>
+    <p class="mt-4 max-w-[52ch] text-lg text-ink-2">{t('notFound.body')}</p>
+
+    <div class="mt-8 flex flex-wrap items-center gap-4">
+      <a
+        href={pathFor('services', locale)}
+        class="inline-flex min-h-11 items-center gap-2 bg-accent px-5 text-accent-contrast transition-colors duration-300 hover:bg-accent-hover active:translate-y-px"
+      >
+        <span class="font-medium">{t('nav.services')}</span>
+        <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+      </a>
+      <a
+        href={pathFor('home', locale)}
+        class="text-ink-2 underline-offset-4 transition-colors duration-300 hover:text-ink hover:underline"
+      >
+        {t('notFound.home')}
+      </a>
+    </div>
+
+    <ActionBar locale={locale} class="mt-10" />
+  </Container>
+</BaseLayout>

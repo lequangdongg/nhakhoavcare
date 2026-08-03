@@ -1,0 +1,19 @@
+---
+import { getCollection, render } from 'astro:content';
+import ServiceDetail from '../../layouts/ServiceDetail.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('services', (e) => e.data.lang === 'vi');
+  return all.map((entry) => ({
+    params: { slug: entry.id.replace(/^vi\//, '') },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<ServiceDetail locale="vi" entry={entry}>
+  <Content />
+</ServiceDetail>

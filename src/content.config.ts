@@ -14,7 +14,11 @@ const services = defineCollection({
     title: z.string().min(1),
     /** 120–160 ký tự: ngắn hơn thì phí chỗ, dài hơn thì Google cắt cụt giữa câu. */
     description: z.string().min(120).max(160),
-    priceFrom: z.number().int().positive(),
+    /**
+     * Giá khởi điểm, đồng. Để trống cho tới khi phòng khám xác nhận bảng giá thật.
+     * Trang hiển thị "Liên hệ để biết giá" khi thiếu, không bịa số.
+     */
+    priceFrom: z.number().int().positive().optional(),
     order: z.number().int(),
     faq: z
       .array(z.object({ question: z.string().min(1), answer: z.string().min(1) }))

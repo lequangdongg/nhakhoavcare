@@ -1,0 +1,92 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Container from '../components/Container.astro';
+import ActionBar from '../components/ActionBar.astro';
+import { Icon } from 'astro-icon/components';
+import { pathFor, type ServiceKey } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const services = (await getCollection('services', (e) => e.data.lang === locale)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const anyPrice = services.some((s) => s.data.priceFrom !== undefined);
+const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
+
+const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t('pricing.title')}. ${t('brand.short')}`}
+  description={t('pricing.intro')}
+>
+  <Container class="py-12 lg:py-16">
+    <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('pricing.title')}</h1>
+    <p class="mt-4 max-w-[62ch] text-lg text-ink-2">{t('pricing.intro')}</p>
+
+    {
+      !anyPrice && (
+        <p class="measure mt-8 inline-block border border-signal/40 px-4 py-2 text-sm text-signal">
+          {t('pricing.pending')}
+        </p>
+      )
+    }
+
+    {/*
+      Bảng giá dạng danh sách hai cột. Taste mục 9.F cấm border-t + border-b trên
+      mọi hàng, nên chỉ dùng một đường phân cách giữa các hàng.
+    */}
+    <div class="mt-10 border-t border-steel">
+      <dl>
+        {
+          services.map((s) => (
+            <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-steel py-4">
+              <dt>
+                <a
+                  href={pathFor(`service:${s.data.key as ServiceKey}`, locale)}
+                  class="font-medium underline-offset-4 transition-colors duration-300 hover:text-accent hover:underline"
+                >
+                  {s.data.title}
+                </a>
+              </dt>
+              <dd class="measure text-ink-2">
+                {s.data.priceFrom !== undefined ? (
+                  <span class="text-ink">
+                    {fmt.format(s.data.priceFrom)} <span class="text-ink-2">đ</span>
+                  </span>
+                ) : (
+                  t('service.priceOnRequest')
+                )}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+
+    <section aria-labelledby="cam-ket" class="mt-14 max-w-[60ch]">
+      <h2 id="cam-ket" class="text-2xl font-semibold">{t('pricing.commitment')}</h2>
+      <ul class="mt-5 space-y-3">
+        {
+          commitments.map((c) => (
+            <li class="flex gap-3">
+              <Icon name="ph:check" class="mt-1 size-5 shrink-0 text-accent" aria-hidden="true" />
+              <span class="text-ink-2">{c}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <ActionBar locale={locale} class="mt-8" />
+    </section>
+  </Container>
+</BaseLayout>

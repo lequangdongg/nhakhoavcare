@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Container from '../components/Container.astro';
+import { Icon } from 'astro-icon/components';
+import { pathFor, type ServiceKey } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const services = (await getCollection('services', (e) => e.data.lang === locale)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t('services.title')}. ${t('brand.short')}`}
+  description={t('services.intro')}
+>
+  <Container class="py-12 lg:py-16">
+    <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('services.title')}</h1>
+    <p class="mt-4 max-w-[62ch] text-lg text-ink-2">{t('services.intro')}</p>
+
+    {/* Danh sách chia hai cột với đường thép phân tách, không dùng thẻ bo góc. */}
+    <ul class="mt-12 grid gap-px border-y border-steel bg-steel md:grid-cols-2">
+      {
+        services.map((s) => (
+          <li class="bg-surface">
+            <a
+              href={pathFor(`service:${s.data.key as ServiceKey}`, locale)}
+              class="group flex h-full flex-col gap-2 p-6 transition-colors duration-300 hover:bg-surface-raised lg:p-7"
+            >
+              <h2 class="flex items-center gap-2 text-lg font-semibold">
+                {s.data.title}
+                <Icon
+                  name="ph:arrow-right"
+                  class="size-4 shrink-0 opacity-0 transition-opacity duration-300 group-hover:opacity-70"
+                  aria-hidden="true"
+                />
+              </h2>
+              <p class="max-w-[52ch] text-sm leading-relaxed text-ink-2">{s.data.description}</p>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </Container>
+</BaseLayout>
