@@ -165,7 +165,7 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
       <h2 id="khac" class="section-title">{t('pr.others')}</h2>
 
       <div class="mt-8 grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
-        <ul class="grid gap-2 sm:grid-cols-2">
+        <ul class="olist grid gap-2 sm:grid-cols-2">
           {
             others.map((s) => (
               <li>
@@ -408,11 +408,20 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
   }
 
   /* ── Hàng dịch vụ khác ───────────────────────────────────────────────── */
+
+  /* Ô lưới mặc định có min-width: auto nên không co dưới kích thước nội dung. */
+  .olist > li {
+    min-width: 0;
+  }
+
   .orow {
     display: flex;
     align-items: center;
     gap: 0.85rem;
     height: 100%;
+    /* Cho phép hàng co nhỏ hơn nội dung. Không có dòng này, chuỗi nowrap bên
+       trong ép hàng rộng ra và tràn khỏi khung trên màn hẹp. */
+    min-width: 0;
     padding: 0.9rem 1rem;
     border: 1px solid var(--steel-line);
     border-radius: var(--r-md);
@@ -440,6 +449,7 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
     white-space: nowrap;
   }
   .orow-price {
+    flex: none;
     margin-inline-start: auto;
     font-weight: 600;
     color: var(--accent);
@@ -450,6 +460,7 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
     font-weight: 500;
   }
   .orow-arrow {
+    flex: none;
     color: var(--text-tertiary);
   }
 

@@ -57,6 +57,11 @@ const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
     display: grid;
     gap: 0.5rem;
   }
+  /* Ô lưới mặc định có min-width: auto nên không co dưới kích thước nội dung.
+     Đây mới là mắt xích thiếu khiến hàng tràn ngang trên mobile. */
+  .prows > li {
+    min-width: 0;
+  }
   @media (min-width: 768px) {
     .prows {
       grid-template-columns: 1fr 1fr;
@@ -68,6 +73,9 @@ const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
     align-items: center;
     gap: 0.85rem;
     height: 100%;
+    /* Cho phép hàng co nhỏ hơn nội dung. Không có dòng này, chuỗi nowrap bên
+       trong ép hàng rộng ra và tràn khỏi khung trên màn hẹp. */
+    min-width: 0;
     padding: 0.9rem 1rem;
     border: 1px solid var(--steel-line);
     border-radius: var(--r-md);
@@ -104,6 +112,7 @@ const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
   }
 
   .prow-price {
+    flex: none;
     display: flex;
     align-items: baseline;
     gap: 0.25rem;
@@ -126,6 +135,7 @@ const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
   }
 
   .prow-arrow {
+    flex: none;
     color: var(--text-tertiary);
     transition:
       color 0.25s var(--ease-out),
