@@ -1,0 +1,19 @@
+---
+import { alternateLinks } from '../i18n/routes';
+import { useTranslations, UI } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+// Trỏ sang ĐÚNG trang tương ứng ở ngôn ngữ kia, không đá về trang chủ.
+const other = alternateLinks(Astro.url.pathname).find((a) => a.locale !== locale)!;
+---
+
+<a href={other.path} hreflang={other.locale} rel="alternate" aria-label={t('lang.switchTo')}>
+  {UI[other.locale]['lang.current']}
+</a>

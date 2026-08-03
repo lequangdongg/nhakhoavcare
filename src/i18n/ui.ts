@@ -1,0 +1,151 @@
+import type { Locale } from './locales';
+
+export const UI = {
+  vi: {
+    'brand.short': 'Nha Khoa Vcare',
+    'nav.breadcrumb': 'Đường dẫn',
+    'faq.title': 'Câu hỏi thường gặp',
+    'service.priceFrom': 'Chi phí',
+    'service.priceOnRequest': 'Liên hệ để biết giá',
+    'service.priceNote':
+      'Chi phí phụ thuộc tình trạng cụ thể. Bác sĩ báo giá đầy đủ sau khi khám, trước khi bắt đầu điều trị.',
+    'services.title': 'Dịch vụ',
+    'services.intro':
+      'Mỗi trang nói rõ quy trình, thời gian và những trường hợp không phù hợp. Chi phí báo sau khi khám.',
+    'pricing.title': 'Bảng giá',
+    'pricing.intro':
+      'Chi phí phụ thuộc tình trạng từng người, nên con số cuối cùng chỉ có sau khi khám. Điều chúng tôi cam kết là bạn biết đủ trước khi đồng ý.',
+    'pricing.pending': 'Bảng giá đang được phòng khám cập nhật.',
+    'pricing.commitment': 'Cam kết về chi phí',
+    'pricing.c1': 'Báo giá đầy đủ bằng văn bản trước khi bắt đầu điều trị.',
+    'pricing.c2': 'Không phát sinh ngoài phần đã báo, trừ khi bạn đồng ý bằng lời trước.',
+    'pricing.c3': 'Chính sách bảo hành ghi thành văn bản, không hứa miệng.',
+    'about.title': 'Về phòng khám',
+    'about.doctors': 'Đội ngũ bác sĩ',
+    'about.doctorsPending':
+      'Hồ sơ bác sĩ đang được hoàn thiện. Mỗi bác sĩ sẽ có bằng cấp, chứng chỉ kèm nơi cấp và năm cấp.',
+    'about.facility': 'Cơ sở vật chất',
+    'contact.title': 'Liên hệ',
+    'contact.hoursNote': 'Ngoài giờ làm việc, nhắn Zalo vẫn được trả lời.',
+    'contact.map': 'Xem trên Google Maps',
+    'blog.title': 'Kiến thức nha khoa',
+    'blog.intro':
+      'Bài viết giải thích các vấn đề răng miệng thường gặp, viết cho người không có chuyên môn.',
+    'blog.pending': 'Chưa có bài viết nào được đăng.',
+    'notFound.title': 'Không tìm thấy trang',
+    'notFound.body':
+      'Đường dẫn này không còn tồn tại. Có thể trang đã được chuyển sang địa chỉ mới.',
+    'notFound.home': 'Về trang chủ',
+    exp: 'năm kinh nghiệm',
+    'search.open': 'Tìm kiếm',
+    'search.placeholder': 'Tìm dịch vụ, bảng giá, câu hỏi...',
+    'search.close': 'Đóng',
+    'search.quick': 'Hành động nhanh',
+    'search.pages': 'Trang',
+    'search.empty': 'Không tìm thấy kết quả nào.',
+    'search.results': 'kết quả',
+    'search.hint': 'Dùng phím mũi tên để chọn, Enter để mở, Esc để đóng.',
+    'nav.home': 'Trang chủ',
+    'nav.primary': 'Điều hướng chính',
+    'nav.about': 'Giới thiệu',
+    'nav.services': 'Dịch vụ',
+    'nav.pricing': 'Bảng giá',
+    'nav.blog': 'Kiến thức nha khoa',
+    'nav.contact': 'Liên hệ',
+    'nav.skipToContent': 'Bỏ qua, tới nội dung chính',
+    'nav.openMenu': 'Mở menu',
+    'nav.closeMenu': 'Đóng menu',
+    'cta.call': 'Gọi ngay',
+    'cta.zalo': 'Nhắn Zalo',
+    'cta.directions': 'Chỉ đường',
+    'footer.hours': 'Giờ làm việc',
+    'footer.contact': 'Liên hệ',
+    'footer.address': 'Địa chỉ',
+    'footer.closed': 'Nghỉ',
+    'lang.switchTo': 'Chuyển sang tiếng Anh',
+    'lang.current': 'Tiếng Việt',
+    'theme.label': 'Giao diện',
+    'theme.system': 'Theo hệ thống',
+    'theme.light': 'Sáng',
+    'theme.dark': 'Tối',
+  },
+  en: {
+    'brand.short': 'Vcare Dental',
+    'nav.breadcrumb': 'Breadcrumb',
+    'faq.title': 'Common questions',
+    'service.priceFrom': 'Cost',
+    'service.priceOnRequest': 'Price on request',
+    'service.priceNote':
+      'Cost depends on your specific case. The dentist gives a full quote after the examination, before treatment begins.',
+    'services.title': 'Treatments',
+    'services.intro':
+      'Each page sets out the procedure, the time it takes, and when it is not the right choice. Cost is quoted after an examination.',
+    'pricing.title': 'Prices',
+    'pricing.intro':
+      'Cost depends on each case, so the final figure only exists after an examination. What we commit to is that you know it all before you agree.',
+    'pricing.pending': 'The price list is being updated by the clinic.',
+    'pricing.commitment': 'What we commit to',
+    'pricing.c1': 'A full written quote before treatment starts.',
+    'pricing.c2': 'Nothing added beyond the quote unless you agree to it first.',
+    'pricing.c3': 'The warranty is a written document, not a spoken promise.',
+    'about.title': 'About the clinic',
+    'about.doctors': 'Our dentists',
+    'about.doctorsPending':
+      'Dentist profiles are being completed. Each one will list qualifications and certificates with the issuing body and year.',
+    'about.facility': 'The clinic',
+    'contact.title': 'Contact',
+    'contact.hoursNote': 'Outside opening hours, Zalo messages still get answered.',
+    'contact.map': 'Open in Google Maps',
+    'blog.title': 'Dental Knowledge',
+    'blog.intro':
+      'Articles explaining common dental problems, written for people without a clinical background.',
+    'blog.pending': 'No articles published yet.',
+    'notFound.title': 'Page not found',
+    'notFound.body': 'This address no longer exists. The page may have moved somewhere else.',
+    'notFound.home': 'Back to home',
+    exp: 'years of experience',
+    'search.open': 'Search',
+    'search.placeholder': 'Search treatments, prices, questions...',
+    'search.close': 'Close',
+    'search.quick': 'Quick actions',
+    'search.pages': 'Pages',
+    'search.empty': 'No results found.',
+    'search.results': 'results',
+    'search.hint': 'Arrow keys to move, Enter to open, Esc to close.',
+    'nav.home': 'Home',
+    'nav.primary': 'Main navigation',
+    'nav.about': 'About',
+    'nav.services': 'Services',
+    'nav.pricing': 'Pricing',
+    'nav.blog': 'Dental Knowledge',
+    'nav.contact': 'Contact',
+    'nav.skipToContent': 'Skip to main content',
+    'nav.openMenu': 'Open menu',
+    'nav.closeMenu': 'Close menu',
+    'cta.call': 'Call now',
+    'cta.zalo': 'Chat on Zalo',
+    'cta.directions': 'Get directions',
+    'footer.hours': 'Opening hours',
+    'footer.contact': 'Contact',
+    'footer.address': 'Address',
+    'footer.closed': 'Closed',
+    'lang.switchTo': 'Chuyển sang tiếng Việt',
+    'lang.current': 'English',
+    'theme.label': 'Theme',
+    'theme.system': 'System',
+    'theme.light': 'Light',
+    'theme.dark': 'Dark',
+  },
+} as const satisfies Record<Locale, Record<string, string>>;
+
+export type UIKey = keyof (typeof UI)['vi'];
+
+export function useTranslations(locale: Locale) {
+  return function t(key: UIKey): string {
+    const value = UI[locale][key];
+    if (value === undefined) {
+      throw new Error(`Thiếu bản dịch cho key "${key}" ở ngôn ngữ "${locale}"`);
+    }
+    return value;
+  };
+}

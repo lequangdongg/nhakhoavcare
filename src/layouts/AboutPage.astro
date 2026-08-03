@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Container from '../components/Container.astro';
+import ImageSlot from '../components/ImageSlot.astro';
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t('about.title')}. ${t('brand.short')}`}
+  description={t('about.doctorsPending')}
+  doctors={doctors}
+>
+  <Container class="py-12 lg:py-16">
+    <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('about.title')}</h1>
+
+    {/* ── Đội ngũ bác sĩ. Phần có sức nặng nhất với mục tiêu uy tín. ────────── */}
+    <section aria-labelledby="bac-si" class="mt-14">
+      <h2 id="bac-si" class="text-2xl font-semibold">{t('about.doctors')}</h2>
+
+      {
+        doctors.length === 0 ? (
+          <p class="mt-4 max-w-[58ch] text-ink-2">{t('about.doctorsPending')}</p>
+        ) : (
+          <ul class="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-12">
+            {doctors.map((d) => (
+              <li class="grid gap-5 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
+                <ImageSlot
+                  slot="doctor-portrait"
+                  ratio="4/5"
+                  brief={d.data.name}
+                  class="sm:max-w-36"
+                />
+
+                <div>
+                  <h3 class="text-lg font-semibold">{d.data.name}</h3>
+                  <p class="text-ink-2">{d.data.title}</p>
+                  <p class="measure mt-1 text-sm text-ink-3">
+                    {d.data.yearsOfExperience} {t('exp')}
+                  </p>
+
+                  <p class="mt-4 text-sm leading-relaxed text-ink-2">{d.data.summary}</p>
+
+                  {/*
+                    Chứng chỉ hiện đủ tên, nơi cấp và năm. Zod chặn build nếu thiếu
+                    nơi cấp hoặc năm: một dòng chứng chỉ trống trơn làm giảm uy tín
+                    thay vì tăng.
+                  */}
+                  <dl class="mt-5 space-y-4 border-t border-steel pt-5 text-sm">
+                    <div>
+                      <dt class="font-semibold">
+                        {locale === 'vi' ? 'Bằng cấp' : 'Qualifications'}
+                      </dt>
+                      <dd class="mt-1 space-y-1 text-ink-2">
+                        {d.data.education.map((e) => (
+                          <p>
+                            {e.degree}, {e.institution}
+                            <span class="measure ml-2 text-ink-3">{e.year}</span>
+                          </p>
+                        ))}
+                      </dd>
+                    </div>
+
+                    <div>
+                      <dt class="font-semibold">
+                        {locale === 'vi' ? 'Chứng chỉ' : 'Certificates'}
+                      </dt>
+                      <dd class="mt-1 space-y-1 text-ink-2">
+                        {d.data.certificates.map((c) => (
+                          <p>
+                            {c.name}, {c.issuer}
+                            <span class="measure ml-2 text-ink-3">{c.year}</span>
+                          </p>
+                        ))}
+                      </dd>
+                    </div>
+
+                    {d.data.achievements.length > 0 && (
+                      <div>
+                        <dt class="font-semibold">
+                          {locale === 'vi' ? 'Thành tựu' : 'Achievements'}
+                        </dt>
+                        <dd class="mt-1 space-y-1 text-ink-2">
+                          {d.data.achievements.map((a) => (
+                            <p>{a}</p>
+                          ))}
+                        </dd>
+                      </div>
+                    )}
+                  </dl>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </section>
+
+    {/* ── Cơ sở vật chất ───────────────────────────────────────────────────── */}
+    <section aria-labelledby="co-so" class="mt-16">
+      <h2 id="co-so" class="text-2xl font-semibold">{t('about.facility')}</h2>
+      <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        <ImageSlot
+          slot="facility-chair"
+          ratio="3/2"
+          brief={locale === 'vi' ? 'Ghế nha khoa, góc rộng' : 'Treatment chair, wide angle'}
+        />
+        <ImageSlot
+          slot="facility-sterile"
+          ratio="3/2"
+          brief={locale === 'vi' ? 'Khu vực tiệt trùng dụng cụ' : 'Instrument sterilisation area'}
+        />
+        <ImageSlot
+          slot="facility-waiting"
+          ratio="3/2"
+          brief={locale === 'vi' ? 'Khu chờ, ánh sáng tự nhiên' : 'Waiting area in natural light'}
+        />
+      </div>
+    </section>
+  </Container>
+</BaseLayout>

@@ -1,0 +1,32 @@
+# Nha Khoa Vcare — https://www.nhakhoavcare.com
+
+# Công cụ tìm kiếm truyền thống
+User-agent: *
+Allow: /
+
+# Crawler của trợ lý AI — mở cổng có chủ ý (spec §12).
+# Đánh đổi: AI trả lời thay site, khách không cần ghé. Nhưng với phòng khám,
+# được AI đọc ra tên + số điện thoại khi khách hỏi "nha khoa nào tốt ở Đà Nẵng"
+# có giá trị hơn một lượt truy cập.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.nhakhoavcare.com/sitemap-index.xml

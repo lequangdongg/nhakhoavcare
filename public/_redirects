@@ -1,0 +1,37 @@
+# Chuyển hướng từ URL Blogger cũ sang cấu trúc mới.
+#
+# URL lấy từ kiểm kê ngày 2026-08-03 qua Blogger feed API, không phải phỏng đoán:
+# docs/superpowers/specs/2026-08-03-kiem-ke-site-cu.md
+#
+# Mã 301 nghĩa là "chuyển hẳn". Google chuyển thứ hạng cũ sang địa chỉ mới,
+# và người bấm link cũ trên Facebook hay Zalo vẫn vào được site.
+
+# Dịch vụ
+/2020/03/cay-ghep-implant.html                        /dich-vu/cay-ghep-implant/         301
+/2020/03/dan-su-veneer.html                           /dich-vu/dan-su-veneer/            301
+/2020/03/phuc-hinh-co-inh.html                        /dich-vu/boc-rang-su/              301
+/2020/03/cau-rang.html                                /dich-vu/cau-rang/                 301
+/2020/03/loai-truong-hop-su-dung-rang-gia-thao.html   /dich-vu/phuc-hinh-thao-lap/       301
+/2020/03/vecni-flour.html                             /dich-vu/vecni-flour-tre-em/       301
+/2020/04/lay-cao-rang_16.html                         /dich-vu/lay-cao-rang/             301
+/2020/04/chua-tuy-rang.html                           /dich-vu/chua-tuy-rang/            301
+/2020/04/1cuoi-ho-loi-la-gi-cuoi-ho-loi-la-tinh.html  /dich-vu/cuoi-ho-loi/              301
+
+# Trang
+/2020/03/bang-gia.html                                /bang-gia/                         301
+/2020/11/blog-post.html                               /gioi-thieu/                       301
+/p/kien-thuc-nha-khoa.html                            /kien-thuc-nha-khoa/               301
+
+# Nội dung thuộc trang Giới thiệu. Chưa có trang con riêng nên trỏ về trang cha;
+# khi viết trang con thì sửa đích ở đây.
+/2020/04/quy-trinh-vo-trung-dung-cu.html              /gioi-thieu/                       301
+/2020/04/cac-thiet-bi-nha-khoa.html                   /gioi-thieu/                       301
+
+# Bài kiến thức. Cùng lý do trên.
+/2020/04/sau-rang-va-phong-ngua-sau-rang.html         /kien-thuc-nha-khoa/               301
+/2020/04/vai-tro-x-quang-rang.html                    /kien-thuc-nha-khoa/               301
+
+# Bắt hết phần còn lại: URL Blogger hỏng và mọi địa chỉ lạ.
+# Google không chuyển thứ hạng qua kiểu gom về một chỗ, nhưng những URL này vốn
+# không có thứ hạng để mất. Giá trị nằm ở chỗ khách không đâm vào trang lỗi.
+/*.html                                               /dich-vu/                          301

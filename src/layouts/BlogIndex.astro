@@ -1,0 +1,31 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Container from '../components/Container.astro';
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+/**
+ * Chưa có collection posts. Trang tồn tại để menu không dẫn tới 404 và để
+ * cấu trúc URL ổn định từ đầu, tránh phải đổi sau khi đã có thứ hạng.
+ */
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t('blog.title')}. ${t('brand.short')}`}
+  description={t('blog.intro')}
+>
+  <Container class="py-12 lg:py-16">
+    <h1 class="text-3xl font-semibold md:text-4xl lg:text-[2.75rem]">{t('blog.title')}</h1>
+    <p class="mt-4 max-w-[62ch] text-lg text-ink-2">{t('blog.intro')}</p>
+
+    <p class="mt-10 border-t border-steel pt-6 text-ink-2">{t('blog.pending')}</p>
+  </Container>
+</BaseLayout>

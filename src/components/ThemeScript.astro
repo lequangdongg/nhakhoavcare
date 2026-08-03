@@ -1,0 +1,23 @@
+---
+import { THEME_STORAGE_KEY } from '../lib/theme';
+---
+
+{
+  /*
+  Chạy CHẶN trong <head>, trước khi trình duyệt vẽ. Không có nó, trang lóe trắng
+  một nhịp rồi mới chuyển sang tối — lỗi này nhìn rất rẻ tiền.
+  Đây là ngoại lệ JavaScript duy nhất trên đường tải chính (spec §8).
+  is:inline bắt buộc: Astro không được bundle/hoãn đoạn này.
+*/
+}
+<script is:inline define:vars={{ storageKey: THEME_STORAGE_KEY }}>
+  try {
+    const stored = localStorage.getItem(storageKey);
+    const dark =
+      stored === 'dark' ||
+      (stored !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    document.documentElement.classList.toggle('dark', dark);
+  } catch {
+    /* localStorage bị chặn (chế độ riêng tư) — để mặc định sáng, không làm hỏng trang */
+  }
+</script>

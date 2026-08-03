@@ -1,0 +1,66 @@
+---
+import { clinic, telHref, zaloHref } from '../data/clinic';
+import { useTranslations } from '../i18n/ui';
+import type { Locale } from '../i18n/locales';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+type DayKey = keyof typeof clinic.hours;
+
+const DAY_LABELS: Record<Locale, Record<DayKey, string>> = {
+  vi: {
+    monday: 'Thứ Hai',
+    tuesday: 'Thứ Ba',
+    wednesday: 'Thứ Tư',
+    thursday: 'Thứ Năm',
+    friday: 'Thứ Sáu',
+    saturday: 'Thứ Bảy',
+    sunday: 'Chủ Nhật',
+  },
+  en: {
+    monday: 'Monday',
+    tuesday: 'Tuesday',
+    wednesday: 'Wednesday',
+    thursday: 'Thursday',
+    friday: 'Friday',
+    saturday: 'Saturday',
+    sunday: 'Sunday',
+  },
+};
+
+const days = Object.entries(clinic.hours) as Array<[DayKey, (typeof clinic.hours)[DayKey]]>;
+---
+
+<footer class="border-border border-t p-4">
+  {/* Mọi giá trị đọc từ clinic.ts — spec §6. Không viết cứng lại ở đây. */}
+  <section aria-labelledby="footer-contact">
+    <h2 id="footer-contact">{t('footer.contact')}</h2>
+    <p class="font-semibold">{clinic.name}</p>
+    <address class="not-italic">
+      {clinic.address.street}, {clinic.address.ward}, {clinic.address.city}
+    </address>
+    <p><a href={telHref(clinic.phone)}>{clinic.phone}</a></p>
+    <p><a href={zaloHref(clinic.zalo)}>{t('cta.zalo')}</a></p>
+  </section>
+
+  <section aria-labelledby="footer-hours">
+    <h2 id="footer-hours">{t('footer.hours')}</h2>
+    <dl>
+      {
+        days.map(([day, value]) => (
+          <div>
+            <dt>{DAY_LABELS[locale][day]}</dt>
+            <dd>{value === 'closed' ? t('footer.closed') : `${value.open} - ${value.close}`}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <p><small>© {new Date().getFullYear()} {clinic.name}</small></p>
+</footer>

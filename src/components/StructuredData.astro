@@ -1,0 +1,149 @@
+---
+/**
+ * JSON-LD.
+ *
+ * Đây là thứ cỗ máy trả lời đọc trước tiên. Với nội dung y tế, Google xếp vào
+ * nhóm YMYL và soi rất kỹ, nên dữ liệu ở đây phải khớp tuyệt đối với Google
+ * Business Profile. Mọi giá trị sinh từ clinic.ts và frontmatter, không viết tay.
+ */
+import type { CollectionEntry } from 'astro:content';
+import { clinic } from '../data/clinic';
+import type { Locale } from '../i18n/locales';
+import { pathFor } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  /** Trang chi tiết dịch vụ: sinh thêm MedicalProcedure và FAQPage. */
+  service?: CollectionEntry<'services'>;
+  doctors?: CollectionEntry<'doctors'>[];
+}
+
+const { locale, service, doctors = [] } = Astro.props;
+const t = useTranslations(locale);
+const site = Astro.site!;
+const clinicId = new URL('/#clinic', site).href;
+
+const DAY_SCHEMA: Record<string, string> = {
+  monday: 'Monday',
+  tuesday: 'Tuesday',
+  wednesday: 'Wednesday',
+  thursday: 'Thursday',
+  friday: 'Friday',
+  saturday: 'Saturday',
+  sunday: 'Sunday',
+};
+
+const openingHours = Object.entries(clinic.hours)
+  .filter(([, v]) => v !== 'closed')
+  .map(([day, v]) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: `https://schema.org/${DAY_SCHEMA[day]}`,
+    opens: (v as { open: string }).open,
+    closes: (v as { close: string }).close,
+  }));
+
+const sameAs = [clinic.sameAs.facebook, clinic.sameAs.googleBusiness].filter(Boolean);
+
+const graph: Record<string, unknown>[] = [
+  {
+    '@type': ['Dentist', 'LocalBusiness'],
+    '@id': clinicId,
+    name: clinic.name,
+    legalName: clinic.legalName,
+    url: new URL(pathFor('home', locale), site).href,
+    telephone: clinic.phone,
+    email: clinic.email,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: clinic.address.street,
+      addressLocality: clinic.address.ward,
+      addressRegion: clinic.address.city,
+      addressCountry: clinic.address.country,
+    },
+    geo: { '@type': 'GeoCoordinates', latitude: clinic.geo.lat, longitude: clinic.geo.lng },
+    openingHoursSpecification: openingHours,
+    sameAs,
+    availableLanguage: ['vi', 'en'],
+  },
+];
+
+if (service) {
+  graph.push({
+    '@type': 'MedicalProcedure',
+    '@id': new URL(Astro.url.pathname, site).href + '#procedure',
+    name: service.data.title,
+    description: service.data.description,
+    procedureType: 'https://schema.org/NoninvasiveProcedure',
+    provider: { '@id': clinicId },
+    ...(service.data.priceFrom !== undefined && {
+      offers: {
+        '@type': 'Offer',
+        price: service.data.priceFrom,
+        priceCurrency: 'VND',
+        availability: 'https://schema.org/InStock',
+      },
+    }),
+  });
+
+  if (service.data.faq.length > 0) {
+    graph.push({
+      '@type': 'FAQPage',
+      mainEntity: service.data.faq.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: { '@type': 'Answer', text: f.answer },
+      })),
+    });
+  }
+
+  graph.push({
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: t('nav.home'),
+        item: new URL(pathFor('home', locale), site).href,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: t('nav.services'),
+        item: new URL(pathFor('services', locale), site).href,
+      },
+      { '@type': 'ListItem', position: 3, name: service.data.title },
+    ],
+  });
+}
+
+// Hồ sơ bác sĩ: chứng chỉ khai bằng EducationalOccupationalCredential kèm nơi cấp.
+for (const d of doctors) {
+  graph.push({
+    '@type': 'Person',
+    name: d.data.name,
+    jobTitle: d.data.title,
+    worksFor: { '@id': clinicId },
+    alumniOf: d.data.education.map((e) => ({
+      '@type': 'EducationalOrganization',
+      name: e.institution,
+    })),
+    hasCredential: d.data.certificates.map((c) => ({
+      '@type': 'EducationalOccupationalCredential',
+      name: c.name,
+      credentialCategory: 'certificate',
+      recognizedBy: { '@type': 'Organization', name: c.issuer },
+      dateCreated: String(c.year),
+      ...(c.verifyUrl && { url: c.verifyUrl }),
+    })),
+    ...(d.data.memberships.length > 0 && {
+      memberOf: d.data.memberships.map((m) => ({ '@type': 'Organization', name: m })),
+    }),
+    knowsLanguage: d.data.languages,
+  });
+}
+
+const jsonLd = { '@context': 'https://schema.org', '@graph': graph };
+---
+
+<script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
