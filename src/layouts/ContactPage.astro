@@ -60,12 +60,7 @@ const mapsHref = clinic.mapsUrl;
           {clinic.address.street}<br />
           {clinic.address.ward}, {clinic.address.city}
         </address>
-        <a
-          href={mapsHref}
-          target="_blank"
-          rel="noopener"
-          class="mt-4 inline-flex items-center gap-1.5 underline-offset-4 transition-colors duration-300 hover:text-accent hover:underline"
-        >
+        <a href={mapsHref} target="_blank" rel="noopener" class="link-slide mt-4">
           <Icon name="ph:map-pin-area" class="size-4 shrink-0" aria-hidden="true" />
           {t('contact.map')}
         </a>

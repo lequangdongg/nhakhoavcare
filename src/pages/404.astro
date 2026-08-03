@@ -33,10 +33,7 @@ const t = useTranslations(locale);
         <span class="font-medium">{t('nav.services')}</span>
         <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
       </a>
-      <a
-        href={pathFor('home', locale)}
-        class="text-ink-2 underline-offset-4 transition-colors duration-300 hover:text-ink hover:underline"
-      >
+      <a href={pathFor('home', locale)} class="link-slide text-ink-2">
         {t('notFound.home')}
       </a>
     </div>

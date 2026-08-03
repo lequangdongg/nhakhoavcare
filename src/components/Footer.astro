@@ -136,7 +136,7 @@ const todayYear = new Date().getFullYear();
           {
             services.map((s) => (
               <li>
-                <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="f-link">
+                <a href={pathFor(`service:${s.data.key as ServiceKey}`, locale)} class="link-slide">
                   {s.data.title}
                 </a>
               </li>
@@ -151,7 +151,7 @@ const todayYear = new Date().getFullYear();
           {
             clinicLinks.map(({ key, label }) => (
               <li>
-                <a href={pathFor(key, locale)} class="f-link">
+                <a href={pathFor(key, locale)} class="link-slide">
                   {label}
                 </a>
               </li>
@@ -219,36 +219,6 @@ const todayYear = new Date().getFullYear();
 </footer>
 
 <style>
-  /* Gạch chân trượt vào từ trái, cùng ngôn ngữ với nav ở header.
-     Gạch chân của underline mặc định nhảy đột ngột, không có chuyển động. */
-  .f-link {
-    position: relative;
-    display: inline-block;
-    color: var(--text-secondary);
-    transition: color 0.25s var(--ease-out);
-  }
-  .f-link::after {
-    content: '';
-    position: absolute;
-    inset-inline-start: 0;
-    bottom: -2px;
-    width: 100%;
-    height: 1.5px;
-    border-radius: var(--r-pill);
-    background: var(--accent);
-    transform-origin: left;
-    scale: 0 1;
-    transition: scale 0.28s var(--ease-out);
-  }
-  .f-link:hover,
-  .f-link:focus-visible {
-    color: var(--accent);
-  }
-  .f-link:hover::after,
-  .f-link:focus-visible::after {
-    scale: 1 1;
-  }
-
   /* Liên kết trong khối liên hệ: icon và chữ cùng đổi màu khi rê. */
   address a {
     transition: color 0.25s var(--ease-out);
