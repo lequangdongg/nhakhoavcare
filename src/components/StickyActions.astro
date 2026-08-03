@@ -21,7 +21,7 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 ---
 
-<div class="sticky-actions lg:hidden" role="group" aria-label={t('cta.call')}>
+<div class="sticky-actions" role="group" aria-label={t('cta.call')}>
   <a href={telHref(clinic.phone)} class="act act-call">
     <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
     <span>{t('sticky.call')}</span>

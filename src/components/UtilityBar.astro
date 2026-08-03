@@ -54,7 +54,7 @@ const hoursByDay = HOUR_KEYS.map((k) => {
       <span data-status-text></span>
     </span>
 
-    <span class="util-item hidden lg:flex">
+    <span class="util-item util-desktop">
       <Icon name="ph:clock" class="size-4 shrink-0 text-ink-3" aria-hidden="true" />
       <span>{t('header.todayHours')}: <span data-today-hours></span></span>
     </span>
@@ -63,7 +63,7 @@ const hoursByDay = HOUR_KEYS.map((k) => {
       href={clinic.mapsUrl}
       target="_blank"
       rel="noopener"
-      class="util-item util-link hidden lg:flex"
+      class="util-item util-link util-desktop"
     >
       <Icon name="ph:map-pin" class="size-4 shrink-0 text-ink-3" aria-hidden="true" />
       <span>{clinic.address.street}, {clinic.address.city}</span>
@@ -138,12 +138,27 @@ const hoursByDay = HOUR_KEYS.map((k) => {
     border-bottom: 1px solid var(--steel-line);
     background: var(--surface-sunken);
     color: var(--text-secondary);
+    overflow: hidden;
   }
 
   .util-item {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    white-space: nowrap;
+  }
+
+  /* Mục chỉ dành cho desktop.
+     KHÔNG dùng lớp hidden của Tailwind ở đây: style phạm vi của component có độ
+     ưu tiên cao hơn lớp tiện ích, nên display:flex ở trên sẽ thắng và mọi mục
+     vẫn hiện trên mobile rồi tràn dòng. */
+  .util-desktop {
+    display: none;
+  }
+  @media (min-width: 1024px) {
+    .util-desktop {
+      display: flex;
+    }
   }
 
   .util-link {
@@ -157,6 +172,8 @@ const hoursByDay = HOUR_KEYS.map((k) => {
      không rơi vào luật cấm chấm màu trang trí. */
   .status {
     display: flex;
+    flex: none;
+    white-space: nowrap;
     align-items: center;
     gap: 0.4rem;
     padding: 0.15rem 0.6rem 0.15rem 0.5rem;
