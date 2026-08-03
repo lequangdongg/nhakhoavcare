@@ -17,11 +17,14 @@ const t = useTranslations(locale);
 const years = yearsInOperation();
 
 /**
- * Ba thẻ nổi quanh khối hình.
+ * Ba thẻ bằng chứng dưới khối hình.
  *
- * Chúng mang bằng chứng thật, không phải hoạ tiết: định vị chuyên môn, cam kết
- * về giá, và giờ mở cửa lấy từ clinic.ts. Taste cấm phần tử nổi không mang
- * nghĩa, nên mỗi thẻ phải nói được một điều kiểm chứng được.
+ * Ban đầu tôi đặt chúng nổi đè lên card, đúng kiểu các mẫu tham khảo. Nhưng ở
+ * các mẫu đó thẻ nổi đè lên ẢNH CHỤP; card của ta là chữ, nên đè vào là mất đọc.
+ * Chuyển xuống thành hàng bên dưới: vẫn thấy rõ, không che gì.
+ *
+ * Nội dung là bằng chứng thật, không phải hoạ tiết: định vị chuyên môn, cam kết
+ * về giá, và giờ mở cửa lấy từ clinic.ts.
  */
 const badges = [
   { icon: 'ph:tooth', label: t('hero.badge1'), tone: 'accent' },
@@ -94,11 +97,10 @@ const badges = [
       </dl>
     </div>
 
-    <div class="rise relative min-w-0" style="--d: 3">
+    <div class="rise min-w-0" style="--d: 3">
       <HeroCarousel locale={locale} />
 
-      {/* Thẻ nổi. Ẩn dưới 1024px vì màn hẹp không đủ chỗ mà không đè nội dung. */}
-      <ul class="badges" aria-hidden="true">
+      <ul class="badges">
         {
           badges.map((b) => (
             <li class={`badge badge-${b.tone}`}>
@@ -207,84 +209,59 @@ const badges = [
     color: var(--accent);
   }
 
-  /* ── Thẻ nổi ─────────────────────────────────────────────────────────── */
+  /* ── Hàng thẻ bằng chứng ─────────────────────────────────────────────── */
   .badges {
-    display: none;
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  @media (min-width: 640px) {
+    .badges {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
 
-  @media (min-width: 1024px) {
-    .badges {
-      display: block;
-    }
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.6rem 0.85rem 0.6rem 0.6rem;
+    border: 1px solid var(--steel-line);
+    border-radius: var(--r-md);
+    background: var(--surface-raised);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.35;
+    transition:
+      border-color 0.28s var(--ease-out),
+      box-shadow 0.28s var(--ease-out);
+  }
+  .badge:hover {
+    border-color: var(--steel-edge);
+    box-shadow: 0 10px 22px -18px rgb(31 41 55 / 0.5);
+  }
 
-    .badge {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      padding: 0.55rem 0.9rem 0.55rem 0.55rem;
-      border: 1px solid var(--steel-line);
-      border-radius: var(--r-pill);
-      background: var(--surface-raised);
-      font-size: 0.8125rem;
-      font-weight: 500;
-      white-space: nowrap;
-      box-shadow: 0 14px 30px -20px rgb(31 41 55 / 0.55);
-    }
+  .badge-icon {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 1.85rem;
+    height: 1.85rem;
+    border-radius: var(--r-sm);
+    background: currentColor;
+  }
+  .badge-icon > :global(svg) {
+    color: var(--surface-raised);
+  }
 
-    .badge-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 1.75rem;
-      height: 1.75rem;
-      border-radius: var(--r-pill);
-      background: currentColor;
-    }
-    .badge-icon > :global(svg) {
-      color: var(--surface-raised);
-    }
-
-    .badge:nth-child(1) {
-      top: -1rem;
-      left: -1.6rem;
-    }
-    .badge:nth-child(2) {
-      top: 44%;
-      right: -2rem;
-    }
-    .badge:nth-child(3) {
-      bottom: 4.2rem;
-      left: -2.4rem;
-    }
-
-    .badge-accent {
-      color: var(--accent);
-    }
-    .badge-secondary {
-      color: var(--secondary);
-    }
-    .badge-success {
-      color: color-mix(in srgb, var(--success) 84%, var(--text-primary));
-    }
-
-    /* Trôi rất nhẹ, lệch pha nhau, để ba thẻ đọc ra là nổi phía trước khối hình
-       chứ không phải dán lên nền. */
-    @media (prefers-reduced-motion: no-preference) {
-      .badge {
-        animation: float 6s ease-in-out infinite;
-      }
-      .badge:nth-child(2) {
-        animation-delay: -2s;
-      }
-      .badge:nth-child(3) {
-        animation-delay: -4s;
-      }
-      @keyframes float {
-        50% {
-          translate: 0 -6px;
-        }
-      }
-    }
+  .badge-accent {
+    color: var(--accent);
+  }
+  .badge-secondary {
+    color: var(--secondary);
+  }
+  .badge-success {
+    color: color-mix(in srgb, var(--success) 84%, var(--text-primary));
   }
 </style>
