@@ -1,17 +1,13 @@
 ---
-
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { clinic } from '../data/clinic';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  locale="vi"
+  title={`${clinic.name} — Nha khoa tại Đà Nẵng`}
+  description="Phòng khám nha khoa tại Đà Nẵng. Cấy ghép Implant, bọc răng sứ, niềng răng và điều trị nha khoa tổng quát. Nội dung đầy đủ sẽ có ở Plan 2."
+>
+  <h1>{clinic.name}</h1>
+  <p>Nền tảng đã dựng xong. Nội dung thật sẽ được viết ở Plan 2.</p>
+</BaseLayout>
