@@ -5,9 +5,15 @@
  * Nhãn là <button> chứ không phải liên kết: mục có menu con thì không tự đi đâu
  * cả, người dùng chọn mục con hoặc bấm dòng "xem tất cả" ở cuối bảng.
  *
- * Không dùng JavaScript. Bảng hiện bằng :hover cho chuột và :focus-within cho
- * bàn phím lẫn thiết bị chạm, vì chạm vào nút là nút nhận focus. Có dải đệm vô
- * hình giữa nút và bảng để chuột đi xuống không làm bảng tắt giữa chừng.
+ * Không dùng JavaScript. Bảng hiện bằng group-hover cho chuột và
+ * group-focus-within cho bàn phím lẫn thiết bị chạm, vì chạm vào nút là nút nhận
+ * focus. Có dải đệm vô hình (pt-2.5) giữa nút và bảng để chuột đi xuống không
+ * làm bảng tắt giữa chừng.
+ *
+ * Toàn bộ kiểu viết bằng utility của Tailwind, không có khối <style> riêng.
+ * Trạng thái "đang ở trang này" dùng thuộc tính data-active chứ không phải lớp:
+ * biến thể data-[active] có độ ưu tiên cao hơn lớp nền nên chắc chắn thắng, còn
+ * hai lớp cùng loại thì thứ tự trong file CSS quyết định, không phải thứ tự viết.
  */
 import { Icon } from 'astro-icon/components';
 
@@ -30,22 +36,37 @@ interface Props {
 const { label, items, allHref, allLabel, active = false } = Astro.props;
 ---
 
-<div class="nav-dropdown">
+<div class="group relative">
   <button
     type="button"
     aria-expanded="false"
+    data-navitem
+    data-active={active ? 'true' : undefined}
     class:list={[
-      'trigger flex items-center gap-1.5 px-1 py-2 text-[0.9375rem] transition-colors duration-300 hover:text-ink',
-      active ? 'is-active text-ink' : 'text-ink-2',
+      'relative z-10 flex cursor-pointer items-center gap-1.5 px-3 py-2 text-[0.9375rem] transition-colors duration-300 hover:text-ink',
+      // Gạch chân: trượt ngang ra từ giữa khi rê hoặc khi đang ở trang đó.
+      "after:absolute after:inset-x-3 after:bottom-0.5 after:h-0.5 after:scale-x-0 after:rounded-full after:bg-accent after:transition-transform after:duration-300 after:ease-[var(--ease-out)] after:content-[''] group-focus-within:after:scale-x-100 hover:after:scale-x-100 data-[active]:after:scale-x-100",
+      active ? 'text-ink' : 'text-ink-2',
     ]}
   >
     {label}
-    <Icon name="ph:caret-down" class="caret size-3.5" aria-hidden="true" />
+    <Icon
+      name="ph:caret-down"
+      class="size-3.5 transition-transform duration-300 ease-[var(--ease-out)] group-focus-within:rotate-180 group-hover:rotate-180"
+      aria-hidden="true"
+    />
   </button>
 
-  <div class="panel-wrap">
+  {
+    /* Bảng trượt xuống nhẹ khi hiện. Chuyển động có lý do: nó cho biết bảng thuộc
+      về mục đang rê chứ không phải nổi lên từ đâu đó. */
+  }
+  <div
+    class="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 translate-y-[-6px] pt-2.5 opacity-0 transition-[opacity,visibility,translate] duration-200 ease-[var(--ease-out)] group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 motion-reduce:translate-y-0"
+  >
+    {/* Bảng chưa mở thì không nhận chuột, tránh chắn nội dung phía dưới */}
     <div
-      class="panel w-[min(44rem,90vw)] rounded-lg border border-steel bg-surface-raised p-2 shadow-xl shadow-ink/10"
+      class="pointer-events-none w-[min(44rem,90vw)] rounded-lg border border-steel bg-surface-raised p-2 shadow-xl shadow-ink/10 group-focus-within:pointer-events-auto group-hover:pointer-events-auto"
     >
       <ul class="grid gap-0.5 sm:grid-cols-2">
         {
@@ -74,7 +95,7 @@ const { label, items, allHref, allLabel, active = false } = Astro.props;
 
       <a
         href={allHref}
-        class="mt-1 flex items-center justify-between gap-2 rounded-md border-t border-steel px-3 py-2.5 text-sm text-ink-2 transition-colors duration-200 hover:bg-surface-sunken hover:text-ink"
+        class="mt-1 flex items-center justify-between gap-2 rounded-md border-t border-steel px-3 py-2.5 text-sm text-ink-2 transition-colors duration-200 hover:bg-surface-sunken hover:text-ink active:translate-y-px"
       >
         {allLabel}
         <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
@@ -82,84 +103,3 @@ const { label, items, allHref, allLabel, active = false } = Astro.props;
     </div>
   </div>
 </div>
-
-<style>
-  .nav-dropdown {
-    position: relative;
-  }
-
-  /* Gạch chân trượt vào từ giữa. Nó cho biết mục nào đang được nhắm tới. */
-  .trigger {
-    position: relative;
-    cursor: pointer;
-  }
-  .trigger::after {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0.125rem;
-    height: 2px;
-    border-radius: var(--r-pill);
-    background: var(--accent);
-    scale: 0 1;
-    transition: scale 0.28s var(--ease-out);
-  }
-  .trigger.is-active::after,
-  .nav-dropdown:hover .trigger::after,
-  .nav-dropdown:focus-within .trigger::after {
-    scale: 1 1;
-  }
-
-  .panel-wrap {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    z-index: 50;
-    translate: -50% 0;
-    /* Dải đệm để chuột đi từ nút xuống bảng không rơi ra ngoài */
-    padding-top: 0.625rem;
-    visibility: hidden;
-    opacity: 0;
-    transition:
-      opacity 0.2s var(--ease-out),
-      visibility 0.2s,
-      translate 0.2s var(--ease-out);
-  }
-
-  .panel {
-    /* Bảng chưa mở thì không nhận chuột, tránh chắn nội dung phía dưới */
-    pointer-events: none;
-  }
-
-  .nav-dropdown:hover .panel-wrap,
-  .nav-dropdown:focus-within .panel-wrap {
-    visibility: visible;
-    opacity: 1;
-  }
-
-  .nav-dropdown:hover .panel,
-  .nav-dropdown:focus-within .panel {
-    pointer-events: auto;
-  }
-
-  .caret {
-    transition: rotate 0.25s var(--ease-out);
-  }
-
-  .nav-dropdown:hover .caret,
-  .nav-dropdown:focus-within .caret {
-    rotate: 180deg;
-  }
-
-  /* Bảng trượt xuống nhẹ khi hiện. Chuyển động có lý do: nó cho biết bảng
-     thuộc về mục đang rê chứ không phải nổi lên từ đâu đó. */
-  @media (prefers-reduced-motion: no-preference) {
-    .panel-wrap {
-      translate: -50% -6px;
-    }
-    .nav-dropdown:hover .panel-wrap,
-    .nav-dropdown:focus-within .panel-wrap {
-      translate: -50% 0;
-    }
-  }
-</style>

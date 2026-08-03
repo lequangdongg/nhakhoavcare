@@ -41,7 +41,7 @@ const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
 
           <span class="prow-price">
             <span class="prow-label">{t('home.priceFrom')}</span>
-            <span class="measure prow-num">{fmt.format(s.data.priceFrom!)}</span>
+            <span class="prow-num measure">{fmt.format(s.data.priceFrom!)}</span>
             <span class="prow-cur">đ</span>
           </span>
 

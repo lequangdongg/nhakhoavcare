@@ -58,7 +58,7 @@ const sameEveryDay = Object.values(clinic.hours).every(
             </span>
             <div>
               <dt class="mapsec-label">{t('footer.hours')}</dt>
-              <dd class="measure mt-0.5">
+              <dd class="mt-0.5 measure">
                 {
                   sameEveryDay && first !== 'closed'
                     ? `${t('map.everyDay')}, ${first.open} - ${first.close}`

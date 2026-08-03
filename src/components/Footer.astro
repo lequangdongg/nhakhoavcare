@@ -80,7 +80,7 @@ const todayYear = new Date().getFullYear();
             >
               {clinic.name}
             </span>
-            <span class="measure mt-0.5 block text-[0.6875rem] text-ink-3">{clinic.tagline}</span>
+            <span class="mt-0.5 block text-[0.6875rem] measure text-ink-3">{clinic.tagline}</span>
           </span>
         </div>
 
@@ -89,7 +89,7 @@ const todayYear = new Date().getFullYear();
             href={mapsHref}
             target="_blank"
             rel="noopener"
-            class="flex gap-2.5 transition-colors duration-300 hover:text-ink"
+            class="flex gap-2.5 transition-colors duration-300 hover:text-accent active:text-accent-hover"
           >
             <Icon
               name="ph:map-pin"
@@ -100,14 +100,14 @@ const todayYear = new Date().getFullYear();
           </a>
           <a
             href={telHref(clinic.phone)}
-            class="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink"
+            class="flex items-center gap-2.5 transition-colors duration-300 hover:text-accent active:text-accent-hover"
           >
             <Icon name="ph:phone-call" class="text-secondary size-4 shrink-0" aria-hidden="true" />
             <span class="measure">{clinic.phone}</span>
           </a>
           <a
             href={zaloHref(clinic.zalo)}
-            class="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink"
+            class="flex items-center gap-2.5 transition-colors duration-300 hover:text-accent active:text-accent-hover"
           >
             <Icon
               name="simple-icons:zalo"
@@ -118,7 +118,7 @@ const todayYear = new Date().getFullYear();
           </a>
           <a
             href={`mailto:${clinic.email}`}
-            class="flex items-center gap-2.5 transition-colors duration-300 hover:text-ink"
+            class="flex items-center gap-2.5 transition-colors duration-300 hover:text-accent active:text-accent-hover"
           >
             <Icon
               name="ph:envelope-simple"
@@ -166,7 +166,7 @@ const todayYear = new Date().getFullYear();
             target="_blank"
             rel="noopener"
             aria-label="Facebook"
-            class="flex size-10 items-center justify-center rounded-full border border-steel-edge transition-all duration-300 hover:border-accent hover:bg-accent-quiet hover:text-accent"
+            class="flex size-10 items-center justify-center rounded-full border border-steel-edge transition-all duration-300 hover:border-accent hover:bg-accent-quiet hover:text-accent active:translate-y-px"
           >
             <Icon name="simple-icons:facebook" class="size-4" aria-hidden="true" />
           </a>
@@ -175,7 +175,7 @@ const todayYear = new Date().getFullYear();
             target="_blank"
             rel="noopener"
             aria-label="Google"
-            class="flex size-10 items-center justify-center rounded-full border border-steel-edge transition-all duration-300 hover:border-accent hover:bg-accent-quiet hover:text-accent"
+            class="flex size-10 items-center justify-center rounded-full border border-steel-edge transition-all duration-300 hover:border-accent hover:bg-accent-quiet hover:text-accent active:translate-y-px"
           >
             <Icon name="simple-icons:google" class="size-4" aria-hidden="true" />
           </a>
@@ -217,13 +217,3 @@ const todayYear = new Date().getFullYear();
     </div>
   </Container>
 </footer>
-
-<style>
-  /* Liên kết trong khối liên hệ: icon và chữ cùng đổi màu khi rê. */
-  address a {
-    transition: color 0.25s var(--ease-out);
-  }
-  address a:hover {
-    color: var(--accent);
-  }
-</style>

@@ -43,7 +43,7 @@ const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).
                 <div>
                   <h3 class="text-lg font-semibold">{d.data.name}</h3>
                   <p class="text-ink-2">{d.data.title}</p>
-                  <p class="measure mt-1 text-sm text-ink-3">
+                  <p class="mt-1 text-sm measure text-ink-3">
                     {d.data.yearsOfExperience} {t('exp')}
                   </p>
 
@@ -63,7 +63,7 @@ const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).
                         {d.data.education.map((e) => (
                           <p>
                             {e.degree}, {e.institution}
-                            <span class="measure ml-2 text-ink-3">{e.year}</span>
+                            <span class="ml-2 measure text-ink-3">{e.year}</span>
                           </p>
                         ))}
                       </dd>
@@ -77,7 +77,7 @@ const doctors = (await getCollection('doctors', (e) => e.data.lang === locale)).
                         {d.data.certificates.map((c) => (
                           <p>
                             {c.name}, {c.issuer}
-                            <span class="measure ml-2 text-ink-3">{c.year}</span>
+                            <span class="ml-2 measure text-ink-3">{c.year}</span>
                           </p>
                         ))}
                       </dd>

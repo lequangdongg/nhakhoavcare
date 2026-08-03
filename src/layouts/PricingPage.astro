@@ -133,7 +133,7 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
                   <p class="fcard-sub">{`${s.data.description.split('.')[0]}.`}</p>
 
                   <p class="fcard-price">
-                    <span class="measure fcard-num">{fmt.format(s.data.priceFrom ?? 0)}</span>
+                    <span class="fcard-num measure">{fmt.format(s.data.priceFrom ?? 0)}</span>
                     <span class="fcard-cur">đ</span>
                   </p>
                   <p class="fcard-unit">{unit}</p>
@@ -174,7 +174,7 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
                     <span class="orow-name">{s.data.title}</span>
                     <span class="orow-sub">{`${s.data.description.split('.')[0]}.`}</span>
                   </span>
-                  <span class="measure orow-price">
+                  <span class="orow-price measure">
                     {fmt.format(s.data.priceFrom ?? 0)} <span class="orow-cur">đ</span>
                   </span>
                   <Icon
@@ -229,7 +229,7 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
         </div>
         <a href={telHref(clinic.phone)} class="note-cta">
           <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
-          <span class="measure font-medium">{clinic.phone}</span>
+          <span class="font-medium measure">{clinic.phone}</span>
         </a>
       </div>
     </Container>

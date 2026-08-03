@@ -272,13 +272,6 @@
     text-wrap: pretty;
   }
 
-  /* Số đo, mã hiệu, giá: chữ số đều bề rộng để cột thẳng hàng như trên bảng đo */
-  .measure {
-    font-variant-numeric: tabular-nums;
-    font-variation-settings: 'wdth' 94;
-    letter-spacing: 0.015em;
-  }
-
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
@@ -293,8 +286,53 @@ dialog {
   color: var(--text-primary);
 }
 
+/* Các lớp dùng lại nhiều nơi khai báo bằng @utility của Tailwind v4, không viết
+   tay bằng bộ chọn thường. Khác biệt thật sự: @utility đăng ký chúng vào tầng
+   utilities nên dùng được mọi biến thể (hover:, lg:, dark:) như utility có sẵn,
+   và Tailwind chỉ xuất ra khi thực sự có nơi dùng. */
+
+/* Số đo, mã hiệu, giá: chữ số đều bề rộng để cột thẳng hàng như trên bảng đo */
+@utility measure {
+  font-variant-numeric: tabular-nums;
+  font-variation-settings: 'wdth' 94;
+  letter-spacing: 0.015em;
+}
+
+/* Liên kết trong danh sách và văn bản: gạch chân trượt vào từ trái, chữ đổi sang
+   màu nhấn, và lún xuống một điểm ảnh khi đang bấm.
+   Dùng nền chuyển sắc chứ không phải ::after: liên kết ở đây nằm trong dòng chữ
+   và có thể xuống dòng, mà phần tử giả định vị tuyệt đối chỉ bám được một hộp.
+   Nền chuyển sắc thì gạch chân theo đúng từng dòng khi liên kết bị ngắt dòng. */
+@utility link-slide {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0 1.5px;
+  color: inherit;
+  transition:
+    background-size 0.3s var(--ease-out),
+    color 0.25s var(--ease-out),
+    translate 0.15s var(--ease-out);
+
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1.5px;
+    color: var(--accent);
+  }
+
+  /* Phản hồi lúc bấm: người dùng thấy cú bấm đã ăn trước khi trang kịp đổi. */
+  &:active {
+    translate: 0 1px;
+    color: var(--accent-hover);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: color 0.25s var(--ease-out);
+  }
+}
+
 /* Vùng ảnh lâm sàng. Dùng cho mọi gallery trước/sau và ảnh cận cảnh răng. */
-.clinical-frame {
+@utility clinical-frame {
   background-color: var(--clinical-surface);
   color: var(--clinical-text);
   border: 1px solid var(--clinical-edge);

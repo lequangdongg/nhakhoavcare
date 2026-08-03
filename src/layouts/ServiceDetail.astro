@@ -34,7 +34,7 @@ const priceLabel =
       <nav aria-label={t('nav.breadcrumb')} class="mb-8">
         <a
           href={pathFor('services', locale)}
-          class="link-slide inline-flex items-center gap-1.5 text-sm text-ink-2"
+          class="inline-flex link-slide items-center gap-1.5 text-sm text-ink-2"
         >
           <Icon name="ph:arrow-left" class="size-4" aria-hidden="true" />
           {t('nav.services')}
@@ -78,7 +78,7 @@ const priceLabel =
             <h2 class="text-sm font-semibold text-ink-2">{t('service.priceFrom')}</h2>
             {
               priceLabel ? (
-                <p class="measure mt-1 text-2xl font-semibold">
+                <p class="mt-1 text-2xl font-semibold measure">
                   {priceLabel} <span class="text-base font-normal text-ink-2">đ</span>
                 </p>
               ) : (

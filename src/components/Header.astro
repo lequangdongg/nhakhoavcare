@@ -88,7 +88,19 @@ const mobileNav = [
         </span>
       </a>
 
-      <nav aria-label={t('nav.primary')} class="ms-auto hidden items-center gap-6 lg:flex">
+      <nav
+        aria-label={t('nav.primary')}
+        data-mainnav
+        class="relative ms-auto hidden items-center gap-1 lg:flex"
+      >
+        {/* Một khối nền duy nhất, trượt sang mục đang được rê. Xem ghi chú ở script. */}
+        <span
+          data-navind
+          aria-hidden="true"
+          class="pointer-events-none absolute top-0 left-0 h-[var(--h,0px)] w-[var(--w,0px)] translate-x-[var(--x,0px)] translate-y-[var(--y,0px)] rounded-md bg-surface-sunken opacity-0 transition-[translate,width,height,opacity] duration-300 ease-[var(--ease-out)] motion-reduce:transition-[opacity] [[data-ind=on]_&]:opacity-100"
+        >
+        </span>
+
         <NavDropdown
           label={t('nav.services')}
           items={serviceItems}
@@ -106,9 +118,12 @@ const mobileNav = [
         <a
           href={pathFor('contact', locale)}
           aria-current={current === pathFor('contact', locale) ? 'page' : undefined}
+          data-navitem
+          data-active={current === pathFor('contact', locale) ? 'true' : undefined}
           class:list={[
-            'nav-link relative px-1 py-2 text-[0.9375rem] transition-colors duration-300 hover:text-ink',
-            current === pathFor('contact', locale) ? 'is-active text-ink' : 'text-ink-2',
+            'relative z-10 px-3 py-2 text-[0.9375rem] transition-colors duration-300 hover:text-ink',
+            "after:absolute after:inset-x-3 after:bottom-0.5 after:h-0.5 after:scale-x-0 after:rounded-full after:bg-accent after:transition-transform after:duration-300 after:ease-[var(--ease-out)] after:content-[''] hover:after:scale-x-100 data-[active]:after:scale-x-100",
+            current === pathFor('contact', locale) ? 'text-ink' : 'text-ink-2',
           ]}
         >
           {t('nav.contact')}
@@ -126,7 +141,7 @@ const mobileNav = [
           <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
           <span class="leading-tight">
             <span class="block text-[0.6875rem] opacity-80">{t('cta.call')}</span>
-            <span class="measure block text-[0.9375rem] font-semibold">{clinic.phone}</span>
+            <span class="block text-[0.9375rem] font-semibold measure">{clinic.phone}</span>
           </span>
         </a>
 
@@ -164,7 +179,7 @@ const mobileNav = [
                 class="flex min-h-13 items-center justify-center gap-2.5 rounded-full bg-accent px-5 text-accent-contrast"
               >
                 <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
-                <span class="measure font-semibold">{clinic.phone}</span>
+                <span class="font-semibold measure">{clinic.phone}</span>
               </a>
             </div>
           </div>
@@ -174,21 +189,51 @@ const mobileNav = [
   </div>
 </header>
 
-<style>
-  /* Cùng kiểu gạch chân với mục có menu con, để hàng nav thống nhất. */
-  .nav-link::after {
-    content: '';
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0.125rem;
-    height: 2px;
-    border-radius: var(--r-pill);
-    background: var(--accent);
-    scale: 0 1;
-    transition: scale 0.28s var(--ease-out);
-  }
-  .nav-link:hover::after,
-  .nav-link.is-active::after {
-    scale: 1 1;
-  }
-</style>
+<script is:inline>
+  // Khối nền dùng chung cho hàng nav.
+  //
+  // Trước đây mỗi mục tự vẽ nền và tự chạy hiệu ứng của nó. Rê chuột nhanh qua
+  // lại thì hai mục cùng chạy dở dang một lúc, mắt đọc ra là giật. Ở đây chỉ có
+  // MỘT khối nền: nó trượt và giãn sang mục đang được rê, nên dù rê nhanh cỡ
+  // nào cũng chỉ có một vật chuyển động, và nó luôn chạy tiếp từ chỗ đang đứng.
+  (() => {
+    const nav = document.querySelector('[data-mainnav]');
+    if (!nav) return;
+    const ind = nav.querySelector('[data-navind]');
+    const items = nav.querySelectorAll('[data-navitem]');
+    let visible = false;
+
+    const moveTo = (el) => {
+      const n = nav.getBoundingClientRect();
+      const r = el.getBoundingClientRect();
+      // Lần đầu hiện: tắt hiệu ứng trong một khung hình, nếu không khối nền bay
+      // từ mép trái sang thay vì lặng lẽ hiện ra đúng chỗ.
+      if (!visible) ind.style.transition = 'none';
+      ind.style.setProperty('--x', `${r.left - n.left}px`);
+      ind.style.setProperty('--y', `${r.top - n.top}px`);
+      ind.style.setProperty('--w', `${r.width}px`);
+      ind.style.setProperty('--h', `${r.height}px`);
+      if (!visible) {
+        void ind.offsetWidth; // ép trình duyệt chốt vị trí trước khi bật lại
+        ind.style.transition = '';
+        visible = true;
+        nav.dataset.ind = 'on';
+      }
+    };
+
+    const hide = () => {
+      visible = false;
+      delete nav.dataset.ind;
+    };
+
+    for (const el of items) {
+      el.addEventListener('pointerenter', () => moveTo(el));
+      el.addEventListener('focus', () => moveTo(el));
+    }
+    // Bảng menu con nằm trong nav nên rê xuống bảng không tính là rời nav.
+    nav.addEventListener('pointerleave', hide);
+    nav.addEventListener('focusout', (e) => {
+      if (!nav.contains(e.relatedTarget)) hide();
+    });
+  })();
+</script>

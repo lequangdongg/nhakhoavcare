@@ -30,7 +30,7 @@ const other = alternateLinks(Astro.url.pathname).find((a) => a.locale !== locale
   />
   {/* Mã ngôn ngữ đích, nhỏ, ở góc dưới. Cho biết bấm vào sẽ sang đâu. */}
   <span
-    class="measure absolute -end-0.5 -bottom-0.5 rounded-full bg-surface px-1 text-[0.5625rem] leading-[1.35] font-semibold text-ink-3 ring-1 ring-steel-edge transition-colors duration-300 group-hover:text-accent group-hover:ring-accent"
+    class="absolute -end-0.5 -bottom-0.5 rounded-full bg-surface px-1 text-[0.5625rem] leading-[1.35] font-semibold measure text-ink-3 ring-1 ring-steel-edge transition-colors duration-300 group-hover:text-accent group-hover:ring-accent"
     aria-hidden="true"
   >
     {other.locale.toUpperCase()}
