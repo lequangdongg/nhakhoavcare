@@ -75,20 +75,74 @@ export const images = {
     clinical: false,
   },
 
-  caseBefore: {
-    src: temp('vcare-case-before', 800, 800),
-    alt: 'Tình trạng răng trước điều trị',
+  // Bốn cặp ảnh trước/sau. Mỗi cặp PHẢI chụp cùng góc, cùng ánh sáng, cùng
+  // khoảng cách. Ảnh trước và sau khác điều kiện chụp là hình thức phóng đại
+  // kết quả, và trên nội dung y tế đó là chuyện đạo đức chứ không phải thẩm mỹ.
+  caseImplantBefore: {
+    src: temp('vcare-case-implant-a', 800, 800),
+    alt: 'Vùng răng mất trước khi cấy ghép Implant',
     ratio: '1/1',
     placeholder: true,
-    brief: 'Trước điều trị. Ghi lại thông số máy ảnh để chụp ảnh sau giống hệt.',
+    brief: 'Implant, trước điều trị. Ghi lại thông số máy để chụp ảnh sau giống hệt.',
     clinical: true,
   },
-  caseAfter: {
-    src: temp('vcare-case-after', 800, 800),
-    alt: 'Kết quả sau điều trị',
+  caseImplantAfter: {
+    src: temp('vcare-case-implant-b', 800, 800),
+    alt: 'Vùng răng sau khi cấy ghép Implant và gắn mão sứ',
     ratio: '1/1',
     placeholder: true,
-    brief: 'Sau điều trị. Cùng góc, cùng ánh sáng, cùng khoảng cách.',
+    brief: 'Implant, sau điều trị. Cùng góc, cùng ánh sáng, cùng khoảng cách.',
+    clinical: true,
+  },
+
+  caseVeneerBefore: {
+    src: temp('vcare-case-veneer-a', 800, 800),
+    alt: 'Răng cửa trước khi dán sứ Veneer',
+    ratio: '1/1',
+    placeholder: true,
+    brief: 'Veneer, trước điều trị.',
+    clinical: true,
+  },
+  caseVeneerAfter: {
+    src: temp('vcare-case-veneer-b', 800, 800),
+    alt: 'Răng cửa sau khi dán sứ Veneer',
+    ratio: '1/1',
+    placeholder: true,
+    brief: 'Veneer, sau điều trị. Cùng điều kiện chụp với ảnh trước.',
+    clinical: true,
+  },
+
+  caseBracesBefore: {
+    src: temp('vcare-case-braces-a', 800, 800),
+    alt: 'Hàm răng lệch trước khi niềng',
+    ratio: '1/1',
+    placeholder: true,
+    brief: 'Chỉnh nha, trước điều trị.',
+    clinical: true,
+  },
+  caseBracesAfter: {
+    src: temp('vcare-case-braces-b', 800, 800),
+    alt: 'Hàm răng sau khi hoàn tất chỉnh nha',
+    ratio: '1/1',
+    placeholder: true,
+    brief: 'Chỉnh nha, sau điều trị. Cùng điều kiện chụp với ảnh trước.',
+    clinical: true,
+  },
+
+  caseWhiteningBefore: {
+    src: temp('vcare-case-white-a', 800, 800),
+    alt: 'Màu răng trước khi tẩy trắng',
+    ratio: '1/1',
+    placeholder: true,
+    brief: 'Tẩy trắng, trước điều trị. Ảnh màu răng phải chụp dưới cùng nguồn sáng.',
+    clinical: true,
+  },
+  caseWhiteningAfter: {
+    src: temp('vcare-case-white-b', 800, 800),
+    alt: 'Màu răng sau khi tẩy trắng',
+    ratio: '1/1',
+    placeholder: true,
+    brief: 'Tẩy trắng, sau điều trị. BẮT BUỘC cùng nguồn sáng với ảnh trước.',
     clinical: true,
   },
 } as const satisfies Record<string, SiteImage>;

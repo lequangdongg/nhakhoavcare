@@ -5,6 +5,7 @@ import Hero from '../components/Hero.astro';
 import PricePreview from '../components/PricePreview.astro';
 import Container from '../components/Container.astro';
 import ServiceCards from '../components/ServiceCards.astro';
+import BeforeAfter from '../components/BeforeAfter.astro';
 import SiteImage from '../components/SiteImage.astro';
 import { Icon } from 'astro-icon/components';
 import { clinic } from '../data/clinic';
@@ -99,16 +100,42 @@ const implantSteps = [
 
   {/* ── Gallery trước/sau. Khung nền sáng ở cả hai chế độ màu. ─────────────── */}
   <section aria-labelledby="ket-qua" class="reveal border-b border-steel">
-    <Container class="reveal py-14 lg:py-20">
+    <Container wide class="py-14 lg:py-20">
       <h2 id="ket-qua" class="text-2xl font-semibold md:text-3xl">Kết quả điều trị</h2>
-      <p class="mt-3 max-w-[58ch] text-ink-2">
-        Ảnh trước và sau chụp cùng góc, cùng ánh sáng, cùng khoảng cách. Vùng ảnh giữ nền sáng ở cả
-        chế độ tối để màu răng không bị nhìn sai.
+      <p class="mt-3 max-w-[62ch] text-ink-2">
+        Ảnh trước và sau chụp cùng góc, cùng ánh sáng, cùng khoảng cách. Kéo thanh giữa ảnh để so
+        sánh.
       </p>
 
-      <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:max-w-3xl">
-        <SiteImage name="caseBefore" />
-        <SiteImage name="caseAfter" />
+      <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <BeforeAfter
+          before="caseImplantBefore"
+          after="caseImplantAfter"
+          caption={t('ba.implant')}
+          labelBefore={t('ba.before')}
+          labelAfter={t('ba.after')}
+        />
+        <BeforeAfter
+          before="caseVeneerBefore"
+          after="caseVeneerAfter"
+          caption={t('ba.veneer')}
+          labelBefore={t('ba.before')}
+          labelAfter={t('ba.after')}
+        />
+        <BeforeAfter
+          before="caseBracesBefore"
+          after="caseBracesAfter"
+          caption={t('ba.braces')}
+          labelBefore={t('ba.before')}
+          labelAfter={t('ba.after')}
+        />
+        <BeforeAfter
+          before="caseWhiteningBefore"
+          after="caseWhiteningAfter"
+          caption={t('ba.whitening')}
+          labelBefore={t('ba.before')}
+          labelAfter={t('ba.after')}
+        />
       </div>
     </Container>
   </section>
