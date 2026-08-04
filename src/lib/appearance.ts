@@ -46,7 +46,21 @@ export function isSkin(value: unknown): value is Skin {
 
 /* ── Trục bố cục ──────────────────────────────────────────────────────── */
 
-export const LAYOUTS = ['split', 'stage', 'list'] as const;
+export const LAYOUTS = [
+  'split',
+  'mirror',
+  'stage',
+  'showcase',
+  'overlay',
+  'sticky',
+  'list',
+  'mapfirst',
+  'compact',
+  'wide',
+  'magazine',
+  'card',
+  'stack',
+] as const;
 export type Layout = (typeof LAYOUTS)[number];
 export const DEFAULT_LAYOUT: Layout = 'split';
 
@@ -79,6 +93,16 @@ export const SKIN_LABEL = {
 
 export const LAYOUT_LABEL = {
   split: 'layout.split',
+  mirror: 'layout.mirror',
   stage: 'layout.stage',
+  showcase: 'layout.showcase',
+  overlay: 'layout.overlay',
+  sticky: 'layout.sticky',
   list: 'layout.list',
+  mapfirst: 'layout.mapfirst',
+  compact: 'layout.compact',
+  wide: 'layout.wide',
+  magazine: 'layout.magazine',
+  card: 'layout.card',
+  stack: 'layout.stack',
 } as const satisfies Record<Layout, string>;

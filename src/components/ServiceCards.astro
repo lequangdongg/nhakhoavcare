@@ -40,7 +40,14 @@ const services = (await getCollection('services', (e) => e.data.lang === locale)
   .slice(0, limit);
 ---
 
-<ul data-grid="services" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+{
+  /* Số cột đổi theo bố cục: tra cứu thì dày lên như một danh mục, tạp chí thì
+    thưa ra thành thẻ lớn, một cột thì xếp dọc hết. */
+}
+<ul
+  data-grid="services"
+  class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 [[data-layout=list]_&]:lg:grid-cols-4 [[data-layout=magazine]_&]:lg:grid-cols-2 [[data-layout=stack]_&]:grid-cols-1"
+>
   {
     services.map((s) => (
       <li>

@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { LAYOUTS, SKIN_SWATCH, SKINS } from './appearance';
@@ -10,6 +11,8 @@ import { LAYOUTS, SKIN_SWATCH, SKINS } from './appearance';
  *
  * Test đọc thẳng file CSS để bắt đúng tình huống đó.
  */
+const SRC = fileURLToPath(new URL('..', import.meta.url));
+
 const css = readFileSync(
   fileURLToPath(new URL('../styles/appearance.css', import.meta.url)),
   'utf8',
@@ -40,9 +43,18 @@ describe('ô màu xem trước khớp với appearance.css', () => {
     });
   }
 
-  it('mọi bố cục khác mặc định đều có quy tắc riêng', () => {
+  it('mọi bố cục khác mặc định đều có luật riêng trong mã nguồn', () => {
+    // Luật bố cục viết bằng utility Tailwind rải trên các component, không nằm
+    // trong appearance.css. Test quét cả cây nguồn để bắt đúng tình huống thêm
+    // tên bố cục vào LAYOUTS mà quên viết luật cho nó: bố cục đó sẽ hiện trong
+    // bộ chọn, bấm vào không đổi gì, và không có gì báo lỗi.
+    const src = readdirSync(SRC, { recursive: true, encoding: 'utf8' })
+      .filter((f) => /\.(astro|css|ts)$/.test(f) && !f.endsWith('.test.ts'))
+      .map((f) => readFileSync(join(SRC, f), 'utf8'))
+      .join('');
+
     for (const layout of LAYOUTS.filter((l) => l !== 'split')) {
-      expect(css).toContain(`:root[data-layout='${layout}']`);
+      expect(src, `bố cục ${layout} chưa có luật nào`).toContain(`[data-layout=${layout}]`);
     }
   });
 });

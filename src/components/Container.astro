@@ -10,11 +10,35 @@ interface Props {
 // ...rest cần cho các móc bố cục như data-part. Không có nó, mọi thuộc tính
 // ngoài ba cái khai ở trên đều bị nuốt mất chứ không báo lỗi.
 const { as: Tag = 'div', class: className = '', wide = false, ...rest } = Astro.props;
+
+/**
+ * Ba bố cục chỉ đổi nhịp chứ không đổi cấu trúc, và chúng đổi ở đúng chỗ này.
+ *
+ * Ràng buộc `main` trong bộ chọn là bắt buộc: Container còn dùng cho thanh
+ * header, mà header không có nhịp dọc. Thiếu `main` thì compact sẽ nhét
+ * padding-block vào header và làm vỡ chiều cao thanh điều hướng.
+ *
+ * Biến thể [[data-layout=x]_main_&] có độ ưu tiên cao hơn lớp py-14 mà nơi gọi
+ * truyền vào, nên nó thắng mà không cần thứ tự hay dấu !.
+ */
+const BY_LAYOUT = [
+  // compact: khung hẹp lại, nhịp dọc ngắn, đọc được nhiều hơn trong một màn hình
+  '[[data-layout=compact]_main_&]:max-w-[68rem] [[data-layout=compact]_main_&]:py-9',
+  // wide: khung rộng gần gấp rưỡi, nhịp dọc giãn ra
+  '[[data-layout=wide]_main_&]:max-w-[100rem] [[data-layout=wide]_main_&]:lg:py-24',
+  // stack: bó theo độ dài dòng đọc được, dù màn hình rộng bao nhiêu
+  '[[data-layout=stack]_main_&]:max-w-[52rem]',
+].join(' ');
 ---
 
 <Tag
   {...rest}
-  class:list={['mx-auto w-full px-5 sm:px-8', wide ? 'max-w-[1400px]' : 'max-w-6xl', className]}
+  class:list={[
+    'mx-auto w-full px-5 sm:px-8',
+    wide ? 'max-w-[1400px]' : 'max-w-6xl',
+    className,
+    BY_LAYOUT,
+  ]}
 >
   <slot />
 </Tag>

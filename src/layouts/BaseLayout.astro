@@ -24,6 +24,34 @@ const { locale, title, description, service, doctors } = Astro.props;
 const t = useTranslations(locale);
 const alternates = alternateLinks(Astro.url.pathname);
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+/**
+ * Bốn bố cục tác động ở cấp <main>.
+ *
+ * list và mapfirst đổi thứ tự NHÌN THẤY bằng flex order. Thứ tự trong DOM giữ
+ * nguyên, nên trình đọc màn hình và công cụ tìm kiếm vẫn nhận đúng một mạch
+ * nội dung. Đây là lý do dùng order chứ không phải dựng ba bản markup.
+ */
+const MAIN_BY_LAYOUT = [
+  '[[data-layout=list]_&]:flex [[data-layout=list]_&]:flex-col',
+  '[[data-layout=mapfirst]_&]:flex [[data-layout=mapfirst]_&]:flex-col',
+  // card: mỗi khối thành một thẻ nổi trên nền chìm, kiểu bento. Hero giữ
+  // nguyên tràn viền để màn hình đầu tiên vẫn liền mạch.
+  '[[data-layout=card]_&]:bg-surface-sunken',
+  '[[data-layout=card]_&]:[&>:is(section,div):not([data-part=hero])]:mx-auto',
+  '[[data-layout=card]_&]:[&>:is(section,div):not([data-part=hero])]:my-5',
+  '[[data-layout=card]_&]:[&>:is(section,div):not([data-part=hero])]:max-w-[1400px]',
+  '[[data-layout=card]_&]:[&>:is(section,div):not([data-part=hero])]:overflow-hidden',
+  // Ghi đè border-b của từng khối: viền một cạnh trên một cái thẻ trông như lỗi
+  '[[data-layout=card]_&]:[&>:is(section,div):not([data-part=hero])]:rounded-lg',
+  '[[data-layout=card]_&]:[&>:is(section,div):not([data-part=hero])]:border',
+  '[[data-layout=card]_&]:[&>:is(section,div):not([data-part=hero])]:border-steel',
+  '[[data-layout=card]_&]:[&>:is(section,div):not([data-part=hero])]:bg-surface-raised',
+  // magazine: nền xen kẽ giữa các khối, đọc như một bài viết.
+  // nth-of-type chứ không phải nth-child: <main> còn chứa khối bản đồ bọc
+  // trong thẻ div, đếm theo child sẽ lệch một nhịp.
+  '[[data-layout=magazine]_&]:[&>section:nth-of-type(2n)]:bg-surface-sunken',
+].join(' ');
 ---
 
 <!doctype html>
@@ -74,7 +102,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
   <body class="pb-[4.75rem] lg:pb-0">
     <a href="#main" class="sr-only focus:not-sr-only">{t('nav.skipToContent')}</a>
     <Header locale={locale} />
-    <main id="main" data-part="main">
+    <main id="main" data-part="main" class={MAIN_BY_LAYOUT}>
       <slot />
     </main>
     <Footer locale={locale} />

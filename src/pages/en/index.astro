@@ -78,7 +78,9 @@ const implantSteps = [
         </p>
       </div>
 
-      <ol class="mt-10 grid gap-px bg-steel sm:grid-cols-2 lg:grid-cols-4">
+      <ol
+        class="mt-10 grid gap-px bg-steel sm:grid-cols-2 lg:grid-cols-4 [[data-layout=stack]_&]:grid-cols-1"
+      >
         {
           implantSteps.map((step) => (
             <li class="bg-surface-sunken p-5 lg:p-6">
@@ -107,7 +109,9 @@ const implantSteps = [
         distance. Drag the handle to compare.
       </p>
 
-      <div class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      <div
+        class="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-4 [[data-layout=stack]_&]:grid-cols-1"
+      >
         <BeforeAfter
           before="caseImplantBefore"
           after="caseImplantAfter"
@@ -140,7 +144,11 @@ const implantSteps = [
     </Container>
   </section>
 
-  <section aria-labelledby="prices" data-part="pricing" class="reveal border-b border-steel">
+  <section
+    aria-labelledby="prices"
+    data-part="pricing"
+    class="reveal border-b border-steel [[data-layout=list]_&]:-order-1"
+  >
     <Container class="py-14 lg:py-20">
       <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div class="max-w-[52ch]">
@@ -159,5 +167,7 @@ const implantSteps = [
       <PricePreview locale={locale} />
     </Container>
   </section>
-  <div data-part="map"><MapSection locale={locale} /></div>
+  <div data-part="map" class="[[data-layout=mapfirst]_&]:-order-1">
+    <MapSection locale={locale} />
+  </div>
 </BaseLayout>

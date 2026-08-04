@@ -126,7 +126,9 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
     <Container wide class="py-12 lg:py-16">
       <h2 id="noi-bat" class="text-[1.375rem] font-semibold">{t('pr.featured')}</h2>
 
-      <ul class="mt-8 grid gap-4 py-3 sm:grid-cols-2 xl:grid-cols-4">
+      <ul
+        class="mt-8 grid gap-4 py-3 sm:grid-cols-2 xl:grid-cols-4 [[data-layout=magazine]_&]:xl:grid-cols-2 [[data-layout=stack]_&]:grid-cols-1"
+      >
         {
           FEATURED.map(({ key, unit, points }, i) => {
             const s = byKey[key];
@@ -186,8 +188,10 @@ const commitments = [t('pricing.c1'), t('pricing.c2'), t('pricing.c3')];
     <Container wide class="py-12 lg:py-16">
       <h2 id="khac" class="text-[1.375rem] font-semibold">{t('pr.others')}</h2>
 
-      <div class="mt-8 grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10">
-        <ul class="grid gap-2 sm:grid-cols-2 [&>li]:min-w-0">
+      <div
+        class="mt-8 grid gap-8 lg:grid-cols-[1.35fr_1fr] lg:gap-10 [[data-layout=stack]_&]:grid-cols-1"
+      >
+        <ul class="grid gap-2 sm:grid-cols-2 [&>li]:min-w-0 [[data-layout=stack]_&]:grid-cols-1">
           {
             others.map((s) => (
               <li>

@@ -139,98 +139,16 @@
   border-radius: var(--r-md);
 }
 
-/* ===========================================================================
-   BỐ CỤC
+/* Luật bố cục KHÔNG nằm ở đây. Mười ba bố cục được viết bằng utility Tailwind
+   với biến thể [[data-layout=...]_&], đặt ngay trên phần tử chúng tác động:
 
-   Ba bố cục dùng CHUNG một DOM. Trang chủ gắn data-part trên từng khối, hero
-   gắn data-hero trên các phần của nó, và các quy tắc dưới đây sắp lại lưới, thứ
-   tự và tỉ lệ.
+     Container.astro      bề ngang khung và nhịp dọc   compact, wide, stack
+     Hero.astro           hình dạng màn hình đầu       split, mirror, stage,
+                                                       showcase, overlay, sticky
+     BaseLayout.astro     nền và thứ tự khối           card, magazine, list,
+                                                       mapfirst
+     ServiceCards.astro   số cột của lưới dịch vụ
+     index.astro          thứ tự bảng giá và bản đồ
 
-   split  hero hai cột, logo trái            mặc định
-   stage  hero một cột căn giữa, logo giữa   khối hình chiếm hết bề ngang
-   list   hero gọn, bảng giá lên trước       ưu tiên tra cứu nhanh
-   =========================================================================== */
-
-/* ── stage ────────────────────────────────────────────────────────────── */
-
-/* Hero về một cột, chữ căn giữa, khối hình xuống dưới và rộng hết khung. */
-:root[data-layout='stage'] [data-hero='grid'] {
-  grid-template-columns: 1fr;
-  gap: 2.5rem;
-  text-align: center;
-}
-:root[data-layout='stage'] [data-hero='text'] {
-  max-width: 62ch;
-  margin-inline: auto;
-}
-/* Các hàng bên trong phải căn giữa theo, nếu không chữ giữa mà nút vẫn dạt
-   trái, ra một bố cục nửa vời. */
-:root[data-layout='stage'] [data-hero='actions'],
-:root[data-layout='stage'] [data-hero='eyebrow'] {
-  justify-content: center;
-}
-:root[data-layout='stage'] [data-hero='stats'] {
-  margin-inline: auto;
-}
-
-/* Logo về giữa, hai bên là nav và nhóm nút. */
-@media (min-width: 1024px) {
-  :root[data-layout='stage'] [data-part='headerbar'] {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-  }
-  :root[data-layout='stage'] [data-part='brand'] {
-    order: 2;
-    justify-self: center;
-  }
-  :root[data-layout='stage'] [data-part='nav'] {
-    order: 1;
-    margin-inline-start: 0;
-    justify-self: start;
-  }
-  :root[data-layout='stage'] [data-part='tools'] {
-    order: 3;
-    margin-inline-start: 0;
-    justify-self: end;
-  }
-}
-
-/* ── list ─────────────────────────────────────────────────────────────── */
-
-/* Hero nén lại: người vào bằng bố cục này là để tra cứu, không phải để ngắm. */
-:root[data-layout='list'] [data-hero='grid'] {
-  padding-block: 2rem;
-  gap: 2rem;
-}
-:root[data-layout='list'] [data-hero='title'] {
-  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 2.5rem);
-}
-/* Khối hình bên phải là thứ tốn chỗ nhất mà ít giá trị tra cứu nhất. */
-@media (max-width: 1023px) {
-  :root[data-layout='list'] [data-hero='stage'] {
-    display: none;
-  }
-}
-:root[data-layout='list'] [data-hero='bg'] {
-  display: none;
-}
-
-/* Bảng giá lên ngay sau hero. Chỉ đổi thứ tự NHÌN THẤY, thứ tự trong DOM giữ
-   nguyên nên trình đọc màn hình và công cụ tìm kiếm vẫn đọc mạch cũ. */
-:root[data-layout='list'] [data-part='main'] {
-  display: flex;
-  flex-direction: column;
-}
-:root[data-layout='list'] [data-part='hero'] {
-  order: -2;
-}
-:root[data-layout='list'] [data-part='pricing'] {
-  order: -1;
-}
-
-/* Lưới dịch vụ dày hơn, đọc như một danh mục chứ không phải ba thẻ giới thiệu. */
-@media (min-width: 1024px) {
-  :root[data-layout='list'] [data-part='services'] [data-grid='services'] {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
+   Đặt cạnh phần tử thì sửa một khối là thấy ngay mọi bố cục ảnh hưởng tới nó,
+   thay vì phải nhớ có một file CSS ở nơi khác đang với tay vào. */

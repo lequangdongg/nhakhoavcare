@@ -33,7 +33,7 @@ const fmt = new Intl.NumberFormat(locale === 'vi' ? 'vi-VN' : 'en-US');
   /* min-w-0 ở cả ô lưới và hàng: ô lưới mặc định min-width:auto nên không co
     dưới kích thước nội dung, khiến chuỗi nowrap bên trong làm tràn ngang mobile. */
 }
-<ul class="grid gap-2 md:grid-cols-2 [&>li]:min-w-0">
+<ul class="grid gap-2 md:grid-cols-2 [&>li]:min-w-0 [[data-layout=stack]_&]:grid-cols-1">
   {
     services.map((s) => (
       <li>

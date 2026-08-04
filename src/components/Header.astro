@@ -21,6 +21,19 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 const current = Astro.url.pathname;
 
+/**
+ * Bố cục stage đưa logo về giữa, nav sang trái, nhóm nút sang phải.
+ * Chỉ từ desktop: dưới 1024px nav đã ẩn nên chia ba cột là vô nghĩa.
+ * ms-0 để huỷ ms-auto mặc định, nếu không nav vẫn bị đẩy dạt sang phải.
+ */
+const STAGE = {
+  bar: '[[data-layout=stage]_&]:lg:grid [[data-layout=stage]_&]:lg:grid-cols-[1fr_auto_1fr]',
+  brand: '[[data-layout=stage]_&]:lg:order-2 [[data-layout=stage]_&]:lg:justify-self-center',
+  nav: '[[data-layout=stage]_&]:lg:order-1 [[data-layout=stage]_&]:lg:ms-0 [[data-layout=stage]_&]:lg:justify-self-start',
+  tools:
+    '[[data-layout=stage]_&]:lg:order-3 [[data-layout=stage]_&]:lg:ms-0 [[data-layout=stage]_&]:lg:justify-self-end',
+};
+
 const serviceItems: DropdownItem[] = (
   await getCollection('services', (e) => e.data.lang === locale)
 )
@@ -74,11 +87,15 @@ const mobileNav = [
   <UtilityBar locale={locale} />
 
   <div class="border-b border-steel bg-surface/90 backdrop-blur-md">
-    <Container wide data-part="headerbar" class="flex h-15 items-center gap-4 lg:h-16">
+    <Container
+      wide
+      data-part="headerbar"
+      class:list={['flex h-15 items-center gap-4 lg:h-16', STAGE.bar]}
+    >
       <a
         href={pathFor('home', locale)}
         data-part="brand"
-        class="flex shrink-0 items-center gap-2.5"
+        class:list={['flex shrink-0 items-center gap-2.5', STAGE.brand]}
       >
         {/* Nhận diện: một tab sứ trên khung thép, vật thật của bộ so màu. */}
         <BrandMark class="size-8" />
@@ -97,7 +114,7 @@ const mobileNav = [
         aria-label={t('nav.primary')}
         data-mainnav
         data-part="nav"
-        class="relative ms-auto hidden items-center gap-1 lg:flex"
+        class:list={['relative ms-auto hidden items-center gap-1 lg:flex', STAGE.nav]}
       >
         {/* Một khối nền duy nhất, trượt sang mục đang được rê. Xem ghi chú ở script. */}
         <span
@@ -136,7 +153,7 @@ const mobileNav = [
         </a>
       </nav>
 
-      <div data-part="tools" class="ms-auto flex items-center gap-2 lg:ms-2">
+      <div data-part="tools" class:list={['ms-auto flex items-center gap-2 lg:ms-2', STAGE.tools]}>
         <SearchModal locale={locale} />
         <AppearanceMenu locale={locale} />
         <LanguageSwitcher locale={locale} />

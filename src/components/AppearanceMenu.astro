@@ -39,10 +39,46 @@ const modeIcon = { system: 'ph:desktop', light: 'ph:sun', dark: 'ph:moon' } as c
 
 // Sơ đồ bố cục vẽ bằng ô CSS, không phải ảnh: nó phải đổi màu theo theme đang
 // chọn, mà ảnh thì không làm được điều đó.
-const layoutBars: Record<(typeof LAYOUTS)[number], string[]> = {
-  split: ['half', 'half', 'full'],
+/**
+ * Sơ đồ bố cục vẽ bằng thanh, mỗi loại thanh là một chuỗi lớp Tailwind.
+ *
+ * Dùng bg-current chứ không phải màu cố định: thanh phải đổi màu theo bảng màu
+ * đang chọn và theo trạng thái đang bấm, mà ảnh thì không làm được điều đó.
+ * Biến thể [[aria-pressed=true]_&] có độ ưu tiên cao hơn opacity nền nên nó
+ * thắng, không phụ thuộc thứ tự lớp.
+ */
+const BAR =
+  'rounded-[2px] bg-current [[aria-pressed=true]_&]:text-accent [[aria-pressed=true]_&]:opacity-100';
+
+const BAR_KIND = {
+  full: 'h-2 w-full opacity-30',
+  half: 'h-2 w-[calc(50%-0.125rem)] opacity-30',
+  // Thanh đặc là khối hình, thanh nhạt là chữ. Nhờ vậy đảo cột nhìn ra ngay là
+  // đảo chứ không trùng với hai cột.
+  'half-solid': 'h-2 w-[calc(50%-0.125rem)] opacity-60',
+  short: 'h-2 w-3/5 opacity-30',
+  narrow: 'mx-auto h-2 w-[70%] opacity-30',
+  thin: 'h-1 w-full opacity-30',
+  'full-tall': 'h-[1.125rem] w-full opacity-30',
+  'wide-tall': 'h-3.5 w-full opacity-30',
+  // Viền rỗng: khối là một cái thẻ nổi chứ không phải một mảng đặc.
+  box: 'h-3.5 w-full border-[1.5px] border-current bg-transparent opacity-40',
+} as const;
+
+const layoutBars: Record<(typeof LAYOUTS)[number], Array<keyof typeof BAR_KIND>> = {
+  split: ['half', 'half-solid', 'full'],
+  mirror: ['half-solid', 'half', 'full'],
   stage: ['full', 'full-tall'],
+  showcase: ['full-tall', 'full', 'short'],
+  overlay: ['full-tall', 'narrow'],
+  sticky: ['half', 'half-solid', 'half'],
   list: ['short', 'full', 'full'],
+  mapfirst: ['short', 'wide-tall'],
+  compact: ['thin', 'thin', 'thin', 'thin', 'thin'],
+  wide: ['wide-tall', 'wide-tall'],
+  magazine: ['full-tall', 'half', 'half'],
+  card: ['box', 'box'],
+  stack: ['narrow', 'narrow', 'narrow'],
 };
 ---
 
@@ -56,7 +92,7 @@ const layoutBars: Record<(typeof LAYOUTS)[number], string[]> = {
   </summary>
 
   <div
-    class="absolute end-0 top-[calc(100%+0.625rem)] z-50 w-[min(20rem,calc(100vw-1.5rem))] rounded-lg border border-steel bg-surface-raised p-4 shadow-xl shadow-ink/10 [[open]>&]:animate-menu-in motion-reduce:[[open]>&]:animate-none"
+    class="absolute end-0 top-[calc(100%+0.625rem)] z-50 w-[min(23rem,calc(100vw-1.5rem))] rounded-lg border border-steel bg-surface-raised p-4 shadow-xl shadow-ink/10 [[open]>&]:animate-menu-in motion-reduce:[[open]>&]:animate-none"
   >
     {/* ── Bảng màu ──────────────────────────────────────────────────── */}
     <p class="text-xs font-semibold text-ink-3">{t('appearance.skin')}</p>
@@ -85,7 +121,11 @@ const layoutBars: Record<(typeof LAYOUTS)[number], string[]> = {
 
     {/* ── Bố cục ────────────────────────────────────────────────────── */}
     <p class="mt-4 text-xs font-semibold text-ink-3">{t('appearance.layout')}</p>
-    <div class="mt-2 grid grid-cols-3 gap-2" role="group" aria-label={t('appearance.layout')}>
+    <div
+      class="mt-2 grid max-h-64 grid-cols-3 gap-2 overflow-y-auto pe-1"
+      role="group"
+      aria-label={t('appearance.layout')}
+    >
       {
         LAYOUTS.map((layout) => (
           <button
@@ -96,7 +136,7 @@ const layoutBars: Record<(typeof LAYOUTS)[number], string[]> = {
           >
             <span class="flex h-7 w-full flex-wrap content-start gap-0.5" aria-hidden="true">
               {layoutBars[layout].map((kind) => (
-                <span class={`ap-bar ap-bar-${kind}`} />
+                <span class={`${BAR} ${BAR_KIND[kind]}`} />
               ))}
             </span>
             <span class="text-[0.6875rem] leading-tight font-medium">
@@ -135,34 +175,6 @@ const layoutBars: Record<(typeof LAYOUTS)[number], string[]> = {
     </button>
   </div>
 </details>
-
-<style>
-  /* Thanh trong sơ đồ bố cục. Dùng màu chữ hiện hành nên nó tự đổi theo theme
-     và theo trạng thái đang chọn. */
-  .ap-bar {
-    height: 0.5rem;
-    border-radius: 2px;
-    background: currentColor;
-    opacity: 0.28;
-  }
-  .ap-bar-full {
-    width: 100%;
-  }
-  .ap-bar-half {
-    width: calc(50% - 0.125rem);
-  }
-  .ap-bar-short {
-    width: 60%;
-  }
-  .ap-bar-full-tall {
-    width: 100%;
-    height: 1.125rem;
-  }
-  [aria-pressed='true'] .ap-bar {
-    opacity: 1;
-    color: var(--accent);
-  }
-</style>
 
 <script
   is:inline

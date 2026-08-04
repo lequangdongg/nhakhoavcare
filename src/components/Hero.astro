@@ -40,13 +40,98 @@ const badges = [
 
 const BTN =
   'inline-flex min-h-12 items-center gap-2.5 rounded-full px-6 font-medium transition-[background-color,border-color,box-shadow,color] duration-300 ease-[var(--ease-out)] active:translate-y-px';
+/**
+ * Sáu bố cục đổi hình dạng màn hình đầu. Gom theo phần tử chứ không theo bố
+ * cục: sửa một phần tử là thấy ngay mọi bố cục đang với tay vào nó.
+ *
+ * Tất cả dùng biến thể [[data-layout=x]_&], tức là "khi tổ tiên mang thuộc tính
+ * này". Thuộc tính nằm trên <html> nên mọi phần tử trong trang đều với tới.
+ */
+const L = {
+  // Khối nền vát cạnh nằm bên phải. Đảo cột thì phải lật theo, nếu không nó
+  // sáng đúng chỗ khối hình vừa rời đi. Overlay và showcase bỏ hẳn nền vì khối
+  // hình đã tràn hết bề ngang.
+  bg: '[[data-layout=mirror]_&]:lg:-scale-x-100 [[data-layout=list]_&]:hidden',
+
+  grid: [
+    // Ba bố cục về một cột
+    '[[data-layout=stage]_&]:grid-cols-1 [[data-layout=showcase]_&]:grid-cols-1',
+    '[[data-layout=overlay]_&]:grid-cols-1 [[data-layout=stack]_&]:grid-cols-1',
+    '[[data-layout=stage]_&]:text-center [[data-layout=showcase]_&]:text-center',
+    '[[data-layout=stage]_&]:gap-10 [[data-layout=showcase]_&]:gap-10',
+    // Overlay không có khoảng hở: thẻ chữ phải chồng lên được khối hình
+    '[[data-layout=overlay]_&]:gap-0',
+    // Đảo cột thì tỉ lệ hai cột cũng lật theo
+    '[[data-layout=mirror]_&]:lg:grid-cols-[0.98fr_1.02fr]',
+    // Cột dính cần các cột bám mép trên thay vì căn giữa theo chiều dọc
+    '[[data-layout=sticky]_&]:lg:items-start',
+    // Hai bố cục ưu tiên tra cứu thì nén màn hình đầu lại
+    '[[data-layout=list]_&]:gap-8 [[data-layout=list]_&]:py-8',
+    '[[data-layout=mapfirst]_&]:py-10',
+    '[[data-layout=compact]_&]:gap-8 [[data-layout=wide]_&]:lg:gap-20',
+  ].join(' '),
+
+  text: [
+    '[[data-layout=stage]_&]:mx-auto [[data-layout=stage]_&]:max-w-[62ch]',
+    '[[data-layout=showcase]_&]:mx-auto [[data-layout=showcase]_&]:max-w-[60ch]',
+    '[[data-layout=magazine]_&]:max-w-[52ch]',
+    // Đảo cột: chữ sang phải bằng order, markup giữ nguyên một bản duy nhất
+    '[[data-layout=mirror]_&]:lg:order-2',
+    // Overlay: thẻ trắng đè lên mép dưới khối hình. Đây là mẫu hay gặp ở site
+    // nha khoa, ảnh phòng khám tràn viền rồi một thẻ chồng lên báo thông tin.
+    '[[data-layout=overlay]_&]:relative [[data-layout=overlay]_&]:z-10',
+    '[[data-layout=overlay]_&]:mx-auto [[data-layout=overlay]_&]:max-w-[58rem]',
+    '[[data-layout=overlay]_&]:-mt-14 [[data-layout=overlay]_&]:md:-mt-20',
+    '[[data-layout=overlay]_&]:rounded-lg [[data-layout=overlay]_&]:border',
+    '[[data-layout=overlay]_&]:border-steel [[data-layout=overlay]_&]:bg-surface-raised',
+    '[[data-layout=overlay]_&]:p-8 [[data-layout=overlay]_&]:md:px-12 [[data-layout=overlay]_&]:md:py-10',
+    '[[data-layout=overlay]_&]:shadow-[0_24px_48px_-32px_rgb(15_23_42/0.35)]',
+  ].join(' '),
+
+  // Hai bố cục căn giữa chữ thì hàng nút và nhãn phải căn giữa theo, nếu không
+  // chữ ở giữa mà nút vẫn dạt trái, ra một bố cục nửa vời.
+  center: '[[data-layout=stage]_&]:justify-center [[data-layout=showcase]_&]:justify-center',
+  stats: '[[data-layout=stage]_&]:mx-auto [[data-layout=showcase]_&]:mx-auto',
+
+  stage: [
+    // Khối hình lên trước chữ: ảnh dẫn dắt, chữ giải thích
+    '[[data-layout=showcase]_&]:-order-1 [[data-layout=overlay]_&]:-order-1',
+    '[[data-layout=mirror]_&]:lg:order-1',
+    // Dính lại khi cuộn, giữ bảng so màu và cam kết giá trong tầm mắt.
+    // Chỉ từ desktop: trên mobile hai cột xếp chồng nên dính là vô nghĩa và
+    // còn chiếm mất màn hình. motion-safe để ai tắt chuyển động không bị dính.
+    '[[data-layout=sticky]_&]:lg:motion-safe:sticky [[data-layout=sticky]_&]:lg:motion-safe:top-26',
+    // Bố cục tra cứu bỏ khối hình trên mobile: nó tốn chỗ nhất mà ít giá trị
+    // tra cứu nhất. Desktop vẫn giữ vì ở đó không phải tranh chỗ.
+    '[[data-layout=list]_&]:max-lg:hidden',
+  ].join(' '),
+
+  title: [
+    '[[data-layout=list]_&]:text-[clamp(1.75rem,1.2rem+2.4vw,2.5rem)]',
+    '[[data-layout=compact]_&]:text-[clamp(1.75rem,1.2rem+2.4vw,2.5rem)]',
+    // Tạp chí: tiêu đề rất lớn, chữ bó sát, dòng khít lại
+    '[[data-layout=magazine]_&]:text-[clamp(2.5rem,1.4rem+5vw,4.75rem)]',
+    '[[data-layout=magazine]_&]:leading-[0.98] [[data-layout=magazine]_&]:tracking-[-0.03em]',
+  ].join(' '),
+
+  // Hai bố cục sắp lại thứ tự đều giữ hero đứng đầu
+  section: '[[data-layout=list]_&]:-order-2 [[data-layout=mapfirst]_&]:-order-2',
+};
+
 const BADGE =
   'flex items-center gap-[0.55rem] rounded-md border border-steel bg-surface-raised py-2.5 pr-3.5 pl-2.5 text-[0.8125rem] leading-[1.35] font-medium transition-[border-color,box-shadow] duration-300 ease-[var(--ease-out)] hover:border-steel-edge hover:shadow-[0_10px_22px_-18px_rgb(31_41_55/0.5)]';
 ---
 
-<section data-part="hero" class="relative overflow-hidden border-b border-steel">
+<section
+  data-part="hero"
+  class:list={['relative overflow-hidden border-b border-steel', L.section]}
+>
   {/* Nền: quầng sáng lạnh cộng một khối hình vát cạnh sau cột phải. */}
-  <div data-hero="bg" class="pointer-events-none absolute inset-0" aria-hidden="true">
+  <div
+    data-hero="bg"
+    class:list={['pointer-events-none absolute inset-0', L.bg]}
+    aria-hidden="true"
+  >
     <span
       class="absolute inset-0 bg-[radial-gradient(54%_48%_at_76%_6%,var(--accent-quiet),transparent_68%),radial-gradient(40%_42%_at_98%_64%,var(--secondary-quiet),transparent_70%)]"
     ></span>
@@ -58,12 +143,18 @@ const BADGE =
   <Container
     wide
     data-hero="grid"
-    class="relative grid items-center gap-12 py-12 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:py-16"
+    class:list={[
+      'relative grid items-center gap-12 py-12 lg:grid-cols-[1.02fr_0.98fr] lg:gap-14 lg:py-16',
+      L.grid,
+    ]}
   >
-    <div data-hero="text" class="max-w-[42ch]">
+    <div data-hero="text" class:list={['max-w-[42ch]', L.text]}>
       <p
         data-hero="eyebrow"
-        class="rise inline-flex items-center gap-[0.4rem] rounded-full border border-steel bg-surface-raised py-[0.3rem] pr-3 pl-2.5 text-[0.8125rem] font-medium text-accent"
+        class:list={[
+          'rise inline-flex items-center gap-[0.4rem] rounded-full border border-steel bg-surface-raised py-[0.3rem] pr-3 pl-2.5 text-[0.8125rem] font-medium text-accent',
+          L.center,
+        ]}
         style="--d: 0"
       >
         <Icon name="ph:map-pin" class="size-4 shrink-0" aria-hidden="true" />
@@ -73,7 +164,10 @@ const BADGE =
       {/* Vế sau đổi màu nhấn: mắt bám vào đúng lời hứa cốt lõi. */}
       <h1
         data-hero="title"
-        class="rise mt-4 text-[2.15rem] leading-[1.06] sm:text-5xl lg:text-[3.3rem]"
+        class:list={[
+          'rise mt-4 text-[2.15rem] leading-[1.06] sm:text-5xl lg:text-[3.3rem]',
+          L.title,
+        ]}
         style="--d: 1"
       >
         {t('hero.titleA')}<span class="text-accent">{t('hero.titleB')}</span>
@@ -81,7 +175,11 @@ const BADGE =
 
       <p class="rise mt-5 max-w-[46ch] text-lg text-ink-2" style="--d: 2">{t('hero.sub')}</p>
 
-      <div data-hero="actions" class="rise mt-8 flex flex-wrap items-center gap-3" style="--d: 3">
+      <div
+        data-hero="actions"
+        class:list={['rise mt-8 flex flex-wrap items-center gap-3', L.center]}
+        style="--d: 3"
+      >
         <a
           href={telHref(clinic.phone)}
           class={`${BTN} bg-accent text-accent-contrast shadow-[0_10px_24px_-12px_color-mix(in_srgb,var(--accent)_80%,transparent)] hover:bg-accent-hover hover:shadow-[0_14px_30px_-12px_color-mix(in_srgb,var(--accent)_85%,transparent)]`}
@@ -107,7 +205,10 @@ const BADGE =
       }
       <dl
         data-hero="stats"
-        class="rise mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-steel pt-6"
+        class:list={[
+          'rise mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-steel pt-6',
+          L.stats,
+        ]}
         style="--d: 4"
       >
         <div>
@@ -125,7 +226,7 @@ const BADGE =
       </dl>
     </div>
 
-    <div data-hero="stage" class="rise min-w-0" style="--d: 3">
+    <div data-hero="stage" class:list={['rise min-w-0', L.stage]} style="--d: 3">
       <HeroCarousel locale={locale} />
 
       <ul class="mt-4 grid gap-2 sm:grid-cols-3">
