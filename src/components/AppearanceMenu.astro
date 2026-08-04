@@ -1,0 +1,249 @@
+---
+/**
+ * Bộ chọn giao diện: bảng màu, bố cục, nền sáng tối.
+ *
+ * Mở đóng bằng <details> nên không tốn JavaScript cho phần đó. JavaScript chỉ
+ * làm đúng ba việc: ghi lựa chọn, đặt thuộc tính lên <html>, và đọc lại trạng
+ * thái mỗi lần mở bảng.
+ *
+ * Đọc lại mỗi lần mở là điểm quan trọng: nền sáng tối còn đổi được từ hộp thoại
+ * tìm kiếm nữa. Hai bảng không nhắn tin cho nhau, chúng cùng nhìn vào <html> —
+ * một nguồn sự thật duy nhất, nên không bao giờ lệch nhau.
+ *
+ * Ô xem trước lấy màu từ SKIN_SWATCH trong appearance.ts. Test giữ cho các giá
+ * trị đó khớp với appearance.css.
+ */
+import { Icon } from 'astro-icon/components';
+import type { Locale } from '../i18n/locales';
+import {
+  LAYOUTS,
+  LAYOUT_LABEL,
+  LAYOUT_STORAGE_KEY,
+  SKINS,
+  SKIN_LABEL,
+  SKIN_STORAGE_KEY,
+  SKIN_SWATCH,
+  THEME_PREFERENCES,
+  THEME_STORAGE_KEY,
+} from '../lib/appearance';
+import { useTranslations } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const modeIcon = { system: 'ph:desktop', light: 'ph:sun', dark: 'ph:moon' } as const;
+
+// Sơ đồ bố cục vẽ bằng ô CSS, không phải ảnh: nó phải đổi màu theo theme đang
+// chọn, mà ảnh thì không làm được điều đó.
+const layoutBars: Record<(typeof LAYOUTS)[number], string[]> = {
+  split: ['half', 'half', 'full'],
+  stage: ['full', 'full-tall'],
+  list: ['short', 'full', 'full'],
+};
+---
+
+<details class="appearance group/ap relative">
+  <summary
+    class="flex size-9 cursor-pointer list-none items-center justify-center rounded-full border border-steel-edge transition-colors duration-300 hover:border-accent hover:bg-accent-quiet hover:text-accent"
+    aria-label={t('appearance.open')}
+    title={t('appearance.open')}
+  >
+    <Icon name="ph:palette" class="size-[1.15rem]" aria-hidden="true" />
+  </summary>
+
+  <div
+    class="absolute end-0 top-[calc(100%+0.625rem)] z-50 w-[min(20rem,calc(100vw-1.5rem))] rounded-lg border border-steel bg-surface-raised p-4 shadow-xl shadow-ink/10 [[open]>&]:animate-menu-in motion-reduce:[[open]>&]:animate-none"
+  >
+    {/* ── Bảng màu ──────────────────────────────────────────────────── */}
+    <p class="text-xs font-semibold text-ink-3">{t('appearance.skin')}</p>
+    <div class="mt-2 grid grid-cols-3 gap-2" role="group" aria-label={t('appearance.skin')}>
+      {
+        SKINS.map((skin) => (
+          <button
+            type="button"
+            data-skin-set={skin}
+            aria-pressed="false"
+            class="ap-opt flex flex-col items-center gap-2 rounded-md border border-steel p-2.5 transition-[border-color,background-color] duration-250 ease-[var(--ease-out)] hover:border-accent hover:bg-accent-quiet aria-pressed:border-accent aria-pressed:bg-accent-quiet"
+          >
+            <span
+              class="flex h-7 w-full overflow-hidden rounded-sm ring-1 ring-steel-edge"
+              aria-hidden="true"
+            >
+              <span class="w-1/2" style={`background:${SKIN_SWATCH[skin].surface}`} />
+              <span class="w-1/4" style={`background:${SKIN_SWATCH[skin].accent}`} />
+              <span class="w-1/4" style={`background:${SKIN_SWATCH[skin].secondary}`} />
+            </span>
+            <span class="text-[0.6875rem] leading-tight font-medium">{t(SKIN_LABEL[skin])}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    {/* ── Bố cục ────────────────────────────────────────────────────── */}
+    <p class="mt-4 text-xs font-semibold text-ink-3">{t('appearance.layout')}</p>
+    <div class="mt-2 grid grid-cols-3 gap-2" role="group" aria-label={t('appearance.layout')}>
+      {
+        LAYOUTS.map((layout) => (
+          <button
+            type="button"
+            data-layout-set={layout}
+            aria-pressed="false"
+            class="ap-opt flex flex-col items-center gap-2 rounded-md border border-steel p-2.5 transition-[border-color,background-color] duration-250 ease-[var(--ease-out)] hover:border-accent hover:bg-accent-quiet aria-pressed:border-accent aria-pressed:bg-accent-quiet"
+          >
+            <span class="flex h-7 w-full flex-wrap content-start gap-0.5" aria-hidden="true">
+              {layoutBars[layout].map((kind) => (
+                <span class={`ap-bar ap-bar-${kind}`} />
+              ))}
+            </span>
+            <span class="text-[0.6875rem] leading-tight font-medium">
+              {t(LAYOUT_LABEL[layout])}
+            </span>
+          </button>
+        ))
+      }
+    </div>
+
+    {/* ── Nền ───────────────────────────────────────────────────────── */}
+    <p class="mt-4 text-xs font-semibold text-ink-3">{t('theme.label')}</p>
+    <div class="mt-2 grid grid-cols-3 gap-2" role="group" aria-label={t('theme.label')}>
+      {
+        THEME_PREFERENCES.map((mode) => (
+          <button
+            type="button"
+            data-mode-set={mode}
+            aria-pressed="false"
+            class="ap-opt flex min-h-10 items-center justify-center gap-1.5 rounded-md border border-steel px-2 text-[0.6875rem] font-medium transition-[border-color,background-color] duration-250 ease-[var(--ease-out)] hover:border-accent hover:bg-accent-quiet aria-pressed:border-accent aria-pressed:bg-accent-quiet"
+          >
+            <Icon name={modeIcon[mode]} class="size-4 shrink-0" aria-hidden="true" />
+            {t(`theme.${mode}`)}
+          </button>
+        ))
+      }
+    </div>
+
+    <button
+      type="button"
+      data-appearance-reset
+      class="mt-4 flex min-h-10 w-full items-center justify-center gap-1.5 rounded-full border border-steel text-[0.8125rem] transition-colors duration-250 ease-[var(--ease-out)] hover:border-accent hover:text-accent active:translate-y-px"
+    >
+      <Icon name="ph:arrow-counter-clockwise" class="size-4 shrink-0" aria-hidden="true" />
+      {t('appearance.reset')}
+    </button>
+  </div>
+</details>
+
+<style>
+  /* Thanh trong sơ đồ bố cục. Dùng màu chữ hiện hành nên nó tự đổi theo theme
+     và theo trạng thái đang chọn. */
+  .ap-bar {
+    height: 0.5rem;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: 0.28;
+  }
+  .ap-bar-full {
+    width: 100%;
+  }
+  .ap-bar-half {
+    width: calc(50% - 0.125rem);
+  }
+  .ap-bar-short {
+    width: 60%;
+  }
+  .ap-bar-full-tall {
+    width: 100%;
+    height: 1.125rem;
+  }
+  [aria-pressed='true'] .ap-bar {
+    opacity: 1;
+    color: var(--accent);
+  }
+</style>
+
+<script
+  is:inline
+  define:vars={{
+    skinKey: SKIN_STORAGE_KEY,
+    layoutKey: LAYOUT_STORAGE_KEY,
+    themeKey: THEME_STORAGE_KEY,
+  }}
+>
+  (() => {
+    const box = document.querySelector('.appearance');
+    if (!box) return;
+    const root = document.documentElement;
+
+    // Đọc trạng thái từ <html> chứ không giữ biến riêng. Nền sáng tối còn đổi
+    // được ở hộp thoại tìm kiếm, giữ bản sao riêng là mời lỗi lệch trạng thái.
+    const refresh = () => {
+      const mode = localStorage.getItem(themeKey) ?? 'system';
+      for (const b of box.querySelectorAll('[data-skin-set]'))
+        b.setAttribute('aria-pressed', String(b.dataset.skinSet === root.dataset.theme));
+      for (const b of box.querySelectorAll('[data-layout-set]'))
+        b.setAttribute('aria-pressed', String(b.dataset.layoutSet === root.dataset.layout));
+      for (const b of box.querySelectorAll('[data-mode-set]'))
+        b.setAttribute('aria-pressed', String(b.dataset.modeSet === mode));
+    };
+
+    const save = (key, value) => {
+      try {
+        if (value === null) localStorage.removeItem(key);
+        else localStorage.setItem(key, value);
+      } catch {
+        /* chế độ riêng tư chặn ghi: lựa chọn vẫn áp cho phiên này, chỉ không nhớ */
+      }
+    };
+
+    const applyMode = (mode) => {
+      const dark =
+        mode === 'dark' || (mode !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+      root.classList.toggle('dark', dark);
+    };
+
+    for (const b of box.querySelectorAll('[data-skin-set]'))
+      b.addEventListener('click', () => {
+        root.dataset.theme = b.dataset.skinSet;
+        save(skinKey, b.dataset.skinSet);
+        refresh();
+      });
+
+    for (const b of box.querySelectorAll('[data-layout-set]'))
+      b.addEventListener('click', () => {
+        root.dataset.layout = b.dataset.layoutSet;
+        save(layoutKey, b.dataset.layoutSet);
+        refresh();
+      });
+
+    for (const b of box.querySelectorAll('[data-mode-set]'))
+      b.addEventListener('click', () => {
+        const mode = b.dataset.modeSet;
+        applyMode(mode);
+        save(themeKey, mode === 'system' ? null : mode);
+        refresh();
+      });
+
+    box.querySelector('[data-appearance-reset]')?.addEventListener('click', () => {
+      root.dataset.theme = 'clinical';
+      root.dataset.layout = 'split';
+      save(skinKey, null);
+      save(layoutKey, null);
+      save(themeKey, null);
+      applyMode('system');
+      refresh();
+    });
+
+    box.addEventListener('toggle', () => box.open && refresh());
+    document.addEventListener('click', (e) => {
+      if (box.open && !box.contains(e.target)) box.open = false;
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && box.open) box.open = false;
+    });
+
+    refresh();
+  })();
+</script>

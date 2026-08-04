@@ -40,7 +40,7 @@ const services = (await getCollection('services', (e) => e.data.lang === locale)
   .slice(0, limit);
 ---
 
-<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+<ul data-grid="services" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
   {
     services.map((s) => (
       <li>

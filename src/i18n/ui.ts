@@ -2,6 +2,16 @@ import type { Locale } from './locales';
 
 export const UI = {
   vi: {
+    'appearance.open': 'Tuỳ chỉnh giao diện',
+    'appearance.skin': 'Bảng màu',
+    'appearance.layout': 'Bố cục',
+    'appearance.reset': 'Về mặc định',
+    'skin.clinical': 'Lâm sàng',
+    'skin.care': 'Thân thiện',
+    'skin.sharp': 'Tối giản',
+    'layout.split': 'Hai cột',
+    'layout.stage': 'Căn giữa',
+    'layout.list': 'Tra cứu',
     'brand.short': 'Nha Khoa Vcare',
     'nav.breadcrumb': 'Đường dẫn',
     'faq.title': 'Câu hỏi thường gặp',
@@ -157,6 +167,16 @@ export const UI = {
     'theme.dark': 'Tối',
   },
   en: {
+    'appearance.open': 'Customise appearance',
+    'appearance.skin': 'Colour theme',
+    'appearance.layout': 'Layout',
+    'appearance.reset': 'Reset to default',
+    'skin.clinical': 'Clinical',
+    'skin.care': 'Friendly',
+    'skin.sharp': 'Minimal',
+    'layout.split': 'Two column',
+    'layout.stage': 'Centred',
+    'layout.list': 'Directory',
     'brand.short': 'Vcare Dental',
     'nav.breadcrumb': 'Breadcrumb',
     'faq.title': 'Common questions',

@@ -3,6 +3,10 @@
 @import '@fontsource-variable/archivo/wght.css';
 @import '@fontsource-variable/archivo/wght-italic.css';
 
+/* Theme màu và bố cục thay thế. Đặt SAU khối :root mặc định bên dưới thì thừa,
+   vì bộ chọn [data-theme] có độ ưu tiên cao hơn :root trần. */
+@import './appearance.css';
+
 /* ===========================================================================
    HỆ MÀU
 

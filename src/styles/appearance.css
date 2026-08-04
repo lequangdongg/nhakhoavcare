@@ -1,0 +1,236 @@
+/* ===========================================================================
+   THEME MÀU VÀ BỐ CỤC
+
+   Mỗi theme chỉ là một khối token. Không component nào biết theme tồn tại: tất
+   cả đã đọc qua var(--accent), var(--r-md)... từ đầu, nên đổi theme là đổi giá
+   trị chứ không phải đổi mã.
+
+   Mỗi theme phải khai ĐỦ CẢ HAI nền sáng và tối. Chỉ khai nền sáng thì bật chế
+   độ tối sẽ rơi về màu của clinical, ra một tổ hợp không ai thiết kế.
+
+   clinical  xanh dương + mint, bo vừa           mặc định, định vị chuyên sâu
+   care      teal + kem ấm, bo lớn, viền mềm     phòng khám gia đình
+   sharp     navy + xám trung tính, bo nhỏ       thẩm mỹ cao cấp, nghiêm
+
+   Ba dải sắc độ sứ VITA cố tình KHÔNG đổi theo theme: đó là dữ liệu đo màu răng
+   thật, không phải màu giao diện. Đổi nó theo gu thẩm mỹ là làm sai dữ liệu.
+   Khung ảnh lâm sàng cũng vậy, xem ghi chú trong global.css.
+   =========================================================================== */
+
+/* ── care: nền sáng ───────────────────────────────────────────────────── */
+:root[data-theme='care'] {
+  --surface: #faf8f4;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f3efe7;
+  --text-primary: #1c1917;
+  --text-secondary: #57534e;
+  --text-tertiary: #a8a29e;
+
+  --steel-line: #e7e1d6;
+  --steel-edge: #d6cec0;
+
+  --accent: #0f766e;
+  --accent-hover: #115e59;
+  --accent-contrast: #ffffff;
+  --accent-quiet: #edfaf7;
+
+  /* Hỗ trợ đổi sang hổ phách: cạnh teal thì nó ấm lên rõ, còn để mint như
+     clinical thì hai màu quá gần nhau và theme mất nhận diện riêng. */
+  --secondary: #b45309;
+  --secondary-hover: #92400e;
+  --secondary-quiet: #fdf6ec;
+
+  --signal: #b45309;
+
+  /* Bo lớn và viền mềm là thứ mắt đọc ra là "thân thiện" trước cả màu. */
+  --r-sm: 0.75rem;
+  --r-md: 1.25rem;
+  --r-lg: 1.75rem;
+}
+
+/* ── care: nền tối ────────────────────────────────────────────────────── */
+:root[data-theme='care'].dark {
+  --surface: #1c1917;
+  --surface-raised: #292524;
+  --surface-sunken: #16130f;
+  --text-primary: #faf8f4;
+  --text-secondary: #d6d3d1;
+  --text-tertiary: #a8a29e;
+
+  --steel-line: #2f2a26;
+  --steel-edge: #44403c;
+
+  --accent: #2dd4bf;
+  --accent-hover: #5eead4;
+  --accent-contrast: #16130f;
+  --accent-quiet: #10312c;
+
+  --secondary: #fbbf24;
+  --secondary-hover: #fcd34d;
+  --secondary-quiet: #3a2c12;
+
+  --signal: #fbbf24;
+}
+
+/* ── sharp: nền sáng ──────────────────────────────────────────────────── */
+:root[data-theme='sharp'] {
+  --surface: #f4f4f5;
+  --surface-raised: #ffffff;
+  --surface-sunken: #e8e8ea;
+  --text-primary: #09090b;
+  --text-secondary: #3f3f46;
+  --text-tertiary: #71717a;
+
+  /* Viền đậm hơn hẳn hai theme kia: khi bo góc gần như vuông, đường viền là
+     thứ duy nhất tách các khối khỏi nhau. */
+  --steel-line: #d4d4d8;
+  --steel-edge: #a1a1aa;
+
+  --accent: #1e3a8a;
+  --accent-hover: #1e40af;
+  --accent-contrast: #ffffff;
+  --accent-quiet: #eef2ff;
+
+  /* Hỗ trợ về xám: theme này chỉ giữ MỘT màu, mọi thứ còn lại trung tính. */
+  --secondary: #475569;
+  --secondary-hover: #334155;
+  --secondary-quiet: #e8e8ea;
+
+  --signal: #9a3412;
+
+  --r-sm: 0.125rem;
+  --r-md: 0.25rem;
+  --r-lg: 0.375rem;
+  /* Nút cũng vuông theo, nếu không thì nút bo tròn nằm giữa các thẻ vuông,
+     đúng kiểu trộn hai hệ bo góc mà Taste mục 4.4 cấm. */
+  --r-pill: 0.25rem;
+}
+
+/* ── sharp: nền tối ───────────────────────────────────────────────────── */
+:root[data-theme='sharp'].dark {
+  --surface: #09090b;
+  --surface-raised: #18181b;
+  --surface-sunken: #000000;
+  --text-primary: #fafafa;
+  --text-secondary: #d4d4d8;
+  --text-tertiary: #a1a1aa;
+
+  --steel-line: #27272a;
+  --steel-edge: #52525b;
+
+  --accent: #93c5fd;
+  --accent-hover: #bfdbfe;
+  --accent-contrast: #09090b;
+  --accent-quiet: #172554;
+
+  --secondary: #a1a1aa;
+  --secondary-hover: #d4d4d8;
+  --secondary-quiet: #27272a;
+
+  --signal: #fdba74;
+}
+
+/* rounded-full của Tailwind là số cứng, không đọc token nào, nên nó KHÔNG tự
+   theo theme như rounded-sm/md/lg. Không ép lại thì theme vuông vẫn còn nút bo
+   tròn nằm giữa các thẻ vuông, đúng kiểu trộn hai hệ bo góc mà Taste mục 4.4
+   cấm. Chỉ ép trên phần tử bấm được: chấm trạng thái và huy hiệu ngôn ngữ là
+   hình tròn có chủ đích, ép chúng thành vuông mới là sai. */
+:root[data-theme='sharp'] :is(a, button, summary, input).rounded-full {
+  border-radius: var(--r-md);
+}
+
+/* ===========================================================================
+   BỐ CỤC
+
+   Ba bố cục dùng CHUNG một DOM. Trang chủ gắn data-part trên từng khối, hero
+   gắn data-hero trên các phần của nó, và các quy tắc dưới đây sắp lại lưới, thứ
+   tự và tỉ lệ.
+
+   split  hero hai cột, logo trái            mặc định
+   stage  hero một cột căn giữa, logo giữa   khối hình chiếm hết bề ngang
+   list   hero gọn, bảng giá lên trước       ưu tiên tra cứu nhanh
+   =========================================================================== */
+
+/* ── stage ────────────────────────────────────────────────────────────── */
+
+/* Hero về một cột, chữ căn giữa, khối hình xuống dưới và rộng hết khung. */
+:root[data-layout='stage'] [data-hero='grid'] {
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  text-align: center;
+}
+:root[data-layout='stage'] [data-hero='text'] {
+  max-width: 62ch;
+  margin-inline: auto;
+}
+/* Các hàng bên trong phải căn giữa theo, nếu không chữ giữa mà nút vẫn dạt
+   trái, ra một bố cục nửa vời. */
+:root[data-layout='stage'] [data-hero='actions'],
+:root[data-layout='stage'] [data-hero='eyebrow'] {
+  justify-content: center;
+}
+:root[data-layout='stage'] [data-hero='stats'] {
+  margin-inline: auto;
+}
+
+/* Logo về giữa, hai bên là nav và nhóm nút. */
+@media (min-width: 1024px) {
+  :root[data-layout='stage'] [data-part='headerbar'] {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+  :root[data-layout='stage'] [data-part='brand'] {
+    order: 2;
+    justify-self: center;
+  }
+  :root[data-layout='stage'] [data-part='nav'] {
+    order: 1;
+    margin-inline-start: 0;
+    justify-self: start;
+  }
+  :root[data-layout='stage'] [data-part='tools'] {
+    order: 3;
+    margin-inline-start: 0;
+    justify-self: end;
+  }
+}
+
+/* ── list ─────────────────────────────────────────────────────────────── */
+
+/* Hero nén lại: người vào bằng bố cục này là để tra cứu, không phải để ngắm. */
+:root[data-layout='list'] [data-hero='grid'] {
+  padding-block: 2rem;
+  gap: 2rem;
+}
+:root[data-layout='list'] [data-hero='title'] {
+  font-size: clamp(1.75rem, 1.2rem + 2.4vw, 2.5rem);
+}
+/* Khối hình bên phải là thứ tốn chỗ nhất mà ít giá trị tra cứu nhất. */
+@media (max-width: 1023px) {
+  :root[data-layout='list'] [data-hero='stage'] {
+    display: none;
+  }
+}
+:root[data-layout='list'] [data-hero='bg'] {
+  display: none;
+}
+
+/* Bảng giá lên ngay sau hero. Chỉ đổi thứ tự NHÌN THẤY, thứ tự trong DOM giữ
+   nguyên nên trình đọc màn hình và công cụ tìm kiếm vẫn đọc mạch cũ. */
+:root[data-layout='list'] [data-part='main'] {
+  display: flex;
+  flex-direction: column;
+}
+:root[data-layout='list'] [data-part='hero'] {
+  order: -2;
+}
+:root[data-layout='list'] [data-part='pricing'] {
+  order: -1;
+}
+
+/* Lưới dịch vụ dày hơn, đọc như một danh mục chứ không phải ba thẻ giới thiệu. */
+@media (min-width: 1024px) {
+  :root[data-layout='list'] [data-part='services'] [data-grid='services'] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

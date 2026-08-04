@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest';
-import { isThemePreference, resolveTheme, THEME_STORAGE_KEY } from './theme';
+import {
+  DEFAULT_LAYOUT,
+  DEFAULT_SKIN,
+  isLayout,
+  isSkin,
+  isThemePreference,
+  LAYOUTS,
+  resolveTheme,
+  SKINS,
+  THEME_STORAGE_KEY,
+} from './appearance';
 
 describe('resolveTheme', () => {
   it('lựa chọn rõ ràng thắng cài đặt hệ thống', () => {
@@ -35,5 +45,23 @@ describe('isThemePreference', () => {
 describe('THEME_STORAGE_KEY', () => {
   it('khoá lưu trữ ổn định — đổi là mất lựa chọn của mọi khách cũ', () => {
     expect(THEME_STORAGE_KEY).toBe('vcare-theme');
+  });
+});
+
+describe('lọc giá trị theme và bố cục', () => {
+  // Giá trị trong localStorage là dữ liệu người dùng sửa được. Không lọc thì
+  // bất kỳ ai cũng đặt được thuộc tính tuỳ ý lên thẻ <html>.
+  it('chỉ nhận tên có thật', () => {
+    expect(isSkin('care')).toBe(true);
+    expect(isLayout('stage')).toBe(true);
+    expect(isSkin('<script>')).toBe(false);
+    expect(isLayout('__proto__')).toBe(false);
+    expect(isSkin(null)).toBe(false);
+    expect(isLayout(42)).toBe(false);
+  });
+
+  it('mặc định nằm trong danh sách hợp lệ', () => {
+    expect(SKINS).toContain(DEFAULT_SKIN);
+    expect(LAYOUTS).toContain(DEFAULT_LAYOUT);
   });
 });

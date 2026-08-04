@@ -47,7 +47,7 @@ const implantSteps = [
   {/* ── Hero. Bố cục lệch, chữ bên trái, khung ảnh bên phải. ───────────────── */}
   <Hero locale={locale} serviceCount={serviceCount} />
 
-  <section aria-labelledby="dich-vu" class="reveal border-b border-steel">
+  <section aria-labelledby="dich-vu" data-part="services" class="reveal border-b border-steel">
     <Container class="reveal py-14 lg:py-20">
       <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
         <h2 id="dich-vu" class="text-2xl font-semibold md:text-3xl">Dịch vụ</h2>
@@ -65,7 +65,11 @@ const implantSteps = [
   </section>
 
   {/* ── Implant. Khối rộng, nền chìm, nói thẳng vào định vị. ───────────────── */}
-  <section aria-labelledby="implant" class="reveal border-b border-steel bg-surface-sunken">
+  <section
+    aria-labelledby="implant"
+    data-part="implant"
+    class="reveal border-b border-steel bg-surface-sunken"
+  >
     <Container class="reveal py-14 lg:py-20">
       <div class="max-w-[52ch]">
         <h2 id="implant" class="text-2xl font-semibold md:text-3xl">
@@ -100,7 +104,7 @@ const implantSteps = [
   </section>
 
   {/* ── Gallery trước/sau. Khung nền sáng ở cả hai chế độ màu. ─────────────── */}
-  <section aria-labelledby="ket-qua" class="reveal border-b border-steel">
+  <section aria-labelledby="ket-qua" data-part="results" class="reveal border-b border-steel">
     <Container wide class="py-14 lg:py-20">
       <h2 id="ket-qua" class="text-2xl font-semibold md:text-3xl">Kết quả điều trị</h2>
       <p class="mt-3 max-w-[62ch] text-ink-2">
@@ -142,7 +146,7 @@ const implantSteps = [
   </section>
 
   {/* ── Bảng giá. Khối chữ đơn, dẫn sang trang giá. ────────────────────────── */}
-  <section aria-labelledby="gia" class="reveal border-b border-steel">
+  <section aria-labelledby="gia" data-part="pricing" class="reveal border-b border-steel">
     <Container class="py-14 lg:py-20">
       <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div class="max-w-[52ch]">
@@ -161,5 +165,5 @@ const implantSteps = [
       <PricePreview locale={locale} />
     </Container>
   </section>
-  <MapSection locale={locale} />
+  <div data-part="map"><MapSection locale={locale} /></div>
 </BaseLayout>
