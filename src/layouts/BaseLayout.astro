@@ -35,6 +35,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const MAIN_BY_LAYOUT = [
   '[[data-layout=list]_&]:flex [[data-layout=list]_&]:flex-col',
   '[[data-layout=mapfirst]_&]:flex [[data-layout=mapfirst]_&]:flex-col',
+  '[[data-layout=proof]_&]:flex [[data-layout=proof]_&]:flex-col',
+  '[[data-layout=servicefirst]_&]:flex [[data-layout=servicefirst]_&]:flex-col',
   // card: mỗi khối thành một thẻ nổi trên nền chìm, kiểu bento. Hero giữ
   // nguyên tràn viền để màn hình đầu tiên vẫn liền mạch.
   '[[data-layout=card]_&]:bg-surface-sunken',
@@ -51,11 +53,33 @@ const MAIN_BY_LAYOUT = [
   // nth-of-type chứ không phải nth-child: <main> còn chứa khối bản đồ bọc
   // trong thẻ div, đếm theo child sẽ lệch một nhịp.
   '[[data-layout=magazine]_&]:[&>section:nth-of-type(2n)]:bg-surface-sunken',
+  // zebra: cũng nền xen kẽ nhưng không đụng tới chữ. magazine đổi cả cỡ tiêu đề,
+  // zebra chỉ tách các khối ra cho dễ quét mắt.
+  '[[data-layout=zebra]_&]:[&>section:nth-of-type(2n)]:bg-surface-sunken',
+  // paper: nội dung là một dải giấy trắng liền mạch chạy giữa nền chìm.
+  '[[data-layout=paper]_&]:bg-surface-sunken [[data-layout=paper]_&]:py-6',
+  '[[data-layout=paper]_&]:[&>:is(section,div)]:mx-auto',
+  '[[data-layout=paper]_&]:[&>:is(section,div)]:max-w-[76rem]',
+  '[[data-layout=paper]_&]:[&>:is(section,div)]:border-x',
+  '[[data-layout=paper]_&]:[&>:is(section,div)]:border-steel',
+  '[[data-layout=paper]_&]:[&>:is(section,div)]:bg-surface-raised',
 ].join(' ');
+
+/**
+ * bigtype và compact đổi cỡ chữ GỐC trên thẻ <html>.
+ *
+ * Đây là chỗ duy nhất làm được việc này: mọi cỡ chữ và khoảng cách của Tailwind
+ * tính bằng rem, mà rem đo theo cỡ chữ gốc. Đặt ở đây thì cả trang giãn ra hoặc
+ * co lại đều nhau, thay vì phải sửa từng lớp text-* một.
+ *
+ * bigtype có lý do thực tế ở phòng khám nha khoa: một phần không nhỏ bệnh nhân
+ * là người lớn tuổi, và họ đọc trang này trên điện thoại.
+ */
+const HTML_BY_LAYOUT = 'data-[layout=bigtype]:text-[112.5%] data-[layout=compact]:text-[93.75%]';
 ---
 
 <!doctype html>
-<html lang={locale} data-theme={DEFAULT_SKIN} data-layout={DEFAULT_LAYOUT}>
+<html lang={locale} data-theme={DEFAULT_SKIN} data-layout={DEFAULT_LAYOUT} class={HTML_BY_LAYOUT}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

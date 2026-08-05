@@ -63,6 +63,14 @@ const BAR_KIND = {
   'wide-tall': 'h-3.5 w-full opacity-30',
   // Viền rỗng: khối là một cái thẻ nổi chứ không phải một mảng đặc.
   box: 'h-3.5 w-full border-[1.5px] border-current bg-transparent opacity-40',
+  'block-tall': 'h-6 w-full opacity-30',
+  'outline-full': 'h-2 w-full border border-current bg-transparent opacity-40',
+  pill: 'mx-auto h-1.5 w-4/5 rounded-full opacity-50',
+  // Nhạt hơn hẳn, dùng để vẽ nhịp nền xen kẽ
+  'full-dim': 'h-2 w-full opacity-15',
+  // Tràn ra ngoài khung sơ đồ, đúng cái mà bố cục tràn mép làm với trang
+  'edge-full': '-mx-[6%] h-2 w-[112%] opacity-30',
+  'type-lg': 'h-3 w-4/5 opacity-40',
 } as const;
 
 const layoutBars: Record<(typeof LAYOUTS)[number], Array<keyof typeof BAR_KIND>> = {
@@ -72,12 +80,23 @@ const layoutBars: Record<(typeof LAYOUTS)[number], Array<keyof typeof BAR_KIND>>
   showcase: ['full-tall', 'full', 'short'],
   overlay: ['full-tall', 'narrow'],
   sticky: ['half', 'half-solid', 'half'],
+  full: ['block-tall'],
+  banner: ['thin', 'full', 'full', 'full'],
+  frame: ['outline-full', 'full', 'full'],
+  rail: ['pill', 'full', 'full'],
+  slim: ['thin', 'half', 'half'],
   list: ['short', 'full', 'full'],
   mapfirst: ['short', 'wide-tall'],
+  proof: ['short', 'wide-tall', 'full'],
+  servicefirst: ['short', 'full', 'half', 'half'],
   compact: ['thin', 'thin', 'thin', 'thin', 'thin'],
   wide: ['wide-tall', 'wide-tall'],
+  bigtype: ['type-lg', 'type-lg', 'full'],
   magazine: ['full-tall', 'half', 'half'],
+  zebra: ['full', 'full-dim', 'full', 'full-dim'],
   card: ['box', 'box'],
+  paper: ['full', 'narrow', 'narrow'],
+  edge: ['edge-full', 'edge-full', 'edge-full'],
   stack: ['narrow', 'narrow', 'narrow'],
 };
 ---
@@ -122,7 +141,7 @@ const layoutBars: Record<(typeof LAYOUTS)[number], Array<keyof typeof BAR_KIND>>
     {/* ── Bố cục ────────────────────────────────────────────────────── */}
     <p class="mt-4 text-xs font-semibold text-ink-3">{t('appearance.layout')}</p>
     <div
-      class="mt-2 grid max-h-64 grid-cols-3 gap-2 overflow-y-auto pe-1"
+      class="mt-2 grid max-h-72 grid-cols-3 gap-2 overflow-y-auto pe-1"
       role="group"
       aria-label={t('appearance.layout')}
     >

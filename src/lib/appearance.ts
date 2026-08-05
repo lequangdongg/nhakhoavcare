@@ -46,19 +46,38 @@ export function isSkin(value: unknown): value is Skin {
 
 /* ── Trục bố cục ──────────────────────────────────────────────────────── */
 
+/**
+ * Xếp theo nhóm để bộ chọn đọc được thành mạch, không phải một rổ tên lộn xộn:
+ * hình dạng màn hình đầu, biến thể header, thứ tự nội dung, rồi nhịp và mật độ.
+ */
 export const LAYOUTS = [
+  // hình dạng màn hình đầu
   'split',
   'mirror',
   'stage',
   'showcase',
   'overlay',
   'sticky',
+  'full',
+  'banner',
+  'frame',
+  // biến thể header
+  'rail',
+  'slim',
+  // thứ tự nội dung
   'list',
   'mapfirst',
+  'proof',
+  'servicefirst',
+  // nhịp và mật độ
   'compact',
   'wide',
+  'bigtype',
   'magazine',
+  'zebra',
   'card',
+  'paper',
+  'edge',
   'stack',
 ] as const;
 export type Layout = (typeof LAYOUTS)[number];
@@ -98,11 +117,22 @@ export const LAYOUT_LABEL = {
   showcase: 'layout.showcase',
   overlay: 'layout.overlay',
   sticky: 'layout.sticky',
+  full: 'layout.full',
+  banner: 'layout.banner',
+  frame: 'layout.frame',
+  rail: 'layout.rail',
+  slim: 'layout.slim',
   list: 'layout.list',
   mapfirst: 'layout.mapfirst',
+  proof: 'layout.proof',
+  servicefirst: 'layout.servicefirst',
   compact: 'layout.compact',
   wide: 'layout.wide',
+  bigtype: 'layout.bigtype',
   magazine: 'layout.magazine',
+  zebra: 'layout.zebra',
   card: 'layout.card',
+  paper: 'layout.paper',
+  edge: 'layout.edge',
   stack: 'layout.stack',
 } as const satisfies Record<Layout, string>;

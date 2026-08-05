@@ -26,6 +26,26 @@ const current = Astro.url.pathname;
  * Chỉ từ desktop: dưới 1024px nav đã ẩn nên chia ba cột là vô nghĩa.
  * ms-0 để huỷ ms-auto mặc định, nếu không nav vẫn bị đẩy dạt sang phải.
  */
+const BAR_BY_LAYOUT = [
+  // rail: thanh điều hướng thành một khối nổi bo tròn, cách mép trên và hai
+  // bên. Bỏ viền dưới vì giờ nó có viền quanh cả bốn cạnh.
+  '[[data-layout=rail]_&]:mx-3 [[data-layout=rail]_&]:mt-3 [[data-layout=rail]_&]:lg:mx-auto',
+  '[[data-layout=rail]_&]:lg:max-w-[76rem] [[data-layout=rail]_&]:rounded-full',
+  '[[data-layout=rail]_&]:border [[data-layout=rail]_&]:border-steel',
+  '[[data-layout=rail]_&]:shadow-lg [[data-layout=rail]_&]:shadow-ink/10',
+].join(' ');
+
+/**
+ * slim: header rút về logo và nút gọi, mọi mục điều hướng dồn vào menu thả
+ * xuống. Nút menu vốn chỉ hiện dưới 1024px nên phải bật lại cho desktop, nếu
+ * không bố cục này sẽ không còn đường nào đi tới các trang khác.
+ */
+const SLIM = {
+  nav: '[[data-layout=slim]_&]:lg:hidden',
+  menu: '[[data-layout=slim]_&]:lg:block',
+  utility: '[[data-layout=slim]_&]:hidden',
+};
+
 const STAGE = {
   bar: '[[data-layout=stage]_&]:lg:grid [[data-layout=stage]_&]:lg:grid-cols-[1fr_auto_1fr]',
   brand: '[[data-layout=stage]_&]:lg:order-2 [[data-layout=stage]_&]:lg:justify-self-center',
@@ -84,9 +104,9 @@ const mobileNav = [
 ---
 
 <header class="sticky top-0 z-40">
-  <UtilityBar locale={locale} />
+  <UtilityBar locale={locale} class={SLIM.utility} />
 
-  <div class="border-b border-steel bg-surface/90 backdrop-blur-md">
+  <div class:list={['border-b border-steel bg-surface/90 backdrop-blur-md', BAR_BY_LAYOUT]}>
     <Container
       wide
       data-part="headerbar"
@@ -114,7 +134,7 @@ const mobileNav = [
         aria-label={t('nav.primary')}
         data-mainnav
         data-part="nav"
-        class:list={['relative ms-auto hidden items-center gap-1 lg:flex', STAGE.nav]}
+        class:list={['relative ms-auto hidden items-center gap-1 lg:flex', STAGE.nav, SLIM.nav]}
       >
         {/* Một khối nền duy nhất, trượt sang mục đang được rê. Xem ghi chú ở script. */}
         <span
@@ -169,7 +189,12 @@ const mobileNav = [
           </span>
         </a>
 
-        <details class="lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden">
+        <details
+          class:list={[
+            'lg:hidden [&[open]_.menu-close]:block [&[open]_.menu-open]:hidden',
+            SLIM.menu,
+          ]}
+        >
           <summary
             class="flex size-10 cursor-pointer list-none items-center justify-center rounded-full border border-steel-edge transition-colors duration-300 hover:bg-surface-sunken"
             aria-label={t('nav.openMenu')}

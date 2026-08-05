@@ -54,7 +54,14 @@ describe('ô màu xem trước khớp với appearance.css', () => {
       .join('');
 
     for (const layout of LAYOUTS.filter((l) => l !== 'split')) {
-      expect(src, `bố cục ${layout} chưa có luật nào`).toContain(`[data-layout=${layout}]`);
+      // Hai dạng biến thể đều hợp lệ:
+      //   [[data-layout=x]_&]  luật bám vào tổ tiên, dùng cho hầu hết bố cục
+      //   data-[layout=x]      luật bám vào chính thẻ mang thuộc tính, tức là
+      //                        <html>, dùng cho bigtype và compact vì chúng đổi
+      //                        cỡ chữ gốc
+      const found =
+        src.includes(`[data-layout=${layout}]`) || src.includes(`data-[layout=${layout}]`);
+      expect(found, `bố cục ${layout} chưa có luật nào`).toBe(true);
     }
   });
 });

@@ -51,7 +51,11 @@ const L = {
   // Khối nền vát cạnh nằm bên phải. Đảo cột thì phải lật theo, nếu không nó
   // sáng đúng chỗ khối hình vừa rời đi. Overlay và showcase bỏ hẳn nền vì khối
   // hình đã tràn hết bề ngang.
-  bg: '[[data-layout=mirror]_&]:lg:-scale-x-100 [[data-layout=list]_&]:hidden',
+  bg: [
+    '[[data-layout=mirror]_&]:lg:-scale-x-100',
+    // Ba bố cục nén màn hình đầu thì nền trang trí không còn chỗ để thở
+    '[[data-layout=list]_&]:hidden [[data-layout=banner]_&]:hidden [[data-layout=slim]_&]:hidden',
+  ].join(' '),
 
   grid: [
     // Ba bố cục về một cột
@@ -69,6 +73,13 @@ const L = {
     '[[data-layout=list]_&]:gap-8 [[data-layout=list]_&]:py-8',
     '[[data-layout=mapfirst]_&]:py-10',
     '[[data-layout=compact]_&]:gap-8 [[data-layout=wide]_&]:lg:gap-20',
+    // full: màn hình đầu chiếm trọn chiều cao khung nhìn.
+    // dvh chứ không phải vh: trên iOS thanh địa chỉ co giãn khi cuộn, vh tính
+    // theo lúc thanh ẩn nên hero bị hụt một khoảng ngay khi vừa mở trang.
+    '[[data-layout=full]_&]:lg:min-h-[calc(100dvh-6.5rem)] [[data-layout=full]_&]:lg:content-center',
+    // banner: dải hẹp, chỉ còn chữ, không khối hình
+    '[[data-layout=banner]_&]:grid-cols-1 [[data-layout=banner]_&]:gap-0',
+    '[[data-layout=banner]_&]:py-7 [[data-layout=banner]_&]:lg:py-9',
   ].join(' '),
 
   text: [
@@ -104,6 +115,8 @@ const L = {
     // Bố cục tra cứu bỏ khối hình trên mobile: nó tốn chỗ nhất mà ít giá trị
     // tra cứu nhất. Desktop vẫn giữ vì ở đó không phải tranh chỗ.
     '[[data-layout=list]_&]:max-lg:hidden',
+    // Hai bố cục bỏ hẳn khối hình: chúng tồn tại để đưa nội dung lên nhanh
+    '[[data-layout=banner]_&]:hidden [[data-layout=slim]_&]:hidden',
   ].join(' '),
 
   title: [
@@ -112,10 +125,22 @@ const L = {
     // Tạp chí: tiêu đề rất lớn, chữ bó sát, dòng khít lại
     '[[data-layout=magazine]_&]:text-[clamp(2.5rem,1.4rem+5vw,4.75rem)]',
     '[[data-layout=magazine]_&]:leading-[0.98] [[data-layout=magazine]_&]:tracking-[-0.03em]',
+    // Toàn màn hình có chỗ nên chữ to hẳn lên
+    '[[data-layout=full]_&]:lg:text-[clamp(3rem,1.8rem+3.4vw,4.25rem)]',
+    // Dải hẹp thì ngược lại, tiêu đề chỉ còn là một dòng dẫn
+    '[[data-layout=banner]_&]:text-[1.75rem] [[data-layout=banner]_&]:lg:text-[2.25rem]',
   ].join(' '),
 
   // Hai bố cục sắp lại thứ tự đều giữ hero đứng đầu
-  section: '[[data-layout=list]_&]:-order-2 [[data-layout=mapfirst]_&]:-order-2',
+  section: [
+    // Bốn bố cục sắp lại thứ tự đều giữ màn hình đầu đứng nguyên vị trí đầu
+    '[[data-layout=list]_&]:-order-2 [[data-layout=mapfirst]_&]:-order-2',
+    '[[data-layout=proof]_&]:-order-2 [[data-layout=servicefirst]_&]:-order-2',
+    // frame: màn hình đầu thành một khối bo góc cách mép trang, không tràn viền
+    '[[data-layout=frame]_&]:m-3 [[data-layout=frame]_&]:lg:m-5',
+    '[[data-layout=frame]_&]:rounded-lg [[data-layout=frame]_&]:border',
+    '[[data-layout=frame]_&]:border-steel',
+  ].join(' '),
 };
 
 const BADGE =

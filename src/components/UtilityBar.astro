@@ -20,9 +20,10 @@ import Container from './Container.astro';
 
 interface Props {
   locale: Locale;
+  class?: string;
 }
 
-const { locale } = Astro.props;
+const { locale, class: className = '' } = Astro.props;
 const t = useTranslations(locale);
 
 // Bảng giờ đưa xuống trình duyệt để tính trạng thái theo đồng hồ của khách.
@@ -42,7 +43,7 @@ const hoursByDay = HOUR_KEYS.map((k) => {
 });
 ---
 
-<div class="overflow-hidden border-b border-steel bg-surface-sunken text-ink-2">
+<div class:list={['overflow-hidden border-b border-steel bg-surface-sunken text-ink-2', className]}>
   <Container wide class="flex h-9 items-center gap-4 text-[0.8125rem] lg:h-10 lg:gap-5">
     {
       /* Trạng thái mở cửa. Hiện sau khi trình duyệt tính xong, tránh nhấp nháy sai.
