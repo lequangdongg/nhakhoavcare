@@ -28,6 +28,7 @@ export const SERVICE_KEYS = Object.keys(SERVICE_SLUGS) as ServiceKey[];
 /** Segment đầu của đường dẫn, dịch theo ngôn ngữ. */
 const SEGMENTS = {
   services: { vi: 'dich-vu', en: 'services' },
+  blog: { vi: 'kien-thuc-nha-khoa', en: 'dental-knowledge' },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 /** Trang tĩnh: key → slug theo ngôn ngữ. Chuỗi rỗng nghĩa là trang gốc. */
@@ -39,6 +40,13 @@ const STATIC_PAGES = {
   pricing: { vi: 'bang-gia', en: 'pricing' },
   contact: { vi: 'lien-he', en: 'contact' },
   blog: { vi: 'kien-thuc-nha-khoa', en: 'dental-knowledge' },
+  /**
+   * Ba trang tin cậy. Chúng không phải dịch vụ — không bán được và không có
+   * giá — nên nằm ở STATIC_PAGES chứ không phải SERVICE_SLUGS.
+   */
+  sterile: { vi: 'quy-trinh-vo-trung', en: 'sterilisation' },
+  technology: { vi: 'thiet-bi', en: 'technology' },
+  kids: { vi: 'nha-khoa-tre-em', en: 'childrens-dentistry' },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type StaticPageKey = keyof typeof STATIC_PAGES;
@@ -64,6 +72,18 @@ export function pathFor(key: RouteKey, locale: Locale): string {
   const page = STATIC_PAGES[key as StaticPageKey];
   if (!page) throw new Error(`Không có trang nào ứng với key: ${key}`);
   return withLocalePrefix(locale, [page[locale]]);
+}
+
+/**
+ * Đường dẫn một bài viết.
+ *
+ * Bài viết KHÔNG nằm trong bảng key ở trên: slug của nó do nội dung quyết định
+ * chứ không phải mã nguồn, nên không có danh sách hữu hạn để dựng bảng. Vì vậy
+ * trang bài viết phải tự truyền `alternates` cho BaseLayout — nó biết cả hai
+ * slug nhờ tra collection theo `key`, còn keyFromPath thì không.
+ */
+export function postPath(slug: string, locale: Locale): string {
+  return withLocalePrefix(locale, [SEGMENTS.blog[locale], slug]);
 }
 
 /** Bảng tra ngược, dựng một lần lúc nạp module. */

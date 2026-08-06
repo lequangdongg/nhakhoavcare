@@ -40,4 +40,33 @@ const doctors = defineCollection({
   schema: doctorSchema,
 });
 
-export const collections = { services, doctors };
+/**
+ * Bài viết cho mục Kiến thức nha khoa.
+ *
+ * Cùng mô hình `key` + `lang` như services để hai bản dịch ghép cặp được. Ràng
+ * buộc "mỗi bài phải có đủ hai ngôn ngữ" không diễn đạt được bằng schema — nó
+ * là ràng buộc giữa các entry, không phải trong một entry — nên nó nằm ở
+ * src/lib/posts.ts và ném lỗi lúc build.
+ */
+const posts = defineCollection({
+  loader: glob({ base: './src/content/posts', pattern: '**/*.md' }),
+  schema: z.object({
+    key: z.string().min(1),
+    lang: z.enum(LOCALES as unknown as [string, ...string[]]),
+    title: z.string().min(1),
+    /** 120–160 ký tự, cùng lý do như services: ngắn thì phí chỗ, dài thì bị cắt. */
+    description: z.string().min(120).max(160),
+    /** Slug dịch theo ngôn ngữ, không suy ra từ tên file để URL tiếng Việt đọc được. */
+    slug: z.string().min(1),
+    publishedAt: z.date(),
+    updatedAt: z.date().optional(),
+    /**
+     * Bác sĩ chịu trách nhiệm chuyên môn, khớp `key` trong collection doctors.
+     * Bắt buộc: nội dung y tế không có người đứng tên thì không nên đăng.
+     */
+    reviewedBy: z.string().min(1),
+    keywords: z.array(z.string().min(1)).default([]),
+  }),
+});
+
+export const collections = { services, doctors, posts };

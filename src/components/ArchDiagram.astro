@@ -1,0 +1,87 @@
+---
+/**
+ * Sơ đồ nong rộng cung hàm — vẽ lại hình vẽ tay ở trang 2 ghi chép: cung hàm
+ * nhìn từ trên, mũi tên hướng ra hai bên, có khung viền.
+ *
+ * Vẽ bằng SVG chứ không chèn ảnh vì site có 3 bảng màu và 2 nền: ảnh bitmap sẽ
+ * đứng yên một màu trong khi mọi thứ quanh nó đổi. Mọi nét ở đây dùng
+ * currentColor hoặc biến token nên nó đi theo giao diện.
+ *
+ * role="img" và <title>: hình này mang thông tin y khoa, không phải trang trí —
+ * người dùng trình đọc màn hình phải nhận được cùng một ý.
+ */
+interface Props {
+  /** Nhãn đọc lên cho trình đọc màn hình. Bắt buộc, khác nhau theo ngôn ngữ. */
+  label: string;
+  class?: string;
+}
+
+const { label, class: className = '' } = Astro.props;
+---
+
+<svg
+  viewBox="0 0 240 190"
+  role="img"
+  aria-label={label}
+  class:list={['w-full text-ink-3', className]}
+  fill="none"
+>
+  <title>{label}</title>
+
+  {/* Khung viền, đúng như hình vẽ tay */}
+  <rect
+    x="1"
+    y="1"
+    width="238"
+    height="188"
+    rx="6"
+    stroke="currentColor"
+    stroke-width="1"
+    opacity="0.35"></rect>
+
+  {
+    /*
+    Cung hàm: chữ U mở lên trên, tức là hàm nhìn từ trên xuống với răng cửa ở
+    phía dưới hình. Nét đôi để ra hình cung có bề dày, không phải một sợi dây.
+  */
+  }
+  <path
+    d="M62 26 C62 96 84 140 120 140 C156 140 178 96 178 26"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.55"></path>
+  <path
+    d="M84 26 C84 88 98 122 120 122 C142 122 156 88 156 26"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    opacity="0.55"></path>
+
+  {/* Các răng: những vạch nối hai nét cung */}
+  <g stroke="currentColor" stroke-width="1.25" opacity="0.4">
+    <line x1="62" y1="42" x2="84" y2="42"></line>
+    <line x1="63" y1="62" x2="85" y2="62"></line>
+    <line x1="67" y1="82" x2="88" y2="80"></line>
+    <line x1="76" y1="104" x2="95" y2="98"></line>
+    <line x1="96" y1="127" x2="105" y2="113"></line>
+    <line x1="178" y1="42" x2="156" y2="42"></line>
+    <line x1="177" y1="62" x2="155" y2="62"></line>
+    <line x1="173" y1="82" x2="152" y2="80"></line>
+    <line x1="164" y1="104" x2="145" y2="98"></line>
+    <line x1="144" y1="127" x2="135" y2="113"></line>
+  </g>
+
+  {/* Hai mũi tên nong ra hai bên — phần mang nghĩa của cả sơ đồ */}
+  <g stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="98" y1="72" x2="40" y2="72"></line>
+    <polyline points="50,64 40,72 50,80"></polyline>
+    <line x1="142" y1="72" x2="200" y2="72"></line>
+    <polyline points="190,64 200,72 190,80"></polyline>
+  </g>
+
+  {/* Đường nét đứt: vị trí cung hàm sau khi nong */}
+  <g stroke="var(--accent)" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7">
+    <path d="M44 26 C44 100 78 152 120 152 C162 152 196 100 196 26"></path>
+  </g>
+</svg>

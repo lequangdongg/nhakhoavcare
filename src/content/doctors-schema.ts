@@ -45,7 +45,16 @@ export const doctorSchema = z.object({
 
   yearsOfExperience: z.number().int().min(0).max(60),
 
-  portrait: z.string().min(1),
+  /**
+   * Khoá ảnh trong src/data/images.ts (ví dụ 'doctorA'), KHÔNG phải đường dẫn
+   * file. Đi qua images.ts thì chân dung được hưởng luôn nhãn "ảnh tạm", tỷ lệ
+   * khung và cách thay ảnh chung với mọi ảnh khác của site.
+   *
+   * Để trống được: khi thiếu, trang vẽ khối chữ cái đầu thay vì hiện ảnh vỡ.
+   * Trước đây trường này là bắt buộc và trỏ tới một file .jpg không tồn tại —
+   * schema dùng z.string() nên Astro không kiểm, và lỗi đi lọt hoàn toàn im lặng.
+   */
+  portrait: z.string().min(1).optional(),
 
   /** Đoạn giới thiệu ngắn, 100-300 ký tự. */
   summary: z.string().min(100).max(300),

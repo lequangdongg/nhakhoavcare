@@ -1,0 +1,62 @@
+---
+/**
+ * Ô chân dung bác sĩ.
+ *
+ * Trước đây chỗ này là <span class="doctor-ph"> — một class không được định
+ * nghĩa ở bất kỳ đâu, nên ô chân dung render ra một span rỗng không kích thước
+ * và cột trái của lưới sập lại. Cùng kiểu lỗi với .link-slide hồi trước: class
+ * chết thì không có gì báo, trang vẫn dựng xong.
+ *
+ * `portrait` là KHOÁ trong images.ts chứ không phải đường dẫn file, nên chân
+ * dung dùng chung cơ chế ảnh tạm với mọi ảnh khác. Thiếu hoặc sai khoá thì đổ
+ * về khối chữ cái đầu — không bao giờ hiện ảnh vỡ.
+ */
+import { type ImageKey, images } from '../data/images';
+import SiteImage from './SiteImage.astro';
+
+interface Props {
+  /** Khoá ảnh trong images.ts. Để trống thì vẽ khối chữ cái đầu. */
+  portrait?: string;
+  /** Tên bác sĩ, dùng cho alt và cho chữ cái đầu khi không có ảnh. */
+  name: string;
+  class?: string;
+}
+
+const { portrait, name, class: className = '' } = Astro.props;
+
+const key = portrait && portrait in images ? (portrait as ImageKey) : undefined;
+
+/**
+ * Chữ cái đầu lấy từ hai từ CUỐI của tên. Tên tiếng Việt để họ trước, nên hai
+ * từ cuối mới là phần người ta gọi nhau — "Nguyễn Văn An" ra "VA", không phải
+ * "NV". Bỏ tiền tố chức danh vì "BS." lặp lại ở cả năm người thì vô nghĩa.
+ */
+const initials = name
+  .replace(/^(BS\.|ThS\.|TS\.|PGS\.|GS\.)\s*/gi, '')
+  .trim()
+  .split(/\s+/)
+  .slice(-2)
+  .map((w) => w[0])
+  .join('')
+  .toUpperCase();
+---
+
+{
+  key ? (
+    <SiteImage name={key} class={className} />
+  ) : (
+    <div
+      class:list={[
+        'flex aspect-3/4 items-center justify-center rounded-lg',
+        'border border-steel bg-surface-sunken',
+        className,
+      ]}
+      role="img"
+      aria-label={name}
+    >
+      <span class="text-2xl font-semibold text-ink-3" aria-hidden="true">
+        {initials}
+      </span>
+    </div>
+  )
+}

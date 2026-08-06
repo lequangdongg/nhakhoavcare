@@ -1,0 +1,36 @@
+---
+/**
+ * Bốn bước tiệt trùng dụng cụ.
+ *
+ * Dùng lại đúng khuôn của khối bốn bước Implant ở trang chủ: lưới gap-px trên
+ * nền thép, không thẻ đổ bóng. Hai trang cùng nói về "một quy trình có thứ tự"
+ * thì phải trông giống nhau, nếu không người đọc tưởng là hai loại nội dung.
+ *
+ * Đánh số hiện ra vì ở đây thứ tự là NỘI DUNG, không phải trang trí: bỏ bước
+ * hoặc đảo bước là hỏng cả chu trình, và đó chính là điều trang muốn nói.
+ */
+import SiteImage from './SiteImage.astro';
+import type { SterileStep } from '../data/copy/sterile';
+
+interface Props {
+  steps: SterileStep[];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol
+  class="mt-10 grid gap-px bg-steel sm:grid-cols-2 lg:grid-cols-4 [[data-layout=stack]_&]:grid-cols-1"
+>
+  {
+    steps.map((step, i) => (
+      <li class="bg-surface p-5 lg:p-6">
+        <SiteImage name={step.image} class="mb-5" />
+
+        <p class="text-sm font-semibold measure text-accent">{String(i + 1).padStart(2, '0')}</p>
+        <h3 class="mt-1 text-base font-semibold">{step.name}</h3>
+        <p class="mt-2 text-sm leading-relaxed text-ink-2">{step.body}</p>
+      </li>
+    ))
+  }
+</ol>

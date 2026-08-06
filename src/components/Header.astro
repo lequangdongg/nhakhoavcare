@@ -54,18 +54,30 @@ const STAGE = {
     '[[data-layout=stage]_&]:lg:order-3 [[data-layout=stage]_&]:lg:ms-0 [[data-layout=stage]_&]:lg:justify-self-end',
 };
 
-const serviceItems: DropdownItem[] = (
-  await getCollection('services', (e) => e.data.lang === locale)
-)
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 6)
-  .map((s) => ({
-    href: pathFor(`service:${s.data.key as ServiceKey}`, locale),
-    title: s.data.title,
-    // Câu đầu của mô tả, đủ để phân biệt mà không tràn dòng.
-    description: `${s.data.description.split('.')[0]}.`,
-    icon: 'ph:tooth',
-  }));
+const serviceItems: DropdownItem[] = [
+  /**
+   * Nha khoa trẻ em đứng đầu và tách khỏi danh sách dịch vụ vì nó là một NHÓM
+   * dịch vụ, không phải một dịch vụ — nó dẫn xuống Vecni Flour và Chỉnh nha chứ
+   * không ngang hàng với chúng. Xếp ngang hàng thì bảng giá cũng không biết
+   * điền gì cho nó.
+   */
+  {
+    href: pathFor('kids', locale),
+    title: t('kids.title'),
+    description: t('kids.intro'),
+    icon: 'ph:baby',
+  },
+  ...(await getCollection('services', (e) => e.data.lang === locale))
+    .sort((a, b) => a.data.order - b.data.order)
+    .slice(0, 5)
+    .map((s) => ({
+      href: pathFor(`service:${s.data.key as ServiceKey}`, locale),
+      title: s.data.title,
+      // Câu đầu của mô tả, đủ để phân biệt mà không tràn dòng.
+      description: `${s.data.description.split('.')[0]}.`,
+      icon: 'ph:tooth',
+    })),
+];
 
 const aboutItems: DropdownItem[] = [
   {
@@ -73,6 +85,18 @@ const aboutItems: DropdownItem[] = [
     title: t('nav.about'),
     description: t('navd.aboutDesc'),
     icon: 'ph:buildings',
+  },
+  {
+    href: pathFor('sterile', locale),
+    title: t('sterile.title'),
+    description: t('sterile.intro'),
+    icon: 'ph:shield-check',
+  },
+  {
+    href: pathFor('technology', locale),
+    title: t('tech.title'),
+    description: t('tech.intro'),
+    icon: 'ph:scan',
   },
   {
     href: pathFor('pricing', locale),
@@ -97,6 +121,9 @@ const aboutItems: DropdownItem[] = [
 const mobileNav = [
   { key: 'about', label: t('nav.about') },
   { key: 'services', label: t('nav.services') },
+  { key: 'kids', label: t('kids.title') },
+  { key: 'sterile', label: t('sterile.title') },
+  { key: 'technology', label: t('tech.title') },
   { key: 'pricing', label: t('nav.pricing') },
   { key: 'blog', label: t('nav.blog') },
   { key: 'contact', label: t('nav.contact') },

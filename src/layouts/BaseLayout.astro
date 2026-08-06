@@ -18,11 +18,31 @@ interface Props {
   /** Trang chi tiết dịch vụ truyền vào để sinh MedicalProcedure và FAQPage. */
   service?: CollectionEntry<'services'>;
   doctors?: CollectionEntry<'doctors'>[];
+  /** Trang bài viết: sinh JSON-LD Article. */
+  post?: CollectionEntry<'posts'>;
+  /** Bác sĩ duyệt bài, vào trường reviewedBy của Article. */
+  reviewer?: CollectionEntry<'doctors'>;
+  /**
+   * Ghi đè cặp đường dẫn hai ngôn ngữ. Chỉ trang bài viết cần: slug bài do nội
+   * dung quyết định nên alternateLinks() không tra ra, và mặc định của nó là
+   * lùi về trang chủ — tức là bấm nút đổi ngôn ngữ ở giữa bài sẽ văng về đầu
+   * site thay vì sang đúng bài đó.
+   */
+  alternates?: Array<{ locale: Locale; path: string }>;
 }
 
-const { locale, title, description, service, doctors } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  service,
+  doctors,
+  post,
+  reviewer,
+  alternates: alternatesOverride,
+} = Astro.props;
 const t = useTranslations(locale);
-const alternates = alternateLinks(Astro.url.pathname);
+const alternates = alternatesOverride ?? alternateLinks(Astro.url.pathname);
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 /**
@@ -110,7 +130,13 @@ const HTML_BY_LAYOUT = 'data-[layout=bigtype]:text-[112.5%] data-[layout=compact
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
 
-    <StructuredData locale={locale} service={service} doctors={doctors} />
+    <StructuredData
+      locale={locale}
+      service={service}
+      doctors={doctors}
+      post={post}
+      reviewer={reviewer}
+    />
     <ThemeScript />
 
     {

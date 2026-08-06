@@ -57,12 +57,27 @@ export const UI = {
       'Hồ sơ bác sĩ đang được hoàn thiện. Mỗi bác sĩ sẽ có bằng cấp, chứng chỉ kèm nơi cấp và năm cấp.',
     'about.facility': 'Cơ sở vật chất',
     'contact.title': 'Liên hệ',
-    'contact.hoursNote': 'Ngoài giờ làm việc, nhắn Zalo vẫn được trả lời.',
+    'contact.hoursNote':
+      'Ngoài giờ khám, phòng khám vẫn nhận tư vấn cả ngày qua điện thoại và Zalo. Nhắn buổi tối muộn hay sáng sớm đều có người đọc; lịch hẹn sẽ được xếp vào giờ khám.',
     'contact.map': 'Xem trên Google Maps',
     'blog.title': 'Kiến thức nha khoa',
     'blog.intro':
       'Bài viết giải thích các vấn đề răng miệng thường gặp, viết cho người không có chuyên môn.',
     'blog.pending': 'Chưa có bài viết nào được đăng.',
+    'blog.reviewedBy': 'Nội dung chuyên môn được duyệt bởi',
+    'blog.published': 'Đăng ngày',
+    'blog.updated': 'Cập nhật',
+    'blog.toc': 'Nội dung bài viết',
+    'blog.back': 'Tất cả bài viết',
+    'sterile.title': 'Quy trình vô trùng',
+    'sterile.intro':
+      'Vô trùng không nhìn ra bằng mắt thường. Vì không nhìn ra được, chúng tôi viết nó ra đây.',
+    'tech.title': 'Thiết bị và chẩn đoán hình ảnh',
+    'tech.intro':
+      'Không nhìn thấy thì không động vào. Phim và mô hình số là thứ quyết định kế hoạch điều trị.',
+    'kids.title': 'Nha khoa trẻ em',
+    'kids.intro':
+      'Mục tiêu là giữ răng cho trẻ, không phải nhổ. Và cửa sổ can thiệp sớm không mở mãi.',
     'notFound.title': 'Không tìm thấy trang',
     'notFound.body':
       'Đường dẫn này không còn tồn tại. Có thể trang đã được chuyển sang địa chỉ mới.',
@@ -126,6 +141,7 @@ export const UI = {
     'status.closed': 'Đã đóng cửa',
     'status.opensAt': 'Mở lúc',
     'status.closesAt': 'đến',
+    'status.afterHours': 'Ngoài giờ vẫn nhận tư vấn qua Zalo',
     'hero.titleA': 'Răng mới phải khớp đúng ',
     'hero.titleB': 'màu răng bạn đang có',
     'hero.seePrices': 'Xem bảng giá',
@@ -243,12 +259,27 @@ export const UI = {
       'Dentist profiles are being completed. Each one will list qualifications and certificates with the issuing body and year.',
     'about.facility': 'The clinic',
     'contact.title': 'Contact',
-    'contact.hoursNote': 'Outside opening hours, Zalo messages still get answered.',
+    'contact.hoursNote':
+      'Outside treatment hours the clinic still takes enquiries all day by phone and Zalo. Late-evening or early-morning messages are read; appointments are then booked into opening hours.',
     'contact.map': 'Open in Google Maps',
     'blog.title': 'Dental Knowledge',
     'blog.intro':
       'Articles explaining common dental problems, written for people without a clinical background.',
     'blog.pending': 'No articles published yet.',
+    'blog.reviewedBy': 'Clinically reviewed by',
+    'blog.published': 'Published',
+    'blog.updated': 'Updated',
+    'blog.toc': 'In this article',
+    'blog.back': 'All articles',
+    'sterile.title': 'Sterilisation',
+    'sterile.intro':
+      'Sterile is not something you can see. Because you cannot see it, we have written it down.',
+    'tech.title': 'Equipment and imaging',
+    'tech.intro':
+      'We do not treat what we cannot see. Radiographs and digital models decide the treatment plan.',
+    'kids.title': "Children's dentistry",
+    'kids.intro':
+      'The goal is to keep a child’s teeth, not remove them. And the window for early treatment does not stay open.',
     'notFound.title': 'Page not found',
     'notFound.body': 'This address no longer exists. The page may have moved somewhere else.',
     'notFound.home': 'Back to home',
@@ -311,6 +342,7 @@ export const UI = {
     'status.closed': 'Closed',
     'status.opensAt': 'Opens',
     'status.closesAt': 'until',
+    'status.afterHours': 'Still answering enquiries on Zalo',
     'hero.titleA': 'A new tooth should match ',
     'hero.titleB': 'the teeth you already have',
     'hero.seePrices': 'See prices',

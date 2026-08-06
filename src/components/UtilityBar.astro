@@ -62,7 +62,26 @@ const hoursByDay = HOUR_KEYS.map((k) => {
       <span data-status-text></span>
     </span>
 
-    <span class="hidden items-center gap-[0.4rem] whitespace-nowrap lg:flex">
+    {
+      /* Ngoài giờ vẫn nhận tư vấn. Chỉ hiện KHI ĐÃ ĐÓNG CỬA — lúc đang mở thì nó
+        là thông tin thừa, còn lúc 21h nó là thứ duy nhất người ta cần biết.
+        Thay thế chỗ của dòng giờ mở cửa để thanh không dài thêm. */
+    }
+    {
+      /* Bật/tắt bằng data- chứ không bằng thuộc tính hidden: hidden của HTML đến
+        từ stylesheet mặc định của trình duyệt nên thua bất kỳ class nào, kể cả
+        lg:flex. Biến thể data- có độ ưu tiên (0,2,0) nên luôn thắng .hidden. */
+    }
+    <a
+      data-afterhours
+      href={zaloHref(clinic.zalo)}
+      class="hidden items-center gap-[0.4rem] whitespace-nowrap transition-colors duration-250 ease-[var(--ease-out)] hover:text-accent data-[show]:flex"
+    >
+      <Icon name="simple-icons:zalo" class="size-4 shrink-0 text-ink-3" aria-hidden="true" />
+      <span>{t('status.afterHours')}</span>
+    </a>
+
+    <span data-todaywrap class="hidden items-center gap-[0.4rem] whitespace-nowrap lg:flex">
       <Icon name="ph:clock" class="size-4 shrink-0 text-ink-3" aria-hidden="true" />
       <span>{t('header.todayHours')}: <span data-today-hours></span></span>
     </span>
@@ -117,13 +136,23 @@ const hoursByDay = HOUR_KEYS.map((k) => {
     const hoursEl = document.querySelector('[data-today-hours]');
     const wrap = document.querySelector('[data-status]');
     const text = document.querySelector('[data-status-text]');
+    const after = document.querySelector('[data-afterhours]');
+    const todayWrap = document.querySelector('[data-todaywrap]');
     if (!wrap) return;
+
+    // Đã đóng cửa: đổi dòng giờ mở cửa thành lời mời nhắn Zalo. Cùng một chỗ
+    // trên thanh, nhưng nói đúng thứ người ta cần vào đúng lúc đó.
+    const showAfterHours = () => {
+      if (after) after.dataset.show = '';
+      if (todayWrap) todayWrap.classList.remove('lg:flex');
+    };
 
     if (!today) {
       if (hoursEl) hoursEl.textContent = labels.closedToday;
       text.textContent = labels.closed;
       wrap.dataset.open = 'false';
       wrap.hidden = false;
+      showAfterHours();
       return;
     }
 
@@ -137,5 +166,6 @@ const hoursByDay = HOUR_KEYS.map((k) => {
     wrap.dataset.open = String(isOpen);
     text.textContent = isOpen ? labels.open + ' ' + labels.closesAt + ' ' + close : labels.closed;
     wrap.hidden = false;
+    if (!isOpen) showAfterHours();
   })();
 </script>

@@ -1,0 +1,201 @@
+---
+import { Icon } from 'astro-icon/components';
+import ArchDiagram from '../components/ArchDiagram.astro';
+import Container from '../components/Container.astro';
+import { KIDS } from '../data/copy/kids';
+import { clinic, telHref } from '../data/clinic';
+import type { Locale } from '../i18n/locales';
+import { pathFor, postPath } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+import { getPosts } from '../lib/posts';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const c = KIDS[locale];
+
+/**
+ * Trang mẹ dẫn xuống ba bài viết. Tra theo `key` chứ không viết cứng đường dẫn:
+ * slug đổi thì link vẫn đúng, và bài chưa tồn tại thì link tự biến mất thay vì
+ * dẫn tới 404.
+ */
+const posts = await getPosts(locale);
+const linkTo = (key: string) => {
+  const p = posts.find((x) => x.data.key === key);
+  return p ? postPath(p.data.slug, locale) : undefined;
+};
+
+const mythHref = linkTo('nho-rang-sua');
+const filmHref = linkTo('chup-phim-6-7-tuoi');
+const habitsHref = linkTo('thoi-quen-xau-lech-ham');
+
+const READ_LINK = 'mt-5 inline-flex link-slide items-center gap-1.5 font-medium text-accent';
+---
+
+<BaseLayout locale={locale} title={`${t('kids.title')}. ${t('brand.short')}`} description={c.lede}>
+  <Container class="py-12 lg:py-16">
+    <h1 class="max-w-[18ch] text-3xl font-semibold text-balance md:text-4xl lg:text-[2.75rem]">
+      {t('kids.title')}
+    </h1>
+    <p class="mt-4 max-w-[62ch] text-lg text-ink-2">{c.lede}</p>
+  </Container>
+
+  {/* ── Giữ răng sữa ─────────────────────────────────────────────────────── */}
+  <section aria-labelledby="rang-sua" class="reveal border-y border-steel bg-surface-sunken">
+    <Container class="py-14 lg:py-20">
+      <h2 id="rang-sua" class="max-w-[24ch] text-2xl font-semibold text-balance md:text-3xl">
+        {c.keepTitle}
+      </h2>
+      {c.keep.map((p) => <p class="mt-4 max-w-[62ch] text-ink-2">{p}</p>)}
+
+      <h3 class="mt-10 text-xl font-semibold">{c.whenTitle}</h3>
+      <ol class="mt-5 grid gap-px bg-steel sm:grid-cols-2 [[data-layout=stack]_&]:grid-cols-1">
+        {
+          c.when.map((w, i) => (
+            <li class="bg-surface-sunken p-5 lg:p-6">
+              <p class="text-sm font-semibold measure text-accent">
+                {String(i + 1).padStart(2, '0')}
+              </p>
+              <h4 class="mt-1 text-base font-semibold">{w.name}</h4>
+              <p class="mt-2 text-sm leading-relaxed text-ink-2">{w.body}</p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <h3 class="mt-12 max-w-[26ch] text-xl font-semibold text-balance">{c.mythTitle}</h3>
+      {c.myth.map((p) => <p class="mt-4 max-w-[62ch] text-ink-2">{p}</p>)}
+      {
+        mythHref && (
+          <a href={mythHref} class={READ_LINK}>
+            {c.mythLink}
+            <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+          </a>
+        )
+      }
+    </Container>
+  </section>
+
+  {/* ── Mốc 6–7 tuổi ─────────────────────────────────────────────────────── */}
+  <section aria-labelledby="chup-phim" class="reveal border-b border-steel">
+    <Container class="py-14 lg:py-20">
+      <h2 id="chup-phim" class="max-w-[26ch] text-2xl font-semibold text-balance md:text-3xl">
+        {c.filmTitle}
+      </h2>
+      {c.film.map((p) => <p class="mt-4 max-w-[62ch] text-ink-2">{p}</p>)}
+      {
+        filmHref && (
+          <a href={filmHref} class={READ_LINK}>
+            {c.filmLink}
+            <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+          </a>
+        )
+      }
+
+      <h3 class="mt-12 text-xl font-semibold">{c.habitsTitle}</h3>
+      {c.habits.map((p) => <p class="mt-4 max-w-[62ch] text-ink-2">{p}</p>)}
+      {
+        habitsHref && (
+          <a href={habitsHref} class={READ_LINK}>
+            {c.habitsLink}
+            <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+          </a>
+        )
+      }
+    </Container>
+  </section>
+
+  {/* ── Chỉnh nha sớm ────────────────────────────────────────────────────── */}
+  <section aria-labelledby="chinh-nha-som" class="reveal border-b border-steel bg-surface-sunken">
+    <Container class="py-14 lg:py-20">
+      <div
+        class="grid gap-10 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-14 [[data-layout=stack]_&]:grid-cols-1"
+      >
+        <div>
+          <h2
+            id="chinh-nha-som"
+            class="max-w-[24ch] text-2xl font-semibold text-balance md:text-3xl"
+          >
+            {c.earlyTitle}
+          </h2>
+          {c.early.map((p) => <p class="mt-4 max-w-[58ch] text-ink-2">{p}</p>)}
+
+          <a
+            href={pathFor('service:braces', locale)}
+            class="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-steel-edge px-5 transition-colors duration-300 hover:bg-surface active:translate-y-px"
+          >
+            <span class="font-medium">{c.earlyLink}</span>
+            <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+          </a>
+        </div>
+
+        <figure class="lg:mt-2">
+          <ArchDiagram label={c.archLabel} />
+          <figcaption class="mt-3 text-sm text-ink-3">{c.archCaption}</figcaption>
+        </figure>
+      </div>
+
+      <h3 class="mt-14 max-w-[30ch] border-t border-steel pt-10 text-xl font-semibold text-balance">
+        {c.windowTitle}
+      </h3>
+      {c.window.map((p) => <p class="mt-4 max-w-[62ch] text-ink-2">{p}</p>)}
+    </Container>
+  </section>
+
+  {/* ── Hai trang dịch vụ con ────────────────────────────────────────────── */}
+  <section aria-labelledby="dich-vu-tre-em" class="reveal border-b border-steel">
+    <Container class="py-14 lg:py-20">
+      <h2 id="dich-vu-tre-em" class="text-2xl font-semibold md:text-3xl">
+        {locale === 'vi' ? 'Dịch vụ cho trẻ' : 'Treatments for children'}
+      </h2>
+
+      <ul class="mt-6 divide-y divide-steel border-y border-steel">
+        {
+          (['fluoride', 'braces'] as const).map((key) => (
+            <li>
+              <a
+                href={pathFor(`service:${key}`, locale)}
+                class="group flex items-center gap-4 py-5"
+              >
+                <Icon name="ph:tooth" class="size-5 shrink-0 text-accent" aria-hidden="true" />
+                <span class="font-medium transition-colors duration-300 group-hover:text-accent">
+                  {key === 'fluoride'
+                    ? locale === 'vi'
+                      ? 'Vecni Flour cho trẻ em'
+                      : 'Fluoride varnish for children'
+                    : locale === 'vi'
+                      ? 'Niềng răng chỉnh nha'
+                      : 'Orthodontics'}
+                </span>
+                <Icon
+                  name="ph:arrow-right"
+                  class="ms-auto size-4 shrink-0 text-ink-3 transition-transform duration-300 group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </section>
+
+  <section aria-labelledby="dat-lich" class="reveal">
+    <Container class="py-14 lg:py-20">
+      <h2 id="dat-lich" class="text-2xl font-semibold md:text-3xl">{c.ctaTitle}</h2>
+      <p class="mt-4 max-w-[58ch] text-ink-2">{c.cta}</p>
+
+      <a
+        href={telHref(clinic.phone)}
+        class="mt-8 inline-flex min-h-12 items-center gap-2.5 rounded-full bg-accent px-6 text-accent-contrast shadow-sm shadow-accent/25 transition-all duration-300 hover:bg-accent-hover hover:shadow-md hover:shadow-accent/30 active:translate-y-px"
+      >
+        <Icon name="ph:phone-call" class="size-5 shrink-0" aria-hidden="true" />
+        <span class="font-semibold measure">{clinic.phone}</span>
+      </a>
+    </Container>
+  </section>
+</BaseLayout>

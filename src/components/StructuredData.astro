@@ -17,9 +17,13 @@ interface Props {
   /** Trang chi tiết dịch vụ: sinh thêm MedicalProcedure và FAQPage. */
   service?: CollectionEntry<'services'>;
   doctors?: CollectionEntry<'doctors'>[];
+  /** Trang bài viết: sinh Article kèm người duyệt chuyên môn. */
+  post?: CollectionEntry<'posts'>;
+  /** Bác sĩ duyệt bài. Vào trường reviewedBy của Article. */
+  reviewer?: CollectionEntry<'doctors'>;
 }
 
-const { locale, service, doctors = [] } = Astro.props;
+const { locale, service, doctors = [], post, reviewer } = Astro.props;
 const t = useTranslations(locale);
 const site = Astro.site!;
 const clinicId = new URL('/#clinic', site).href;
@@ -140,6 +144,32 @@ for (const d of doctors) {
       memberOf: d.data.memberships.map((m) => ({ '@type': 'Organization', name: m })),
     }),
     knowsLanguage: d.data.languages,
+  });
+}
+
+/**
+ * Bài viết. `reviewedBy` là trường Google soi kỹ nhất với nội dung y tế: nó
+ * phân biệt một bài có người chuyên môn đứng tên với một bài viết cho có.
+ */
+if (post) {
+  graph.push({
+    '@type': 'Article',
+    headline: post.data.title,
+    description: post.data.description,
+    inLanguage: locale,
+    datePublished: post.data.publishedAt.toISOString().slice(0, 10),
+    ...(post.data.updatedAt && {
+      dateModified: post.data.updatedAt.toISOString().slice(0, 10),
+    }),
+    publisher: { '@id': clinicId },
+    ...(reviewer && {
+      reviewedBy: {
+        '@type': 'Person',
+        name: reviewer.data.name,
+        jobTitle: reviewer.data.title,
+        worksFor: { '@id': clinicId },
+      },
+    }),
   });
 }
 

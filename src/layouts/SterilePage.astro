@@ -1,0 +1,135 @@
+---
+import { Icon } from 'astro-icon/components';
+import Container from '../components/Container.astro';
+import SiteImage from '../components/SiteImage.astro';
+import SterileSteps from '../components/SterileSteps.astro';
+import { STERILE } from '../data/copy/sterile';
+import type { Locale } from '../i18n/locales';
+import { pathFor } from '../i18n/routes';
+import { useTranslations } from '../i18n/ui';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const c = STERILE[locale];
+---
+
+<BaseLayout
+  locale={locale}
+  title={`${t('sterile.title')}. ${t('brand.short')}`}
+  description={c.lede}
+>
+  <Container class="py-12 lg:py-16">
+    <h1 class="max-w-[20ch] text-3xl font-semibold text-balance md:text-4xl lg:text-[2.75rem]">
+      {t('sterile.title')}
+    </h1>
+    <p class="mt-4 max-w-[62ch] text-lg text-ink-2">{c.lede}</p>
+  </Container>
+
+  <section aria-labelledby="khac-biet" class="reveal border-y border-steel bg-surface-sunken">
+    <Container class="py-14 lg:py-20">
+      <h2 id="khac-biet" class="max-w-[24ch] text-2xl font-semibold text-balance md:text-3xl">
+        {c.openingTitle}
+      </h2>
+      {c.opening.map((p) => <p class="mt-4 max-w-[62ch] text-ink-2">{p}</p>)}
+
+      <h3 class="mt-10 text-base font-semibold">{c.routesTitle}</h3>
+      {/* Ba đường lây: đường kẻ ngăn thay vì thẻ — đây là danh sách, không phải ba lựa chọn. */}
+      <ul class="mt-4 max-w-[62ch] divide-y divide-steel border-y border-steel">
+        {
+          c.routes.map((r) => (
+            <li class="flex gap-3 py-3 text-ink-2">
+              <Icon
+                name="ph:arrow-right"
+                class="mt-1 size-4 shrink-0 text-accent"
+                aria-hidden="true"
+              />
+              <span>{r}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </Container>
+  </section>
+
+  <section aria-labelledby="dung-cu" class="reveal border-b border-steel">
+    <Container wide class="py-14 lg:py-20">
+      <h2 id="dung-cu" class="max-w-[24ch] text-2xl font-semibold text-balance md:text-3xl">
+        {c.instrumentsTitle}
+      </h2>
+      <p class="mt-4 max-w-[62ch] text-ink-2">{c.instrumentsLede}</p>
+
+      <SterileSteps steps={c.steps} />
+
+      <p class="border-warning mt-8 max-w-[62ch] border-s-2 ps-5 text-ink">{c.stepWarning}</p>
+    </Container>
+  </section>
+
+  <section aria-labelledby="hop" class="reveal border-b border-steel">
+    <Container class="py-14 lg:py-20">
+      <div class="grid gap-10 lg:grid-cols-2 lg:gap-14 [[data-layout=stack]_&]:grid-cols-1">
+        <div>
+          <h2 id="hop" class="text-2xl font-semibold md:text-3xl">{c.boxTitle}</h2>
+          {c.box.map((p) => <p class="mt-4 max-w-[58ch] text-ink-2">{p}</p>)}
+          <p class="mt-6 max-w-[58ch] text-sm text-ink-3">{c.uv}</p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 lg:content-start">
+          <SiteImage name="sterileIndicator" />
+          <SiteImage name="sterileBox" />
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section aria-labelledby="be-mat" class="reveal border-b border-steel bg-surface-sunken">
+    <Container class="py-14 lg:py-20">
+      <h2 id="be-mat" class="text-2xl font-semibold md:text-3xl">{c.surfacesTitle}</h2>
+      {c.surfaces.map((p) => <p class="mt-4 max-w-[62ch] text-ink-2">{p}</p>)}
+
+      {
+        /*
+        Câu chốt của cả trang. Nó là một câu kiểm tra được, nên nó đứng riêng ở
+        cỡ chữ lớn chứ không lẫn vào đoạn văn phía trên.
+      */
+      }
+      <h2
+        class="mt-14 max-w-[26ch] border-t border-steel pt-10 text-2xl font-semibold text-balance md:text-3xl"
+      >
+        {c.closingTitle}
+      </h2>
+      {c.closing.map((p) => <p class="mt-4 max-w-[62ch] text-ink-2">{p}</p>)}
+    </Container>
+  </section>
+
+  <section aria-labelledby="phau-thuat" class="reveal">
+    <Container class="py-14 lg:py-20">
+      <div
+        class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-14 [[data-layout=stack]_&]:grid-cols-1"
+      >
+        <div>
+          <h2 id="phau-thuat" class="text-2xl font-semibold md:text-3xl">{c.surgeryTitle}</h2>
+          {c.surgery.map((p) => <p class="mt-4 max-w-[58ch] text-ink-2">{p}</p>)}
+
+          <a
+            href={pathFor('service:implant', locale)}
+            class="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-steel-edge px-5 transition-colors duration-300 hover:bg-surface-sunken active:translate-y-px"
+          >
+            <span class="font-medium">{c.surgeryLink}</span>
+            <Icon name="ph:arrow-right" class="size-4 shrink-0" aria-hidden="true" />
+          </a>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2 lg:content-start">
+          <SiteImage name="surgeryRoom" class="sm:col-span-2" />
+          <SiteImage name="preOpRoom" />
+          <SiteImage name="sterileSeal" />
+        </div>
+      </div>
+    </Container>
+  </section>
+</BaseLayout>

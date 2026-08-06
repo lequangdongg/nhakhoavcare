@@ -1,7 +1,8 @@
 import { getCollection } from 'astro:content';
 import type { Locale } from '../i18n/locales';
-import { pathFor, type ServiceKey } from '../i18n/routes';
+import { pathFor, postPath, type ServiceKey } from '../i18n/routes';
 import { useTranslations } from '../i18n/ui';
+import { getPosts } from './posts';
 
 export interface IndexEntry {
   title: string;
@@ -42,5 +43,31 @@ export async function buildIndex(locale: Locale): Promise<IndexEntry[]> {
     group: t('search.pages'),
   }));
 
-  return [...services, ...pages];
+  /**
+   * Ba trang tin cậy có mô tả riêng, khác với bốn trang trên: người tìm
+   * "vô trùng" hay "conebeam" gõ đúng chữ trong phần mô tả chứ không gõ tiêu đề.
+   */
+  const trust: IndexEntry[] = (
+    [
+      ['sterile', 'sterile.title', 'sterile.intro'],
+      ['technology', 'tech.title', 'tech.intro'],
+      ['kids', 'kids.title', 'kids.intro'],
+    ] as const
+  ).map(([key, title, intro]) => ({
+    title: t(title),
+    description: t(intro),
+    keywords: '',
+    href: pathFor(key, locale),
+    group: t('search.pages'),
+  }));
+
+  const posts = (await getPosts(locale)).map((p) => ({
+    title: p.data.title,
+    description: p.data.description,
+    keywords: p.data.keywords.join(' '),
+    href: postPath(p.data.slug, locale),
+    group: t('nav.blog'),
+  }));
+
+  return [...services, ...trust, ...pages, ...posts];
 }
